@@ -1,14 +1,19 @@
-""" vc module """
-from discord import Embed, Color, File
+""" voice module """
+from discord import Embed, Color
 from discord.ext import commands
 
-class Vc(commands.Cog):
-    """ vc class """
+class Voice(commands.Cog):
+    """ voice chat commands """
+    #only 1 cmd rn. will be further expanded upon later.
+    def __init__(self, bot):
+        self.bot = bot
+        self.ass = self.bot.get_cog('Assets')
+
     @commands.command()
     async def vc(self, ctx):
         """
         Sends a voice chat invitation to @user(s)
-        
+
         This command issues a voice chat invitation to @mentioned
         server members. It can be used by a server member only when
         they are in one of the server's voice channels.
@@ -45,23 +50,13 @@ class Vc(commands.Cog):
         #build embed with invite message & file references
         embed = Embed(description=inv_msg, color=Color.purple())
         embed.set_author(name="Bronson's Voice Chat Invitation",
-                         icon_url='attachment://images_common_bbb.jpg')
-        embed.set_thumbnail(url='attachment://images_vc_quill.jpg')
-        embed.set_image(url='attachment://images_vc_rsvp.jpg')
+                         icon_url=self.ass.get_cloud_url('bbb'))
+        embed.set_thumbnail(url=self.ass.get_cloud_url('quill'))
+        embed.set_image(url=self.ass.get_cloud_url('rsvp'))
         embed.set_footer(text='Please RSVP at your earliest convenience, '
                               'oKaY BuY.')
 
-        #attach embedded files & send
-        try:
-            with open('./images/common/bbb.jpg', 'rb') as icon, \
-                 open('./images/vc/quill.jpg', 'rb') as thumbnail, \
-                 open('./images/vc/rsvp.jpg', 'rb') as rsvp_img:
-
-                await ctx.reply(embed=embed, files=[File(icon),
-                                                    File(thumbnail),
-                                                    File(rsvp_img)])
-        except FileNotFoundError as e:
-            raise commands.CommandError('Asset not found.') from e
+        await ctx.reply(embed=embed)
 
     @vc.error
     async def vc_error(self, ctx, error):
@@ -70,4 +65,4 @@ class Vc(commands.Cog):
 
 async def setup(bot):
     """ add command to bot's cog system """
-    await bot.add_cog(Vc(bot))
+    await bot.add_cog(Voice(bot))

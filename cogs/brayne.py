@@ -3,18 +3,18 @@ from datetime import datetime
 from os import name as os_name
 from platform import platform, python_version, system
 
-from discord import Color, CustomActivity, Embed, File,  __version__
+from discord import Color, CustomActivity, Embed, __version__
 from discord.ext import commands
 from gpiozero import CPUTemperature
 from psutil import (boot_time, cpu_count, cpu_freq, cpu_percent,
                     disk_usage, virtual_memory)
 
 class Brayne(commands.Cog):
-    """ Brayne class for the brayne command """
+    """ Brayne class """
     def __init__(self, bot):
-        #initialize variable used for uptime later
-        self.connected_time = 0
         self.bot = bot
+        self.ass = self.bot.get_cog('Assets')
+        self.connected_time = 0
 
     @commands.command(aliases=['about', 'info', 'ver', 'version'])
     async def brayne(self, ctx):
@@ -29,7 +29,6 @@ class Brayne(commands.Cog):
         Usage: <prefix>brayne
         Aliases: about, info, ver, version
         """
-        #build embed
         embed = Embed(description=self._get_platform_info(),
                       color=Color.blue())
         embed.add_field(name='__CPU__:',
@@ -39,35 +38,26 @@ class Brayne(commands.Cog):
         embed.add_field(name='__Disk__:',
                         value=self._get_disk_info(), inline=True)
         embed.set_author(name="Bronson's BrAyNe",
-                         icon_url='attachment://images_common_bbb.jpg')
-        embed.set_thumbnail(url='attachment://images_brayne_brayne.png')
+                         icon_url=self.ass.get_cloud_url('bbb'))
+        embed.set_thumbnail(url=self.ass.get_cloud_url('brayne'))
 
-        #prepare local files for use in embed, then send
-        try:
-            with open('./images/common/bbb.jpg', 'rb') as icon, \
-                 open('./images/brayne/brayne.png', 'rb') as thumbnail:
-                await ctx.reply(embed=embed,
-                                    files=[File(icon), File(thumbnail)])
-        except FileNotFoundError as e:
-            raise commands.CommandError('Asset not found.') from e
+        await ctx.reply(embed=embed)
 
     @commands.Cog.listener()
     async def on_ready(self):
         """ called when the bot is online & ready """
         self.connected_time = datetime.now()
         await self.bot.change_presence(
-            activity=CustomActivity(name='420.69-2024.03.17-01'))
+            activity=CustomActivity(name='420.69-1.1.0'))
 
     def _get_platform_info(self):
-        """ grab platform info for embed """
-        #get system boot time as a Unix timestamp,
-        #then convert it to a datetime object
-        boot_timestamp = boot_time()
-        booted_time = datetime.fromtimestamp(boot_timestamp)
+        """ get platform info  """
+        booted_time = datetime.fromtimestamp(boot_time())
 
-        #build string of platform info for embed & pass it back
         platform_info = (
-            f'**Bot version**: 420.69-2024.03.17-01\n\n'
+             '**Bot version**: 420.69-1.1.0\n'
+             '**GitHub**: '
+             '[/mdf-gh/bronson](https://www.github.com/mdf-gh/bronson)\n\n'
             f'**Python version**: {python_version()}\n'
             f'**discord.py API version**: {__version__}\n\n'
             f'**OS**: {platform()} ({os_name})\n\n'
@@ -77,7 +67,7 @@ class Brayne(commands.Cog):
         return platform_info
 
     def _get_cpu_info(self):
-        """ get cpu related info for embed """
+        """ get cpu info """
         #get cpu temp if on linux (raspberry pi)
         if system().lower() == "linux":
             cpu_temp = CPUTemperature()
@@ -96,7 +86,7 @@ class Brayne(commands.Cog):
         return cpu_info
 
     def _get_memory_info(self):
-        """ get memory info for embed """
+        """ get memory info """
         memory_info = (
             f'**Used**: {virtual_memory().used / (1024 ** 3):.2f} GB\n'
             f'**Total**: {virtual_memory().total / (1024 ** 3):.2f} GB\n'
@@ -105,7 +95,7 @@ class Brayne(commands.Cog):
         return memory_info
 
     def _get_disk_info(self):
-        """ get disk info for embed """
+        """ get disk info """
         disk_info = (
             f'**Used**: {disk_usage('/').used / (1024 ** 3):.2f} GB\n'
             f'**Total**: {disk_usage('/').total / (1024 ** 3):.2f} GB\n'
@@ -114,11 +104,9 @@ class Brayne(commands.Cog):
         return disk_info
 
     def _get_uptime(self, start_time):
-        """ calculate uptime for bot or system """
-        #get the time in-between now & provided start time
+        """ get uptime info for bot or system """
         delta = datetime.now() - start_time
 
-        #calculate the values & return formatted uptime back
         days = delta.days
         hours, remainder = divmod(delta.seconds, 3600)
         minutes, seconds = divmod(remainder, 60)
@@ -128,7 +116,7 @@ class Brayne(commands.Cog):
 
     @brayne.error
     async def brayne_error(self, ctx, error):
-        """ handles brayne command errors """
+        """ handles brayne errors """
         await ctx.reply(f'**Error**: {error}')
 
 async def setup(bot):

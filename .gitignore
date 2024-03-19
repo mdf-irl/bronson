@@ -174,7 +174,7 @@ cython_debug/
 *.jpeg
 *.png
 *.gif
-other/*.txt
+*.txt
 *.json
 *.sqlite
 *.sqlite3
