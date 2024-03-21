@@ -16,6 +16,16 @@ class Comics(commands.Cog):
         self.bot = bot
         self.ass = self.bot.get_cog('Assets')
 
+    @commands.command(aliases=['bd'])
+    async def boondocks(self, ctx):
+        """
+        Sends a random Boondocks comic
+
+        Usage: <prefix>boondocks
+        Aliases: bd
+        """
+        await self._handle_gocomics_comic(ctx, 'boondocks', 'The Boondocks')
+
     @commands.command(aliases=['c&h'])
     async def cah(self, ctx):
         """
@@ -24,8 +34,8 @@ class Comics(commands.Cog):
         Usage: <prefix>cah
         Aliases: c&h
         """
-        await self._handle_gocomics_comic(ctx, 'calvinandhobbes',
-                                          'Calvin & Hobbes')
+        await self._handle_gocomics_comic(
+            ctx, 'calvinandhobbes', 'Calvin & Hobbes')
 
     @commands.command(aliases=['gf'])
     async def garfield(self, ctx):
@@ -55,8 +65,19 @@ class Comics(commands.Cog):
         Usage: <prefix>peanutsb
         Aliases: pb
         """
-        await self._handle_gocomics_comic(ctx, 'peanuts-begins',
-                                          'Peanuts Begins')
+        await self._handle_gocomics_comic(
+            ctx, 'peanuts-begins', 'Peanuts Begins')
+
+    @commands.command(aliases=['scribbles', 'ss'])
+    async def sarah(self, ctx):
+        """
+        Sends a random Sarah's Scribbles comic
+
+        Usage: <prefix>sarah
+        Aliases: pb
+        """
+        await self._handle_gocomics_comic(
+            ctx, 'sarahs-scribbles', "Sarah's Scribbles")
 
     async def _handle_gocomics_comic(self, ctx, url_id, name):
         """

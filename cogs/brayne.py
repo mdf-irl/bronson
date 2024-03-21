@@ -48,14 +48,14 @@ class Brayne(commands.Cog):
         """ called when the bot is online & ready """
         self.connected_time = datetime.now()
         await self.bot.change_presence(
-            activity=CustomActivity(name='420.69-1.1.0'))
+            activity=CustomActivity(name='420.69-1.2.0'))
 
     def _get_platform_info(self):
         """ get platform info  """
         booted_time = datetime.fromtimestamp(boot_time())
 
         platform_info = (
-             '**Bot version**: 420.69-1.1.0\n'
+             '**Bot version**: 420.69-1.2.0\n'
              '**GitHub**: '
              '[/mdf-gh/bronson](https://www.github.com/mdf-gh/bronson)\n\n'
             f'**Python version**: {python_version()}\n'

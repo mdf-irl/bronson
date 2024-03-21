@@ -36,6 +36,7 @@ class DiscordBot(commands.Bot):
 
         await self.load_extension('cogs.brayne')
         await self.load_extension('cogs.comics')
+        await self.load_extension('cogs.facts')
         await self.load_extension('cogs.fangulese')
         await self.load_extension('cogs.novelty')
         await self.load_extension('cogs.voice')
