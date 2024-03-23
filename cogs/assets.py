@@ -1,43 +1,58 @@
 """ assets module """
-from json import loads
+from io import BytesIO
 from random import choice
 
 from aiohttp import ClientSession
 from cloudinary import config, utils
+from discord import File
 from discord.ext import commands
+
 
 class Assets(commands.Cog):
     """ Assets class """
-    def get_cloud_url(self, public_id, res_type='image', add_prefix=True):
-        """ get resource url from cdn """
+    async def get_url(self, public_id, res_type='image', tag=False):
+        """ get cloud url """
         config(cloud_name='mdf-cdn')
 
-        if add_prefix:
-            p_id = f'bronson/{public_id}'
-        else:
-            p_id = public_id
-        return utils.cloudinary_url(f'{p_id}',
-                                    resource_type=res_type)[0]
+        if not tag:
+            return utils.cloudinary_url(
+                f'bronson/{public_id}', resource_type=res_type)[0]
 
-    async def get_random_cloud_url(self, tag):
-        """ get random image url from cdn files matching tag """
-        data = loads(await self.get_text(
-            f'http://res.cloudinary.com/mdf-cdn/image/list/{tag}.json'))
-        public_ids = [resource['public_id'] for resource in data['resources']]
-        return self.get_cloud_url(choice(public_ids), add_prefix=False)
+        json_data = await self.get_url_data(
+            f'http://res.cloudinary.com/mdf-cdn/image/list/{public_id}.json',
+            get_type='json')
+        chosen_public_id = choice(
+            [resource['public_id'] for resource in json_data['resources']])
+        return utils.cloudinary_url(
+            chosen_public_id, resource_type=res_type)[0]
 
-    async def get_text(self, url):
-        """ aiohttp text grabber """
-        async with ClientSession() as session:
-            async with session.get(url) as response:
-                return await response.text()
+    async def get_url_data(self, url, get_type='text', timeout=5):
+        """ GET """
+        try:
+            async with ClientSession() as session:
+                async with session.get(url, timeout=timeout) as response:
+                    if response.status == 200:
+                        if get_type == 'text':
+                            return await response.text()
+                        if get_type == 'json':
+                            return await response.json()
+                        if get_type == 'binary':
+                            return await response.read()
+                    else:
+                        raise commands.CommandError(
+                            f'Fetch attempt on "{url}" failed with error code '
+                            f'{response.status}.')
+        except TimeoutError as e:
+            raise commands.CommandError(
+                f'Timeout threshold of {timeout} seconds reached while '
+                f'attempting to fetch data from "{url}."') from e
 
-    async def get_binary(self, url):
-        """ aiohttp binary grabber """
-        async with ClientSession() as session:
-            async with session.get(url) as response:
-                return await response.read()
+    async def get_discord_file(self, url, filename, spoiler=False):
+        """ get discord File() """
+        binary = await self.get_url_data(url, get_type='binary')
+        return File(BytesIO(binary), filename=filename, spoiler=spoiler)
+
 
 async def setup(bot):
-    """ add class to bot's cog system"""
+    """ add class to bot's cog system """
     await bot.add_cog(Assets(bot))

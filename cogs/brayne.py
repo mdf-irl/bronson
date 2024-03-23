@@ -9,8 +9,10 @@ from gpiozero import CPUTemperature
 from psutil import (boot_time, cpu_count, cpu_freq, cpu_percent,
                     disk_usage, virtual_memory)
 
+
 class Brayne(commands.Cog):
     """ Brayne class """
+
     def __init__(self, bot):
         self.bot = bot
         self.ass = self.bot.get_cog('Assets')
@@ -29,17 +31,17 @@ class Brayne(commands.Cog):
         Usage: <prefix>brayne
         Aliases: about, info, ver, version
         """
-        embed = Embed(description=self._get_platform_info(),
-                      color=Color.blue())
-        embed.add_field(name='__CPU__:',
-                        value=self._get_cpu_info(), inline=True)
-        embed.add_field(name='__Memory__:',
-                        value=self._get_memory_info(), inline=True)
-        embed.add_field(name='__Disk__:',
-                        value=self._get_disk_info(), inline=True)
-        embed.set_author(name="Bronson's BrAyNe",
-                         icon_url=self.ass.get_cloud_url('bbb'))
-        embed.set_thumbnail(url=self.ass.get_cloud_url('brayne'))
+        embed = Embed(
+            description=self._get_platform_info(), color=Color.blue())
+        embed.add_field(
+            name='__CPU__:', value=self._get_cpu_info(), inline=True)
+        embed.add_field(
+            name='__Memory__:', value=self._get_memory_info(), inline=True)
+        embed.add_field(
+            name='__Disk__:', value=self._get_disk_info(), inline=True)
+        embed.set_author(
+            name="Bronson's BrAyNe", icon_url=await self.ass.get_url('bbb'))
+        embed.set_thumbnail(url=await self.ass.get_url('brayne'))
 
         await ctx.reply(embed=embed)
 
@@ -48,16 +50,16 @@ class Brayne(commands.Cog):
         """ called when the bot is online & ready """
         self.connected_time = datetime.now()
         await self.bot.change_presence(
-            activity=CustomActivity(name='420.69-1.2.0'))
+            activity=CustomActivity(name='420.69-1.2.1'))
 
     def _get_platform_info(self):
         """ get platform info  """
         booted_time = datetime.fromtimestamp(boot_time())
 
         platform_info = (
-             '**Bot version**: 420.69-1.2.0\n'
-             '**GitHub**: '
-             '[/mdf-gh/bronson](https://www.github.com/mdf-gh/bronson)\n\n'
+            '**Bot version**: 420.69-1.2.1\n'
+            '**GitHub**: '
+            '[/mdf-gh/bronson](https://www.github.com/mdf-gh/bronson)\n\n'
             f'**Python version**: {python_version()}\n'
             f'**discord.py API version**: {__version__}\n\n'
             f'**OS**: {platform()} ({os_name})\n\n'
@@ -68,7 +70,7 @@ class Brayne(commands.Cog):
 
     def _get_cpu_info(self):
         """ get cpu info """
-        #get cpu temp if on linux (raspberry pi)
+        # get cpu temp if on linux (raspberry pi)
         if system().lower() == "linux":
             cpu_temp = CPUTemperature()
             cpu_temp_f = cpu_temp.temperature * (9 / 5) + 32
@@ -79,8 +81,8 @@ class Brayne(commands.Cog):
         cpu_info = (
             f'**Usage**: {cpu_percent(interval=1):.2f}%\n'
             f'**Core/Freq**: {cpu_count(logical=False)}x @ '
-                           f'{cpu_freq().current / 1000:.2f} GHz '
-                           f'(***max*** *{cpu_freq().max / 1000:.2f} GHz*)\n'
+            f'{cpu_freq().current / 1000:.2f} GHz '
+            f'(***max*** *{cpu_freq().max / 1000:.2f} GHz*)\n'
             f'**Temperature**: {cpu_temp_f}'
         )
         return cpu_info
@@ -118,6 +120,7 @@ class Brayne(commands.Cog):
     async def brayne_error(self, ctx, error):
         """ handles brayne errors """
         await ctx.reply(f'**Error**: {error}')
+
 
 async def setup(bot):
     """ adds class to bot's cog system """

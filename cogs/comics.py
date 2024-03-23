@@ -1,9 +1,9 @@
 """ comics module """
-from io import BytesIO
 from re import findall
 
-from discord import Color, Embed, File
+from discord import Color, Embed
 from discord.ext import commands
+
 
 class Comics(commands.Cog):
     """
@@ -12,6 +12,7 @@ class Comics(commands.Cog):
     Can *very* easily be expanded to process any comic strip found
     on this list: https://www.gocomics.com/comics/a-to-z
     """
+
     def __init__(self, bot):
         self.bot = bot
         self.ass = self.bot.get_cog('Assets')
@@ -85,33 +86,34 @@ class Comics(commands.Cog):
         that was passed over. It then grabs the date the comic appeared
         & the comic's image to send.
         """
-        try:
-            html = await self.ass.get_text(
-                f'https://www.gocomics.com/random/{url_id}')
-        except Exception:
-            await ctx.reply("**Error**: Couldn't get HTML.")
-            raise
+        html = await self.ass.get_url_data(
+            f'https://www.gocomics.com/random/{url_id}')
 
-        #I should probably be using bs4 for this for
-        #performance reasons
+        # I should probably be using bs4 for this for
+        # performance reasons
         date = findall('(?<=formatted-date=").+?(?=")', html)
         image_url = findall('(?<=data-image=").+?(?=")', html)
 
-        if (not date) or (not image_url):
-            await ctx.reply("**Error**: Couldn't extract date or image URL.")
-            raise ValueError("Couldn't extract date or image URL.")
+        if not date:
+            raise commands.CommandError("Couldn't extract date.")
+        if not image_url:
+            raise commands.CommandError("Couldn't extract image URL.")
 
         embed = Embed(title=f'{name}: {date[0]}', color=Color.yellow())
         embed.set_author(name="Bronson's Comics",
-                         icon_url=self.ass.get_cloud_url('bbb'))
+                         icon_url=await self.ass.get_url('bbb'))
         embed.set_image(url='attachment://comic.gif')
 
-        #attaching because discord shows attached images larger than
-        #URL images for some reason. also no idea why GoComics is using
-        #.gif format for their images, but they are
-        comic = File(BytesIO(await self.ass.get_binary(image_url[0])),
-                     filename='comic.gif')
+        # attaching because discord shows attached images larger than
+        # URL images for some reason. also no idea why GoComics is using
+        # .gif format for their images, but they are
+        comic = await self.ass.get_discord_file(image_url[0], 'comic.gif')
         await ctx.reply(embed=embed, file=comic)
+
+    async def cog_command_error(self, ctx, error):
+        """ override, handles all cog errors for this class """
+        await ctx.reply(f'**Error**: {error}')
+
 
 async def setup(bot):
     """ add class to bot's cog system"""

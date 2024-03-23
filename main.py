@@ -12,12 +12,17 @@ load_dotenv()
 DISCORD_TOKEN = getenv('DISCORD_TOKEN')
 BOT_PREFIX = getenv('BOT_PREFIX')
 
-if (DISCORD_TOKEN is None) or (BOT_PREFIX is None):
-    print('Could not get environment variables from .env file.')
+if DISCORD_TOKEN is None:
+    print("Couldn't get DISCORD_TOKEN from .env file")
     quit_bot()
+elif BOT_PREFIX is None:
+    print("Couldn't get BOT_PREFIX from .env file. Defaulting to '!'")
+    BOT_PREFIX = '!'
+
 
 class DiscordBot(commands.Bot):
     """ main bot class """
+
     def __init__(self):
         intents = discord.Intents.default()
         intents.message_content = True
@@ -31,7 +36,7 @@ class DiscordBot(commands.Bot):
 
     async def load_cogs(self):
         """ load cogs """
-        #always load assets first
+        # always load assets first
         await self.load_extension('cogs.assets')
 
         await self.load_extension('cogs.brayne')
@@ -43,6 +48,7 @@ class DiscordBot(commands.Bot):
 
     async def setup_hook(self):
         await self.load_cogs()
+
 
 bot = DiscordBot()
 bot.run(DISCORD_TOKEN)

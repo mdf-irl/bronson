@@ -2,9 +2,11 @@
 from discord import Embed, Color
 from discord.ext import commands
 
+
 class Voice(commands.Cog):
     """ voice chat commands """
-    #only 1 cmd rn. will be further expanded upon later.
+    # only 1 cmd rn. will be further expanded upon later.
+
     def __init__(self, bot):
         self.bot = bot
         self.ass = self.bot.get_cog('Assets')
@@ -23,36 +25,36 @@ class Voice(commands.Cog):
         mentioned_users = ctx.message.mentions
         invitees = ''
 
-        #check for command errors
+        # check for command errors
         if ctx.author.voice is None:
             raise commands.CommandError('You are not in a voice channel.')
         if not mentioned_users:
             raise commands.CommandError('You did not mention any users.')
 
-        #get a list of the mentioned users separated by commas
+        # get a list of the mentioned users separated by commas
         for user in mentioned_users:
             invitees = invitees + f'{user.mention}, '
 
-        #build invite message
+        # build invite message
         inv_msg = (
             f'Dearest {invitees}\n\n'
-             'It is my sincere pleasure to extend to you a cordial invitation '
-             'to our esteemed voice chat session, currently taking place in '
-             'voice communications channel: '
+            'It is my sincere pleasure to extend to you a cordial invitation '
+            'to our esteemed voice chat session, currently taking place in '
+            'voice communications channel: '
             f'"**{ctx.author.voice.channel.name}**."\n\n'
 
-             'Your insights and contributions are highly valued, and we '
-             'believe that your participation would greatly enhance the depth '
-             'and breadth of our discussion.\n\n'
+            'Your insights and contributions are highly valued, and we '
+            'believe that your participation would greatly enhance the depth '
+            'and breadth of our discussion.\n\n'
             f'Kind regards,\n<@{ctx.author.id}>'
         )
 
-        #build embed with invite message & file references
+        # build embed with invite message & file references
         embed = Embed(description=inv_msg, color=Color.purple())
         embed.set_author(name="Bronson's Voice Chat Invitation",
-                         icon_url=self.ass.get_cloud_url('bbb'))
-        embed.set_thumbnail(url=self.ass.get_cloud_url('quill'))
-        embed.set_image(url=self.ass.get_cloud_url('rsvp'))
+                         icon_url=await self.ass.get_url('bbb'))
+        embed.set_thumbnail(url=await self.ass.get_url('quill'))
+        embed.set_image(url=await self.ass.get_url('rsvp'))
         embed.set_footer(text='Please RSVP at your earliest convenience, '
                               'oKaY BuY.')
 
@@ -62,6 +64,7 @@ class Voice(commands.Cog):
     async def vc_error(self, ctx, error):
         """ vc err handler """
         await ctx.reply(f'**Error**: {error}')
+
 
 async def setup(bot):
     """ add command to bot's cog system """

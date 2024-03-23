@@ -1,12 +1,12 @@
 """ fangulese module """
-from io import BytesIO
 from random import randint
 
-from discord import File
 from discord.ext import commands
+
 
 class Fangulese(commands.Cog):
     """ Fangulese & c0n-adjacent commands """
+
     def __init__(self, bot):
         self.bot = bot
         self.ass = self.bot.get_cog('Assets')
@@ -19,7 +19,7 @@ class Fangulese(commands.Cog):
         Usage: <prefix>bronson
         Aliases: btoborg, btoborg1
         """
-        await ctx.reply(self.ass.get_cloud_url('bronson'))
+        await ctx.reply(await self.ass.get_url('bronson'))
 
     @commands.command(aliases=['hey', 'hi'])
     async def hello(self, ctx):
@@ -31,10 +31,10 @@ class Fangulese(commands.Cog):
         """
         response = (
             f'hello <@{ctx.author.id}> my name is bronson i am 15 years old '
-             'and i have almost i ha a beard, but i should not have a beard '
-             'because I am too young tough you know genetics lol. i like '
-             'loud music and making games for byond.com. And my teachers are '
-             'amazed that I practicly never have home work.'
+            'and i have almost i ha a beard, but i should not have a beard '
+            'because I am too young tough you know genetics lol. i like '
+            'loud music and making games for byond.com. And my teachers are '
+            'amazed that I practicly never have home work.'
         )
         await ctx.reply(response)
 
@@ -71,11 +71,11 @@ class Fangulese(commands.Cog):
         Usage: <prefix>sludge
         Aliases: sludgedump
         """
-        #attaching because discord doesn't play nicely with using
-        #spoiler tags around an image URL
-        sludge_url = await self.ass.get_random_cloud_url('sludge')
-        sludge_bin = File(BytesIO(await self.ass.get_binary(sludge_url)),
-                          filename='sludge.jpg', spoiler=True)
+        # attaching because discord doesn't play nicely with using
+        # spoiler tags around an image URL
+        sludge_url = await self.ass.get_url('sludge', tag=True)
+        sludge_bin = await self.ass.get_discord_file(
+            sludge_url, 'sludge.jpg', spoiler=True)
 
         await ctx.reply(file=sludge_bin)
 
@@ -126,15 +126,10 @@ class Fangulese(commands.Cog):
                 output_message += char.lower()
         return output_message
 
-    @bronson.error
-    async def bronson_error(self, ctx, error):
-        """ bronson cmd error handler """
+    async def cog_command_error(self, ctx, error):
+        """ override, handles all cog errors for this class """
         await ctx.reply(f'**Error**: {error}')
 
-    @sludge.error
-    async def sludge_error(self, ctx, error):
-        """ sludge err handler """
-        await ctx.reply(f'**Error**: {error}')
 
 async def setup(bot):
     """ add command to bot's cog system """
