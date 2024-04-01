@@ -43,7 +43,7 @@ Command | Aliases | Description
 ### **Novelty**
 Command | Aliases | Description
 --- | --- | ---
-!8ball *question* || Asks Bronson's Magical 8ball a *question*
+!8ball *question* || Asks Bronson's Magic 8ball a *question*
 !achtung *message* || Sends an ACHTUNG! alert about *message*
 !ckhello || Sends Cool-Knight's hello message
 !coinflip | coin, flip, flipcoin | Bronson flips a coin for you
@@ -57,12 +57,12 @@ Command | Aliases | Description
 !yogabs | yo | Sends a random yo gabs meme
 
 ### **Voice**
-Command | Alias | Description
+Command | Aliases | Description
 --- | --- | ---
 vc *@user(s)* || Invites *@user(s)* to the voice channel you are currently in
 
 ### **Wrestling**
-Command | Alias | Description
+Command | Aliases | Description
 --- | --- | ---
 curse *@user(s)* || Danhausen curses *@user(s)*
 deez *@user(s)* | deeznuts, redeem | Kindly asks *@user(s)* to redeem deez nuts
