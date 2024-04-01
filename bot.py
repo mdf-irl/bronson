@@ -6,7 +6,9 @@ from sys import exit as quit_bot
 
 import discord
 from discord.ext import commands
+from dotenv import load_dotenv
 
+load_dotenv()
 DISCORD_TOKEN = getenv('DISCORD_TOKEN')
 BOT_PREFIX = getenv('BOT_PREFIX')
 CLOUD_NAME = getenv('CLOUD_NAME')

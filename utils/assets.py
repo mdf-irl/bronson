@@ -7,12 +7,14 @@ from aiohttp import ClientSession
 from cloudinary import config, utils
 from discord import File
 from discord.ext import commands
+from dotenv import load_dotenv
 
 class Assets(commands.Cog):
     """ Assets class """
 
     def __init__(self, bot):
         self.bot = bot # just to shut pylint up
+        load_dotenv()
         self.cloud_name = getenv('CLOUD_NAME')
 
     async def get_url(self, public_id, res_type='image', tag=False):
