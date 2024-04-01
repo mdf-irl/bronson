@@ -10,6 +10,7 @@ class Voice(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.ass = self.bot.get_cog('Assets')
+        self.gen = self.bot.get_cog('General')
 
     @commands.command()
     async def vc(self, ctx, users: commands.Greedy[Member]):
@@ -26,11 +27,8 @@ class Voice(commands.Cog):
         # check for command errors
         if ctx.author.voice is None:
             raise commands.CommandError("You aren't in a voice channel.")
-        if not users:
-            raise commands.CommandError("You didn't @mention any user(s).")
 
-        # get a list of the mentioned users separated by commas
-        invitees = ', '.join(user.mention for user in users)
+        invitees = await self.gen.format_users(users)
 
         # build invite message
         inv_msg = (

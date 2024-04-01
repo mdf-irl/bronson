@@ -9,6 +9,7 @@ class Wrestling(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.ass = self.bot.get_cog('Assets')
+        self.gen = self.bot.get_cog('General')
 
     @commands.command()
     async def curse(self, ctx, users: commands.Greedy[Member]):
@@ -17,11 +18,9 @@ class Wrestling(commands.Cog):
 
         Usage: <prefix>curse @user(s)
         """
-        if not users:
-            raise commands.CommandError("You didn't @mention any user(s).")
 
         has_have = 'has' if len(users) == 1 else 'have'
-        cursed_users = ', '.join(user.mention for user in users)
+        cursed_users = await self.gen.format_users(users)
 
         embed = Embed(
             description=(
@@ -43,10 +42,7 @@ class Wrestling(commands.Cog):
         Usage: <prefix>deez @user(s)
         Aliases: deeznuts, redeem
         """
-        if not users:
-            raise commands.CommandError("You didn't @mention any user(s).")
-
-        deez_users = ', '.join(user.mention for user in users)
+        deez_users = await self.gen.format_users(users)
 
         deez_url = await self.ass.get_url('deez.gif')
         deez_bin = await self.ass.get_discord_file(deez_url, 'deez.gif')
@@ -61,10 +57,7 @@ class Wrestling(commands.Cog):
         Usage: <prefix>delete @user(s)
         Aliases: del
         """
-        if not users:
-            raise commands.CommandError("You didn't @mention any user(s).")
-
-        del_users = ', '.join(user.mention for user in users)
+        del_users = await self.gen.format_users(users)
 
         del_url = await self.ass.get_url('mh_delete.gif')
         del_bin = await self.ass.get_discord_file(del_url, 'mh_delete.gif')

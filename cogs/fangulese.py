@@ -11,6 +11,7 @@ class Fangulese(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.ass = self.bot.get_cog('Assets')
+        self.gen = self.bot.get_cog('General')
 
     @commands.command(aliases=['btoborg', 'btoborg1'])
     async def bronson(self, ctx):
@@ -88,10 +89,7 @@ class Fangulese(commands.Cog):
 
         Usage: <prefix>tohd @user(s)
         """
-        if not users:
-            raise commands.CommandError("You didn't @mention any user(s).")
-
-        tohd_users = ', '.join(user.mention for user in users)
+        tohd_users = await self.gen.format_users(users)
 
         await ctx.send(
             f'TUCH OV HERTNISS DISSTINTS ON U {tohd_users} '

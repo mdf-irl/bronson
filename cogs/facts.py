@@ -1,7 +1,7 @@
 """ facts module """
 from random import choice
 
-from discord import Color, Embed
+from discord import Color, Embed, Member
 from discord.ext import commands
 
 
@@ -11,6 +11,7 @@ class Facts(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.ass = self.bot.get_cog('Assets')
+        self.gen = self.bot.get_cog('General')
 
     @commands.command()
     async def cat(self, ctx):
@@ -72,7 +73,7 @@ class Facts(commands.Cog):
         await ctx.reply(embed=embed)
 
     @commands.command(aliases=['yomama'])
-    async def mom(self, ctx):
+    async def mom(self, ctx, users: commands.Greedy[Member]):
         """
         Sends a fact about @user's mom
 
@@ -82,15 +83,7 @@ class Facts(commands.Cog):
         Usage: <prefix>mom @user
         Aliases: yomama
         """
-        mentioned_users = ctx.message.mentions
-
-        # check to make sure a single user was mentioned
-        if not mentioned_users:
-            raise commands.CommandError("You didn't mention a user.")
-        if len(mentioned_users) > 1:
-            raise commands.CommandError(
-                'You can only mention one user for this command.'
-        )
+        target_users = await self.gen.format_users(users)
 
         json_data = await self.ass.get_url_data(
             'https://www.yomama-jokes.com/api/v1/jokes/random/',
@@ -101,7 +94,7 @@ class Facts(commands.Cog):
         # make sure the joke is in valid format, then swap out
         # "yo mama" for @user's MOM
         if joke.lower().startswith('yo mama'):
-            joke = f"{mentioned_users[0].mention}'s **MOM** {joke[7:]}"
+            joke = f"{target_users}'s **MOM** {joke[7:]}"
         else:
             raise commands.CommandError('Malformed joke.')
 

@@ -12,6 +12,7 @@ class Novelty(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.ass = self.bot.get_cog('Assets')
+        self.gen = self.bot.get_cog('General')
 
     @commands.command(name='8ball')
     async def eightball(self, ctx, *, question):
@@ -146,11 +147,7 @@ class Novelty(commands.Cog):
 
         Usage: <prefix>insult @user(s)
         """
-
-        if not users:
-            raise commands.CommandError("You didn't @mention any user(s).")
-
-        insultees = ', '.join(user.mention for user in users)
+        insultees = await self.gen.format_users(users)
 
         insult = await self.ass.get_url_data(
             'https://insult.mattbas.org/api/insult.txt'
@@ -176,10 +173,7 @@ class Novelty(commands.Cog):
 
         Usage: <prefix>sausage @user(s)
         """
-        if not users:
-            raise commands.CommandError("You didn't @mention any user(s).")
-
-        hungry_users = ', '.join(user.mention for user in users)
+        hungry_users = await self.gen.format_users(users)
 
         response = (
             f'{hungry_users} would you like some sausage?\n'
@@ -203,10 +197,7 @@ class Novelty(commands.Cog):
 
         Usage: <prefix>spray @user(s)
         """
-        if not users:
-            raise commands.CommandError("You didn't @mention any user(s).")
-
-        sprayed_users = ', '.join(user.mention for user in users)
+        sprayed_users = await self.gen.format_users(users)
 
         await ctx.send(
             f'Sprays {sprayed_users} with water bottle\n'
