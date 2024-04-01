@@ -26,7 +26,7 @@ Command | Aliases | Description
 !cat || Sends a random fact about cats
 !dog || Sends a random fact about dogs
 !helly || Sends a random fact about HeLLy
-!mom *@user(s)* | yomama | Sends a random fact *@user(s)*' mom
+!mom *@user(s)* | yomama | Sends a random fact about *@user(s)*' mom
 !useless || Sends a random useless fact
 
 ### **Fangulese**
@@ -59,12 +59,12 @@ Command | Aliases | Description
 ### **Voice**
 Command | Aliases | Description
 --- | --- | ---
-vc *@user(s)* || Invites *@user(s)* to the voice channel you are currently in
+!vc *@user(s)* || Invites *@user(s)* to the voice channel you are currently in
 
 ### **Wrestling**
 Command | Aliases | Description
 --- | --- | ---
-curse *@user(s)* || Danhausen curses *@user(s)*
-deez *@user(s)* | deeznuts, redeem | Kindly asks *@user(s)* to redeem deez nuts
-delete *@user(s)* | del | Informs *@user(s)* that they will be deleted
-eviluno || Sends an image informing channel of Evil Uno's incessant flatulence
+!curse *@user(s)* || Danhausen curses *@user(s)*
+!deez *@user(s)* | deeznuts, redeem | Kindly asks *@user(s)* to redeem deez nuts
+!delete *@user(s)* | del | Informs *@user(s)* that they will be deleted
+!eviluno || Sends an image informing channel of Evil Uno's incessant flatulence
