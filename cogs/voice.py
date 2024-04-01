@@ -1,5 +1,5 @@
 """ voice module """
-from discord import Embed, Color
+from discord import Embed, Color, Member
 from discord.ext import commands
 
 
@@ -12,7 +12,7 @@ class Voice(commands.Cog):
         self.ass = self.bot.get_cog('Assets')
 
     @commands.command()
-    async def vc(self, ctx):
+    async def vc(self, ctx, users: commands.Greedy[Member]):
         """
         Sends a voice chat invitation to @user(s)
 
@@ -22,22 +22,19 @@ class Voice(commands.Cog):
 
         Usage: <prefix>vc @user(s)
         """
-        mentioned_users = ctx.message.mentions
-        invitees = ''
 
         # check for command errors
         if ctx.author.voice is None:
-            raise commands.CommandError('You are not in a voice channel.')
-        if not mentioned_users:
-            raise commands.CommandError('You did not mention any users.')
+            raise commands.CommandError("You aren't in a voice channel.")
+        if not users:
+            raise commands.CommandError("You didn't @mention any user(s).")
 
         # get a list of the mentioned users separated by commas
-        for user in mentioned_users:
-            invitees = invitees + f'{user.mention}, '
+        invitees = ', '.join(user.mention for user in users)
 
         # build invite message
         inv_msg = (
-            f'Dearest {invitees}\n\n'
+            f'Dearest {invitees},\n\n'
             'It is my sincere pleasure to extend to you a cordial invitation '
             'to our esteemed voice chat session, currently taking place in '
             'voice communications channel: '
@@ -51,12 +48,15 @@ class Voice(commands.Cog):
 
         # build embed with invite message & file references
         embed = Embed(description=inv_msg, color=Color.purple())
-        embed.set_author(name="Bronson's Voice Chat Invitation",
-                         icon_url=await self.ass.get_url('bbb'))
+        embed.set_author(
+            name="Bronson's Voice Chat Invitation",
+            icon_url=await self.ass.get_url('bbb')
+        )
         embed.set_thumbnail(url=await self.ass.get_url('quill'))
         embed.set_image(url=await self.ass.get_url('rsvp'))
-        embed.set_footer(text='Please RSVP at your earliest convenience, '
-                              'oKaY BuY.')
+        embed.set_footer(
+            text='Please RSVP at your earliest convenience, oKaY BuY.'
+        )
 
         await ctx.reply(embed=embed)
 

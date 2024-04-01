@@ -6,8 +6,9 @@ from platform import platform, python_version, system
 from discord import Color, CustomActivity, Embed, __version__
 from discord.ext import commands
 from gpiozero import CPUTemperature
-from psutil import (boot_time, cpu_count, cpu_freq, cpu_percent,
-                    disk_usage, virtual_memory)
+from psutil import (
+    boot_time, cpu_count, cpu_freq, cpu_percent, disk_usage, virtual_memory
+)
 
 
 class Brayne(commands.Cog):
@@ -32,37 +33,79 @@ class Brayne(commands.Cog):
         Aliases: about, info, ver, version
         """
         embed = Embed(
-            description=self._get_platform_info(), color=Color.blue())
+            description=self._get_platform_info(), color=Color.blue()
+        )
         embed.add_field(
-            name='__CPU__:', value=self._get_cpu_info(), inline=True)
+            name='__CPU__:', value=self._get_cpu_info(), inline=True
+        )
         embed.add_field(
-            name='__Memory__:', value=self._get_memory_info(), inline=True)
+            name='__Memory__:', value=self._get_memory_info(), inline=True
+        )
         embed.add_field(
-            name='__Disk__:', value=self._get_disk_info(), inline=True)
+            name='__Disk__:', value=self._get_disk_info(), inline=True
+        )
         embed.set_author(
-            name="Bronson's BrAyNe", icon_url=await self.ass.get_url('bbb'))
+            name="Bronson's BrAyNe", icon_url=await self.ass.get_url('bbb')
+        )
         embed.set_thumbnail(url=await self.ass.get_url('brayne'))
 
-        await ctx.reply(embed=embed)
+        await ctx.send(embed=embed)
+
+    @commands.command()
+    async def help(self, ctx):
+        """ help """
+        embed = Embed(
+            title='You need help? LOL!!!',
+            description=(
+                'Please visit [my GitHub page]'
+                '(https://github.com/mdf-gh/bronson) to find my command '
+                'list, help, documentation, & source code.'
+            ),
+            color=Color.blue()
+        )
+        embed.set_author(
+            name='Bronson', icon_url=await self.ass.get_url('bbb')
+        )
+        embed.set_thumbnail(url=await self.ass.get_url('cow_capri'))
+
+        await ctx.send(embed=embed)
+
+    @commands.command()
+    async def temp(self, ctx):
+        """ temp """
+        if system().lower() == "linux":
+            cpu_temp = CPUTemperature()
+            cpu_temp_f = cpu_temp.temperature * (9 / 5) + 32
+            cpu_temp_f = f'{cpu_temp_f:.2f} °F'
+
+            await ctx.send(
+                f'oWwWw mY BrAyNe iS CuRReNtLy {cpu_temp_f} LOL!!!!!'
+            )
+        else:
+            await ctx.send('oKaY WtF KoN EyE aM NoT a RaZzBeRRy PiE LOL!!!!!')
 
     @commands.Cog.listener()
     async def on_ready(self):
         """ called when the bot is online & ready """
         self.connected_time = datetime.now()
         await self.bot.change_presence(
-            activity=CustomActivity(name='420.69-1.2.1'))
+            activity=CustomActivity(name='420.69-1.3.0')
+        )
 
     def _get_platform_info(self):
         """ get platform info  """
         booted_time = datetime.fromtimestamp(boot_time())
 
         platform_info = (
-            '**Bot version**: 420.69-1.2.1\n'
+            '**Bot version**: 420.69-1.3.0\n'
             '**GitHub**: '
             '[/mdf-gh/bronson](https://www.github.com/mdf-gh/bronson)\n\n'
+
             f'**Python version**: {python_version()}\n'
             f'**discord.py API version**: {__version__}\n\n'
+
             f'**OS**: {platform()} ({os_name})\n\n'
+
             f'**Bot uptime**: {self._get_uptime(self.connected_time)}\n'
             f'**System uptime**: {self._get_uptime(booted_time)}'
         )
@@ -113,8 +156,7 @@ class Brayne(commands.Cog):
         hours, remainder = divmod(delta.seconds, 3600)
         minutes, seconds = divmod(remainder, 60)
 
-        uptime = f'{days}d, {hours}h, {minutes}m, {seconds}s'
-        return uptime
+        return f'{days}d, {hours}h, {minutes}m, {seconds}s'
 
     @brayne.error
     async def brayne_error(self, ctx, error):

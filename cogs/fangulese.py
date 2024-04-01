@@ -1,6 +1,7 @@
 """ fangulese module """
 from random import randint
 
+from discord import Member
 from discord.ext import commands
 
 
@@ -36,7 +37,7 @@ class Fangulese(commands.Cog):
             'loud music and making games for byond.com. And my teachers are '
             'amazed that I practicly never have home work.'
         )
-        await ctx.reply(response)
+        await ctx.send(response)
 
     @commands.command(aliases=['ps', 'pslam'])
     async def powerslam(self, ctx):
@@ -56,7 +57,7 @@ class Fangulese(commands.Cog):
         pp = f"{'p' * randint(11, 15)}"
         ex = f"{'!' * randint(11, 15)}"
 
-        await ctx.reply(self._get_alt_caps(f'{oo}k{aa}{yy} {pp}owerslam{ex}'))
+        await ctx.send(self._get_alt_caps(f'{oo}k{aa}{yy} {pp}owerslam{ex}'))
 
     @commands.command(aliases=['sludgedump'])
     async def sludge(self, ctx):
@@ -75,9 +76,27 @@ class Fangulese(commands.Cog):
         # spoiler tags around an image URL
         sludge_url = await self.ass.get_url('sludge', tag=True)
         sludge_bin = await self.ass.get_discord_file(
-            sludge_url, 'sludge.jpg', spoiler=True)
+            sludge_url, 'sludge.jpg', spoiler=True
+        )
 
-        await ctx.reply(file=sludge_bin)
+        await ctx.send(file=sludge_bin)
+
+    @commands.command()
+    async def tohd(self, ctx, users: commands.Greedy[Member]):
+        """
+        Hits @user(s) with the touch of hurtness distance
+
+        Usage: <prefix>tohd @user(s)
+        """
+        if not users:
+            raise commands.CommandError("You didn't @mention any user(s).")
+
+        tohd_users = ', '.join(user.mention for user in users)
+
+        await ctx.send(
+            f'TUCH OV HERTNISS DISSTINTS ON U {tohd_users} '
+            'IYAHHHHHHHHHH!!!!11'
+        )
 
     @commands.command(aliases=['tehehe', 'teeheehee'])
     async def thh(self, ctx):
@@ -93,7 +112,7 @@ class Fangulese(commands.Cog):
         heee = f"H{'E' * randint(21, 30)}"
         heeee = f"H{'E' * randint(31, 40)}"
 
-        await ctx.reply(f'{tee}\n{heee}\n{heeee}')
+        await ctx.send(f'{tee}\n{heee}\n{heeee}')
 
     @commands.command(aliases=['yh'])
     async def yeehaw(self, ctx):
@@ -110,8 +129,10 @@ class Fangulese(commands.Cog):
         ww = f"{'W' * randint(5, 10)}"
         ex = f"{'!' * randint(5, 10)}"
 
-        await ctx.reply(f'Y{ee}H{aa}{ww}{ex}\n'
-                        f"RIDIN' A MOTHERFUCKIN' COWBOY{ex * 2} :cowboy:")
+        await ctx.send(
+            f'Y{ee}H{aa}{ww}{ex}\n'
+            f"RIDIN' A MOTHERFUCKIN' COWBOY{ex * 2} :cowboy:"
+        )
 
     def _get_alt_caps(self, message):
         """

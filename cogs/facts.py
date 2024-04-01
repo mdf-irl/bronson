@@ -24,9 +24,11 @@ class Facts(commands.Cog):
         fact = json_data['fact']
 
         embed = Embed(description=fact, color=Color.red())
-        embed.set_author(name="Bronson's Cat Facts",
-                         icon_url=await self.ass.get_url('bbb'))
+        embed.set_author(
+            name="Bronson's Cat Facts", icon_url=await self.ass.get_url('bbb')
+        )
         embed.set_thumbnail(url=await self.ass.get_url('billy_c'))
+
         await ctx.reply(embed=embed)
 
     @commands.command()
@@ -37,13 +39,16 @@ class Facts(commands.Cog):
         Usage: <prefix>dog
         """
         json_data = await self.ass.get_url_data(
-            'https://dogapi.dog/api/v2/facts', get_type='json')
+            'https://dogapi.dog/api/v2/facts', get_type='json'
+        )
         fact = json_data['data'][0]['attributes']['body']
 
         embed = Embed(description=fact, color=Color.red())
-        embed.set_author(name="Bronson's Dog Facts",
-                         icon_url=await self.ass.get_url('bbb'))
+        embed.set_author(
+            name="Bronson's Dog Facts", icon_url=await self.ass.get_url('bbb')
+        )
         embed.set_thumbnail(url=await self.ass.get_url('duchess_c'))
+
         await ctx.reply(embed=embed)
 
     @commands.command()
@@ -58,9 +63,12 @@ class Facts(commands.Cog):
         facts = facts_text.splitlines()
 
         embed = Embed(description=choice(facts), color=Color.red())
-        embed.set_author(name="Bronson's HeLLy Facts",
-                         icon_url=await self.ass.get_url('bbb'))
+        embed.set_author(
+            name="Bronson's HeLLy Facts",
+            icon_url=await self.ass.get_url('bbb')
+        )
         embed.set_thumbnail(url=await self.ass.get_url('sherlock'))
+
         await ctx.reply(embed=embed)
 
     @commands.command(aliases=['yomama'])
@@ -80,12 +88,14 @@ class Facts(commands.Cog):
         if not mentioned_users:
             raise commands.CommandError("You didn't mention a user.")
         if len(mentioned_users) > 1:
-            raise commands.CommandError('You can only mention one user '
-                                        'for this command.')
+            raise commands.CommandError(
+                'You can only mention one user for this command.'
+        )
 
         json_data = await self.ass.get_url_data(
             'https://www.yomama-jokes.com/api/v1/jokes/random/',
-            get_type='json')
+            get_type='json'
+        )
         joke = json_data['joke']
 
         # make sure the joke is in valid format, then swap out
@@ -96,9 +106,11 @@ class Facts(commands.Cog):
             raise commands.CommandError('Malformed joke.')
 
         embed = Embed(description=joke, color=Color.red())
-        embed.set_author(name="Bronson's Mom Facts",
-                         icon_url=await self.ass.get_url('bbb'))
+        embed.set_author(
+            name="Bronson's Mom Facts", icon_url=await self.ass.get_url('bbb')
+        )
         embed.set_thumbnail(url=await self.ass.get_url('your_mom'))
+
         await ctx.reply(embed=embed)
 
     @commands.command()
@@ -111,13 +123,17 @@ class Facts(commands.Cog):
         """
         json_data = await self.ass.get_url_data(
             'https://uselessfacts.jsph.pl/api/v2/facts/random?language=en',
-            get_type='json')
+            get_type='json'
+        )
         fact = json_data['text']
 
         embed = Embed(description=fact, color=Color.red())
-        embed.set_author(name="Bronson's Useless Facts",
-                         icon_url=await self.ass.get_url('bbb'))
+        embed.set_author(
+            name="Bronson's Useless Facts",
+            icon_url=await self.ass.get_url('bbb')
+        )
         embed.set_thumbnail(url=await self.ass.get_url('useless'))
+
         await ctx.reply(embed=embed)
 
     async def cog_command_error(self, ctx, error):

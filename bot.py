@@ -1,16 +1,15 @@
 """ Bronson """
 #!/usr/bin/env python3
 
-from os import getenv
+from os import getenv, listdir
 from sys import exit as quit_bot
 
 import discord
 from discord.ext import commands
-from dotenv import load_dotenv
 
-load_dotenv()
 DISCORD_TOKEN = getenv('DISCORD_TOKEN')
 BOT_PREFIX = getenv('BOT_PREFIX')
+CLOUD_NAME = getenv('CLOUD_NAME')
 
 if DISCORD_TOKEN is None:
     print("Couldn't get DISCORD_TOKEN from .env file")
@@ -18,6 +17,9 @@ if DISCORD_TOKEN is None:
 elif BOT_PREFIX is None:
     print("Couldn't get BOT_PREFIX from .env file. Defaulting to '!'")
     BOT_PREFIX = '!'
+elif CLOUD_NAME is None:
+    print("Couldn't get CLOUD_NAME from .env file.")
+    quit_bot()
 
 
 class DiscordBot(commands.Bot):
@@ -32,23 +34,21 @@ class DiscordBot(commands.Bot):
         super().__init__(
             command_prefix=commands.when_mentioned_or(BOT_PREFIX),
             intents=intents,
+            help_command=None,
         )
 
     async def load_cogs(self):
         """ load cogs """
         # always load assets first
-        await self.load_extension('cogs.assets')
+        await self.load_extension('utils.assets')
 
-        await self.load_extension('cogs.brayne')
-        await self.load_extension('cogs.comics')
-        await self.load_extension('cogs.facts')
-        await self.load_extension('cogs.fangulese')
-        await self.load_extension('cogs.novelty')
-        await self.load_extension('cogs.voice')
+        cogs = listdir('./cogs')
+        for cog in cogs:
+            if cog.endswith('.py'):
+                await self.load_extension(f'cogs.{cog[:-3]}')
 
     async def setup_hook(self):
         await self.load_cogs()
-
 
 bot = DiscordBot()
 bot.run(DISCORD_TOKEN)
