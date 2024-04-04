@@ -33,6 +33,7 @@ Command | Aliases | Description
 Command | Aliases | Description
 --- | --- | ---
 !bronson | btoborg | Sends IRL Bronson's mug shot image
+!haheho | ha | Sends a haha hehe hoho message
 !hello | hi, hey | Sends Bronson's famous hello message
 !powerslam | ps, pslam | Sends a powerslam message
 !sludge || Sends a random sludge dump image
@@ -60,6 +61,11 @@ Command | Aliases | Description
 Command | Aliases | Description
 --- | --- | ---
 !vc *@user(s)* || Invites *@user(s)* to the voice channel you are currently in
+
+### **Weather**
+Command | Aliases | Description
+--- | --- | ---
+!weather *zipcode* | w | Gets current weather for *zipcode*
 
 ### **Wrestling**
 Command | Aliases | Description
