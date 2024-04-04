@@ -1,7 +1,7 @@
 """ fangulese module """
-from random import randint
+from random import choice, randint
 
-from discord import Member
+from discord import Color, Embed, Member  # , Status
 from discord.ext import commands
 
 
@@ -12,6 +12,7 @@ class Fangulese(commands.Cog):
         self.bot = bot
         self.ass = self.bot.get_cog('Assets')
         self.gen = self.bot.get_cog('General')
+        # self.kamillion = False
 
     @commands.command(aliases=['btoborg', 'btoborg1'])
     async def bronson(self, ctx):
@@ -21,7 +22,44 @@ class Fangulese(commands.Cog):
         Usage: <prefix>bronson
         Aliases: btoborg, btoborg1
         """
-        await ctx.reply(await self.ass.get_url('bronson'))
+        embed = Embed(color=Color.random())
+        embed.set_image(url=await self.ass.get_url('bronson'))
+        await ctx.send(embed=embed)
+        # await ctx.send(await self.ass.get_url('bronson'))
+
+    @commands.command(aliases=['ha'])
+    async def haheho(self, ctx):
+        """ Sends a ha he ho message """
+        msg = [
+            'AH haH HEhEH ehh HO o ho Ho Ho OHO!!!!!'
+            'HAhA HEH hEHeh he HEHE ho Ho HO HAhAH HEheh eh OH ohOHO!!!!!!',
+            'hA HEHHEHAhAH HEh HAH HE hE oHOh o ho hOh OHO!!!!!!!!',
+            'HAhAHaHhe hEH hO ohO Ho HAhAH ehhEh eh HOhoHoHo!!!',
+            'Ahah HEHhaHAhehH ho hOH oh Oh OAhHAH heh ehe hOH oHOHOoO!!!',
+            'HAhAhAhAHHEh hEHE hEHHE Ho o HOAhAHH hEHEHEH hohOhOhOhOHO!!!!!!!',
+            'HAhAhHHE hHE HeHE hHE o ho Ho HOHahHAhhHE h HHehH hOhO Hoh oO!!!',
+            'HAhah AH haH AhEHh Hehhe HOH oHO h OHAhaHah hEHEHEH hHo H HoHO!!',
+            'hAhAhHEH ehEH EH h oh oh o H AHhAHAH heh HEHEHh Oh OH OhOO!!!!!',
+            'AHAHhAHHAhAHH Hehe HEHEH hOhOhOHOh aHaHhhAhh hHEheh HOOhOhOoO!!!'
+        ]
+        embed = Embed(
+            description=f'{choice(msg)} {choice(msg)}', color=Color.random()
+        )
+        await ctx.send(embed=embed)
+        # await ctx.send(f'{choice(msg)} {choice(msg)}')
+
+    # @commands.command()
+    # @commands.is_owner()  # only bot owner can do this
+    # async def kamillion(self, ctx):
+    #     """ kamillion moad on/off """
+    #     if not self.kamillion:
+    #         await self.bot.change_presence(status=Status.invisible)
+    #         await ctx.send('KaMiLLiOn MoAd engaged.')
+    #         self.kamillion = True
+    #     else:
+    #         await self.bot.change_presence(status=Status.online)
+    #         await ctx.send('KaMiLLiOn MoAd disengaged.')
+    #         self.kamillion = False
 
     @commands.command(aliases=['hey', 'hi'])
     async def hello(self, ctx):
@@ -38,7 +76,8 @@ class Fangulese(commands.Cog):
             'loud music and making games for byond.com. And my teachers are '
             'amazed that I practicly never have home work.'
         )
-        await ctx.send(response)
+        embed = Embed(description=response, color=Color.random())
+        await ctx.send(embed=embed)
 
     @commands.command(aliases=['ps', 'pslam'])
     async def powerslam(self, ctx):
@@ -58,7 +97,12 @@ class Fangulese(commands.Cog):
         pp = f"{'p' * randint(11, 15)}"
         ex = f"{'!' * randint(11, 15)}"
 
-        await ctx.send(self._get_alt_caps(f'{oo}k{aa}{yy} {pp}owerslam{ex}'))
+        embed = Embed(
+            description=self._get_alt_caps(f'{oo}k{aa}{yy} {pp}owerslam{ex}'),
+            color=Color.random()
+        )
+        await ctx.send(embed=embed)
+        # await ctx.send(self._get_alt_caps(f'{oo}k{aa}{yy} {pp}owerslam{ex}'))
 
     @commands.command(aliases=['sludgedump'])
     async def sludge(self, ctx):
@@ -79,7 +123,6 @@ class Fangulese(commands.Cog):
         sludge_bin = await self.ass.get_discord_file(
             sludge_url, 'sludge.jpg', spoiler=True
         )
-
         await ctx.send(file=sludge_bin)
 
     @commands.command()
@@ -90,11 +133,16 @@ class Fangulese(commands.Cog):
         Usage: <prefix>tohd @user(s)
         """
         tohd_users = await self.gen.format_users(users)
-
-        await ctx.send(
-            f'TUCH OV HERTNISS DISSTINTS ON U {tohd_users} '
-            'IYAHHHHHHHHHH!!!!11'
+        embed = Embed(
+            description=(f'TUCH OV HERTNISS DISSTINTS ON U {tohd_users} '
+                         'IYAHHHHHHHHHH!!!!11'),
+            color=Color.random()
         )
+        await ctx.send(embed=embed)
+        # await ctx.send(
+        #     f'TUCH OV HERTNISS DISSTINTS ON U {tohd_users} '
+        #     'IYAHHHHHHHHHH!!!!11'
+        # )
 
     @commands.command(aliases=['tehehe', 'teeheehee'])
     async def thh(self, ctx):
@@ -110,7 +158,11 @@ class Fangulese(commands.Cog):
         heee = f"H{'E' * randint(21, 30)}"
         heeee = f"H{'E' * randint(31, 40)}"
 
-        await ctx.send(f'{tee}\n{heee}\n{heeee}')
+        embed = Embed(
+            description=f'{tee}\n{heee}\n{heeee}', color=Color.random()
+        )
+        await ctx.send(embed=embed)
+        # await ctx.send(f'{tee}\n{heee}\n{heeee}')
 
     @commands.command(aliases=['yh'])
     async def yeehaw(self, ctx):
@@ -127,10 +179,16 @@ class Fangulese(commands.Cog):
         ww = f"{'W' * randint(5, 10)}"
         ex = f"{'!' * randint(5, 10)}"
 
-        await ctx.send(
-            f'Y{ee}H{aa}{ww}{ex}\n'
-            f"RIDIN' A MOTHERFUCKIN' COWBOY{ex * 2} :cowboy:"
+        embed = Embed(
+            description=(f'Y{ee}H{aa}{ww}{ex}\n'
+                         f"RIDIN' A MOTHERFUCKIN' COWBOY{ex * 2} :cowboy:"),
+            color=Color.random()
         )
+        await ctx.send(embed=embed)
+        # await ctx.send(
+        #     f'Y{ee}H{aa}{ww}{ex}\n'
+        #     f"RIDIN' A MOTHERFUCKIN' COWBOY{ex * 2} :cowboy:"
+        # )
 
     def _get_alt_caps(self, message):
         """
@@ -147,7 +205,12 @@ class Fangulese(commands.Cog):
 
     async def cog_command_error(self, ctx, error):
         """ override, handles all cog errors for this class """
-        await ctx.reply(f'**Error**: {error}')
+        if isinstance(error, commands.CheckFailure):
+            await ctx.send(
+                '**Error**: Only the bot owner can use this command.'
+            )
+        else:
+            await ctx.reply(f'**Error**: {error}')
 
 
 async def setup(bot):

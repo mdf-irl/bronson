@@ -16,6 +16,7 @@ class Comics(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.ass = self.bot.get_cog('Assets')
+        self.gen = self.bot.get_cog('General')
 
     @commands.command()
     async def gmg(self, ctx):
@@ -25,12 +26,13 @@ class Comics(commands.Cog):
         Usage: <prefix>gmg
         """
         # not a gocomics comic, files are stored in cloud
-        embed = Embed(title='Garfield Minus Garfield', color=Color.yellow())
-        embed.set_author(
-            name="Bronson's Comics", icon_url=await self.ass.get_url('bbb')
+        embed = Embed(
+            title='Garfield Minus Garfield', color=Color.random()
         )
+        # embed.set_author(
+        #     name="Bronson's Comics", icon_url=await self.ass.get_url('bbb')
+        # )
         embed.set_image(url=await self.ass.get_url('gmg', tag=True))
-
         await ctx.send(embed=embed)
 
     @commands.command(aliases=['bd'])
@@ -117,10 +119,12 @@ class Comics(commands.Cog):
         if not image_url:
             raise commands.CommandError("Couldn't extract image URL.")
 
-        embed = Embed(title=f'{name}: {date[0]}', color=Color.yellow())
-        embed.set_author(
-            name="Bronson's Comics", icon_url=await self.ass.get_url('bbb')
+        embed = Embed(
+            title=f'{name}: {date[0]}', color=Color.random()
         )
+        # embed.set_author(
+        #     name="Bronson's Comics", icon_url=await self.ass.get_url('bbb')
+        # )
         embed.set_image(url='attachment://comic.gif')
 
         # attaching because discord shows attached images larger than

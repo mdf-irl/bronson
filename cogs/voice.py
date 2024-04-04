@@ -1,5 +1,5 @@
 """ voice module """
-from discord import Embed, Color, Member
+from discord import Color, Embed, Member
 from discord.ext import commands
 
 
@@ -45,18 +45,17 @@ class Voice(commands.Cog):
         )
 
         # build embed with invite message & file references
-        embed = Embed(description=inv_msg, color=Color.purple())
-        embed.set_author(
-            name="Bronson's Voice Chat Invitation",
-            icon_url=await self.ass.get_url('bbb')
-        )
+        embed = Embed(description=inv_msg, color=Color.random())
+        # embed.set_author(
+        #     name="Bronson's Voice Chat Invitation",
+        #     icon_url=await self.ass.get_url('bbb')
+        # )
         embed.set_thumbnail(url=await self.ass.get_url('quill'))
         embed.set_image(url=await self.ass.get_url('rsvp'))
         embed.set_footer(
             text='Please RSVP at your earliest convenience, oKaY BuY.'
         )
-
-        await ctx.reply(embed=embed)
+        await ctx.send(embed=embed)
 
     @vc.error
     async def vc_error(self, ctx, error):

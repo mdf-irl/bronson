@@ -9,11 +9,12 @@ from discord import File
 from discord.ext import commands
 from dotenv import load_dotenv
 
+
 class Assets(commands.Cog):
     """ Assets class """
 
     def __init__(self, bot):
-        self.bot = bot # just to shut pylint up
+        self.bot = bot  # just to shut pylint up
         load_dotenv()
         self.cloud_name = getenv('CLOUD_NAME')
 
@@ -46,14 +47,18 @@ class Assets(commands.Cog):
                             return await response.json()
                         if get_type == 'binary':
                             return await response.read()
+                    elif response.status == 429:
+                        raise commands.CommandError(
+                            'Exceeded API usage limitations. LOL!!!'
+                        )
                     else:
                         raise commands.CommandError(
-                            f'Fetch attempt on "{url}" failed with error code '
+                            f'Fetch attempt on URL failed with error code '
                             f'{response.status}.')
         except TimeoutError as e:
             raise commands.CommandError(
                 f'Timeout threshold of {timeout} seconds reached while '
-                f'attempting to fetch data from "{url}."') from e
+                f'attempting to fetch data from URL.') from e
 
     async def get_discord_file(self, url, filename, spoiler=False):
         """ get discord File() """

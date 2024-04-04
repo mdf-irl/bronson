@@ -3,6 +3,7 @@
 from discord import Color, Embed, Member
 from discord.ext import commands
 
+
 class Wrestling(commands.Cog):
     """ wrestling-related commands """
 
@@ -25,13 +26,12 @@ class Wrestling(commands.Cog):
         embed = Embed(
             description=(
                 f'{cursed_users} {has_have} been **CURSED** by Danhausen.'),
-            color=Color.red()
+            color=Color.random()
         )
-        embed.set_author(
-            name="Danhausen's Curse", icon_url=await self.ass.get_url('bbb')
-        )
+        # embed.set_author(
+        #     name="Danhausen's Curse", icon_url=await self.ass.get_url('bbb')
+        # )
         embed.set_image(url=f'{await self.ass.get_url('curse')}.gif')
-
         await ctx.send(embed=embed)
 
     @commands.command(aliases=['deeznuts', 'redeem'])
@@ -44,10 +44,17 @@ class Wrestling(commands.Cog):
         """
         deez_users = await self.gen.format_users(users)
 
-        deez_url = await self.ass.get_url('deez.gif')
-        deez_bin = await self.ass.get_discord_file(deez_url, 'deez.gif')
+        embed = Embed(
+            description=f'{deez_users} **REDEEM DEEZ NUTS!!!**',
+            color=Color.random()
+        )
+        embed.set_image(url=await self.ass.get_url('deez.gif'))
+        await ctx.send(embed=embed)
 
-        await ctx.send(f'{deez_users} **REDEEM DEEZ NUTS!!!**', file=deez_bin)
+        # deez_url = await self.ass.get_url('deez.gif')
+        # deez_bin = await self.ass.get_discord_file(deez_url, 'deez.gif')
+
+        # await ctx.send(f'{deez_users} **REDEEM DEEZ NUTS!!!**', file=deez_bin)
 
     @commands.command(aliases=['del'])
     async def delete(self, ctx, users: commands.Greedy[Member]):
@@ -59,10 +66,16 @@ class Wrestling(commands.Cog):
         """
         del_users = await self.gen.format_users(users)
 
-        del_url = await self.ass.get_url('mh_delete.gif')
-        del_bin = await self.ass.get_discord_file(del_url, 'mh_delete.gif')
+        embed=Embed(
+            description=f'{del_users} will be **DELETED**!!!',
+            color=Color.random()
+        )
+        embed.set_image(url=await self.ass.get_url('mh_delete.gif'))
+        await ctx.send(embed=embed)
+        # del_url = await self.ass.get_url('mh_delete.gif')
+        # del_bin = await self.ass.get_discord_file(del_url, 'mh_delete.gif')
 
-        await ctx.send(f'{del_users} will be **DELETED**!!!', file=del_bin)
+        # await ctx.send(f'{del_users} will be **DELETED**!!!', file=del_bin)
 
     @commands.command()
     async def eviluno(self, ctx):
@@ -71,7 +84,10 @@ class Wrestling(commands.Cog):
 
         Usage: <prefix>eviluno
         """
-        await ctx.reply(await self.ass.get_url('evil_uno'))
+        embed = Embed(color=Color.random())
+        embed.set_image(url=await self.ass.get_url('evil_uno'))
+        await ctx.send(embed=embed)
+        # await ctx.reply(await self.ass.get_url('evil_uno'))
 
     async def cog_command_error(self, ctx, error):
         """ override, handles all cog errors for this class """

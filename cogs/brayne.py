@@ -17,6 +17,7 @@ class Brayne(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.ass = self.bot.get_cog('Assets')
+        self.gen = self.bot.get_cog('General')
         self.connected_time = 0
 
     @commands.command(aliases=['about', 'info', 'ver', 'version'])
@@ -33,7 +34,9 @@ class Brayne(commands.Cog):
         Aliases: about, info, ver, version
         """
         embed = Embed(
-            description=self._get_platform_info(), color=Color.blue()
+            title='Bronson',
+            description=self._get_platform_info(),
+            color=Color.random()
         )
         embed.add_field(
             name='__CPU__:', value=self._get_cpu_info(), inline=True
@@ -44,11 +47,10 @@ class Brayne(commands.Cog):
         embed.add_field(
             name='__Disk__:', value=self._get_disk_info(), inline=True
         )
-        embed.set_author(
-            name="Bronson's BrAyNe", icon_url=await self.ass.get_url('bbb')
-        )
+        # embed.set_author(
+        #     name="Bronson's BrAyNe", icon_url=await self.ass.get_url('bbb')
+        # )
         embed.set_thumbnail(url=await self.ass.get_url('brayne'))
-
         await ctx.send(embed=embed)
 
     @commands.command()
@@ -61,13 +63,12 @@ class Brayne(commands.Cog):
                 '(https://github.com/mdf-gh/bronson) to find my command '
                 'list, help, documentation, & source code.'
             ),
-            color=Color.blue()
+            color=Color.random()
         )
-        embed.set_author(
-            name='Bronson', icon_url=await self.ass.get_url('bbb')
-        )
+        # embed.set_author(
+        #     name='Bronson', icon_url=await self.ass.get_url('bbb')
+        # )
         embed.set_thumbnail(url=await self.ass.get_url('cow_capri'))
-
         await ctx.send(embed=embed)
 
     @commands.command()
@@ -78,18 +79,22 @@ class Brayne(commands.Cog):
             cpu_temp_f = cpu_temp.temperature * (9 / 5) + 32
             cpu_temp_f = f'{cpu_temp_f:.2f} °F'
 
-            await ctx.send(
-                f'oWwWw mY BrAyNe iS CuRReNtLy {cpu_temp_f} LOL!!!!!'
+            embed = Embed(
+                description='oWwWw mY BrAyNe iS CuRReNtLy '
+                    f'{cpu_temp_f} LOL!!!!!', color=Color.random()
             )
+            await ctx.send(embed=embed)
         else:
-            await ctx.send('oKaY WtF KoN EyE aM NoT a RaZzBeRRy PiE LOL!!!!!')
+            raise commands.CommandError(
+                'oKaY WtF KoN EyE aM NoT a RaZzBeRRy PiE LOL!!!!!'
+            )
 
     @commands.Cog.listener()
     async def on_ready(self):
         """ called when the bot is online & ready """
         self.connected_time = datetime.now()
         await self.bot.change_presence(
-            activity=CustomActivity(name='420.69-1.3.2')
+            activity=CustomActivity(name='420.69-1.4.0')
         )
 
     def _get_platform_info(self):
@@ -97,7 +102,7 @@ class Brayne(commands.Cog):
         booted_time = datetime.fromtimestamp(boot_time())
 
         platform_info = (
-            '**Bot version**: 420.69-1.3.2\n'
+            '**Bot version**: 420.69-1.4.0\n'
             '**GitHub**: '
             '[/mdf-gh/bronson](https://www.github.com/mdf-gh/bronson)\n\n'
 
@@ -158,9 +163,8 @@ class Brayne(commands.Cog):
 
         return f'{days}d, {hours}h, {minutes}m, {seconds}s'
 
-    @brayne.error
-    async def brayne_error(self, ctx, error):
-        """ handles brayne errors """
+    async def cog_command_error(self, ctx, error):
+        """ override, handles all cog errors for this class """
         await ctx.reply(f'**Error**: {error}')
 
 

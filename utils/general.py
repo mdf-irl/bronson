@@ -2,6 +2,7 @@
 from discord import Member
 from discord.ext import commands
 
+
 class General(commands.Cog):
     """ General class """
 
@@ -15,6 +16,7 @@ class General(commands.Cog):
 
         users_f = ', '.join(user.mention for user in users)
         return users_f
+
 
 async def setup(bot):
     """ add class to bot's cog system """

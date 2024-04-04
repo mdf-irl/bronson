@@ -36,22 +36,26 @@ class Novelty(commands.Cog):
         # format question to turn mentions into display names
         # we do this because an embed title won't properly display
         # mentions
-        mentioned_users = ctx.message.mentions
+        # mentioned_users = ctx.message.mentions
 
-        for user in mentioned_users:
-            question = question.replace(user.mention, user.display_name)
+        # for user in mentioned_users:
+        #     question = question.replace(user.mention, user.display_name)
+
+        if not question.endswith('?'):
+            question = f'{question}?'
 
         embed = Embed(
-            title=f'{question}', description=choice(responses),
-            color=Color.blue()
+            title='Magic 8ball',
+            description=(f'*{question}*\n'
+                         f'**Answer**: {choice(responses)}'),
+            color=Color.random()
         )
-        embed.set_author(
-            name="Bronson's Magic 8ball",
-            icon_url=await self.ass.get_url('bbb')
-        )
-        embed.set_thumbnail(url=await self.ass.get_url('8ball'))
-
-        await ctx.reply(embed=embed)
+        # embed.set_author(
+        #     name="Bronson's Magic 8ball",
+        #     icon_url=await self.ass.get_url('bbb')
+        # )
+        embed.set_thumbnail(url=await self.ass.get_url('8ball_ai_f'))
+        await ctx.send(embed=embed)
 
     @commands.command()
     async def achtung(self, ctx, *, message):
@@ -62,10 +66,9 @@ class Novelty(commands.Cog):
         """
 
         embed = Embed(
-            title='ACHTUNG!', description=message, color=Color.red()
+            title='ACHTUNG!', description=message, color=Color.random()
         )
         embed.set_thumbnail(url=await self.ass.get_url('siren.gif'))
-
         await ctx.send(embed=embed)
 
     @commands.command()
@@ -75,12 +78,14 @@ class Novelty(commands.Cog):
 
         Usage: <prefix>ckhello
         """
-        await ctx.send(
+        msg = (
             'Hello i am Bronson from StarCraft Broodwar.\n'
             'A gamer, a websiter. And i am Arana Friend.\n'
             'And ofc Cool knight in shiny armor.\n'
             ':slight_smile:'
         )
+        embed = Embed(description=msg, color=Color.random())
+        await ctx.send(embed=embed)
 
     @commands.command(aliases=['coin', 'flip', 'flipcoin'])
     async def coinflip(self, ctx):
@@ -95,8 +100,10 @@ class Novelty(commands.Cog):
         coin_state = [
             await self.ass.get_url('heads'), await self.ass.get_url('tails')
         ]
-
-        await ctx.reply(choice(coin_state))
+        embed = Embed(color=Color.random())
+        embed.set_image(url=choice(coin_state))
+        await ctx.send(embed=embed)
+        #await ctx.reply(choice(coin_state))
 
     @commands.command(aliases=['cow'])
     async def cowsay(self, ctx, *, message):
@@ -122,13 +129,14 @@ class Novelty(commands.Cog):
         )
         joke = resp['attachments'][0]['text']
 
-        embed = Embed(description=joke, color=Color.red())
-        embed.set_author(
-            name="Bronson's Dad Jokes", icon_url=await self.ass.get_url('bbb')
+        embed = Embed(
+            title='Dad Jokes', description=joke, color=Color.random()
         )
+        # embed.set_author(
+        #     name="Bronson's Dad Jokes", icon_url=await self.ass.get_url('bbb')
+        # )
         embed.set_thumbnail(url=await self.ass.get_url('dad'))
-
-        await ctx.reply(embed=embed)
+        await ctx.send(embed=embed)
 
     @commands.command(aliases=['fucknewby'])
     async def fnewby(self, ctx):
@@ -138,7 +146,10 @@ class Novelty(commands.Cog):
         Usage: <prefix>fnewby
         Aliases: fucknewby
         """
-        await ctx.reply(f'{await self.ass.get_url('fucknewby')}.gif')
+        embed = Embed(color=Color.random())
+        embed.set_image(url=f'{await self.ass.get_url('fucknewby')}.gif')
+        await ctx.send(embed=embed)
+        # await ctx.reply(f'{await self.ass.get_url('fucknewby')}.gif')
 
     @commands.command()
     async def insult(self, ctx, users: commands.Greedy[Member]):
@@ -155,13 +166,14 @@ class Novelty(commands.Cog):
         insult = insult.replace("You ", "you ", 1)
         response = f'{insultees}, {insult.rstrip()}.'
 
-        embed = Embed(description=response, color=Color.red())
-        embed.set_author(
-            name="Bronson's Insults", icon_url=await self.ass.get_url('bbb')
+        embed = Embed(
+            title='Insults', description=response, color=Color.random()
         )
+        # embed.set_author(
+        #     name="Bronson's Insults", icon_url=await self.ass.get_url('bbb')
+        # )
         embed.set_thumbnail(url=await self.ass.get_url('insult'))
-
-        await ctx.reply(embed=embed)
+        await ctx.send(embed=embed)
 
     @commands.command()
     async def sausage(self, ctx, users: commands.Greedy[Member]):
@@ -183,12 +195,14 @@ class Novelty(commands.Cog):
         )
         # attaching because discord doesn't play nicely with loading
         # content URLs in a multi-line message
-        sausage_url = await self.ass.get_url('sausage')
-        sausage_bin = await self.ass.get_discord_file(
-            sausage_url, filename='sausage.gif'
-        )
-
-        await ctx.reply(response, file=sausage_bin)
+        # sausage_url = await self.ass.get_url('sausage')
+        # sausage_bin = await self.ass.get_discord_file(
+        #     sausage_url, filename='sausage.gif'
+        # )
+        embed = Embed(description=response, color=Color.random())
+        embed.set_image(url=await self.ass.get_url('sausage.gif'))
+        await ctx.send(embed=embed)
+        #await ctx.reply(response, file=sausage_bin)
 
     @commands.command()
     async def spray(self, ctx, users: commands.Greedy[Member]):
@@ -199,12 +213,14 @@ class Novelty(commands.Cog):
         """
         sprayed_users = await self.gen.format_users(users)
 
-        await ctx.send(
+        msg = (
             f'Sprays {sprayed_users} with water bottle\n'
             'There some water for you\n'
             "it' hot water.\n"
             ':wink:'
         )
+        embed = Embed(description=msg, color=Color.random())
+        await ctx.send(embed=embed)
 
     @commands.command(aliases=['hawk'])
     async def trumpet(self, ctx):
@@ -218,7 +234,7 @@ class Novelty(commands.Cog):
         trumpet_vid = await self.ass.get_discord_file(
             trumpet_url, 'trumpet.mov'
         )
-        await ctx.reply(file=trumpet_vid)
+        await ctx.send(file=trumpet_vid)
 
     @commands.command(aliases=['yo'])
     async def yogabs(self, ctx):
@@ -231,7 +247,10 @@ class Novelty(commands.Cog):
         Usage: <prefix>yogabs
         Aliases: yo
         """
-        await ctx.reply(await self.ass.get_url('yogabs', tag=True))
+        embed = Embed(color=Color.random())
+        embed.set_image(url=await self.ass.get_url('yogabs', tag=True))
+        await ctx.send(embed=embed)
+        # await ctx.reply(await self.ass.get_url('yogabs', tag=True))
 
     async def cog_command_error(self, ctx, error):
         """ override, handles all cog errors for this class """

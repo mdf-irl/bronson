@@ -21,16 +21,18 @@ class Facts(commands.Cog):
         Usage: <prefix>cat
         """
         json_data = await self.ass.get_url_data(
-            'https://catfact.ninja/fact', get_type='json')
+            'https://catfact.ninja/fact', get_type='json'
+        )
         fact = json_data['fact']
 
-        embed = Embed(description=fact, color=Color.red())
-        embed.set_author(
-            name="Bronson's Cat Facts", icon_url=await self.ass.get_url('bbb')
+        embed = Embed(
+            title='Cat Facts', description=fact, color=Color.random()
         )
+        # embed.set_author(
+        #     name="Bronson's Cat Facts", icon_url=await self.ass.get_url('bbb')
+        # )
         embed.set_thumbnail(url=await self.ass.get_url('billy_c'))
-
-        await ctx.reply(embed=embed)
+        await ctx.send(embed=embed)
 
     @commands.command()
     async def dog(self, ctx):
@@ -44,13 +46,15 @@ class Facts(commands.Cog):
         )
         fact = json_data['data'][0]['attributes']['body']
 
-        embed = Embed(description=fact, color=Color.red())
-        embed.set_author(
-            name="Bronson's Dog Facts", icon_url=await self.ass.get_url('bbb')
+        embed = Embed(
+            title='Dog Facts', description=fact, color=Color.random()
         )
+        # embed.set_author(
+        #     name="Bronson's Dog Facts", icon_url=await self.ass.get_url('bbb')
+        # )
         embed.set_thumbnail(url=await self.ass.get_url('duchess_c'))
 
-        await ctx.reply(embed=embed)
+        await ctx.send(embed=embed)
 
     @commands.command()
     async def helly(self, ctx):
@@ -63,14 +67,16 @@ class Facts(commands.Cog):
         facts_text = await self.ass.get_url_data(facts_url)
         facts = facts_text.splitlines()
 
-        embed = Embed(description=choice(facts), color=Color.red())
-        embed.set_author(
-            name="Bronson's HeLLy Facts",
-            icon_url=await self.ass.get_url('bbb')
+        embed = Embed(
+            title='HeLLy Facts', description=choice(facts),
+            color=Color.random()
         )
+        # embed.set_author(
+        #     name="Bronson's HeLLy Facts",
+        #     icon_url=await self.ass.get_url('bbb')
+        # )
         embed.set_thumbnail(url=await self.ass.get_url('sherlock'))
-
-        await ctx.reply(embed=embed)
+        await ctx.send(embed=embed)
 
     @commands.command(aliases=['yomama'])
     async def mom(self, ctx, users: commands.Greedy[Member]):
@@ -98,13 +104,14 @@ class Facts(commands.Cog):
         else:
             raise commands.CommandError('Malformed joke.')
 
-        embed = Embed(description=joke, color=Color.red())
-        embed.set_author(
-            name="Bronson's Mom Facts", icon_url=await self.ass.get_url('bbb')
+        embed = Embed(
+            title='Mom Facts', description=joke, color=Color.random()
         )
+        # embed.set_author(
+        #     name="Bronson's Mom Facts", icon_url=await self.ass.get_url('bbb')
+        # )
         embed.set_thumbnail(url=await self.ass.get_url('your_mom'))
-
-        await ctx.reply(embed=embed)
+        await ctx.send(embed=embed)
 
     @commands.command()
     async def useless(self, ctx):
@@ -120,14 +127,15 @@ class Facts(commands.Cog):
         )
         fact = json_data['text']
 
-        embed = Embed(description=fact, color=Color.red())
-        embed.set_author(
-            name="Bronson's Useless Facts",
-            icon_url=await self.ass.get_url('bbb')
+        embed = Embed(
+            title='Useless Facts', description=fact, color=Color.random()
         )
+        # embed.set_author(
+        #     name="Bronson's Useless Facts",
+        #     icon_url=await self.ass.get_url('bbb')
+        # )
         embed.set_thumbnail(url=await self.ass.get_url('useless'))
-
-        await ctx.reply(embed=embed)
+        await ctx.send(embed=embed)
 
     async def cog_command_error(self, ctx, error):
         """ override, handles all cog errors for this class """
