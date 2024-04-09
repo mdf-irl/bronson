@@ -46,10 +46,6 @@ class Voice(commands.Cog):
 
         # build embed with invite message & file references
         embed = Embed(description=inv_msg, color=Color.random())
-        # embed.set_author(
-        #     name="Bronson's Voice Chat Invitation",
-        #     icon_url=await self.ass.get_url('bbb')
-        # )
         embed.set_thumbnail(url=await self.ass.get_url('quill'))
         embed.set_image(url=await self.ass.get_url('rsvp'))
         embed.set_footer(

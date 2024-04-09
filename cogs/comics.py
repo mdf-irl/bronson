@@ -29,9 +29,6 @@ class Comics(commands.Cog):
         embed = Embed(
             title='Garfield Minus Garfield', color=Color.random()
         )
-        # embed.set_author(
-        #     name="Bronson's Comics", icon_url=await self.ass.get_url('bbb')
-        # )
         embed.set_image(url=await self.ass.get_url('gmg', tag=True))
         await ctx.send(embed=embed)
 
@@ -122,9 +119,6 @@ class Comics(commands.Cog):
         embed = Embed(
             title=f'{name}: {date[0]}', color=Color.random()
         )
-        # embed.set_author(
-        #     name="Bronson's Comics", icon_url=await self.ass.get_url('bbb')
-        # )
         embed.set_image(url='attachment://comic.gif')
 
         # attaching because discord shows attached images larger than

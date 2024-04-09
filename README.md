@@ -2,6 +2,17 @@
 ![](https://res.cloudinary.com/mdf-cdn/image/upload/v1711960243/bronson/project_bronson.jpg)
 
 ## **Commands**
+### **Aspies**
+Command | Aliases | Description
+--- | --- | ---
+!49ers || Sends HeLLy 49ers gif
+!ckhello || Sends Cool-Knight's hello message
+!fnewby | fucknewby | Sends the classic fucknewby gif
+!gabby || Sends the stabby gabby gif
+!spray *@user(s)* || Sprays *@user(s)* with water bottle (it' hot water.)
+!trumpet | hawk | Sends a video of Hawk's beautiful trumpet performance
+!yogabs | yo | Sends a random yo gabs meme
+
 ### **Brayne**
 Command | Aliases | Description
 --- | --- | ---
@@ -33,7 +44,8 @@ Command | Aliases | Description
 Command | Aliases | Description
 --- | --- | ---
 !bronson | btoborg | Sends IRL Bronson's mug shot image
-!haheho | ha | Sends a haha hehe hoho message
+!ha || Sends a haha hehe hoho message
+!hack *@user(s)* || Bronson hacks *@user(s)*
 !hello | hi, hey | Sends Bronson's famous hello message
 !powerslam | ps, pslam | Sends a powerslam message
 !sludge || Sends a random sludge dump image
@@ -46,16 +58,21 @@ Command | Aliases | Description
 --- | --- | ---
 !8ball *question* || Asks Bronson's Magic 8ball a *question*
 !achtung *message* || Sends an ACHTUNG! alert about *message*
-!ckhello || Sends Cool-Knight's hello message
-!coinflip | coin, flip, flipcoin | Bronson flips a coin for you
+!coin || Bronson flips a coin for you
 !cowsay *message* | cow | Sends an ASCII art cow saying your *message*
 !dadjoke || Sends a random dad joke
-!fnewby | fucknewby | Sends the classic fucknewby gif
+!gif *query* | tenor | Sends the first gif result from tenor for *query*
 !insult *@user(s)* || Insults *@user(s)*
+!joke || Sends a random joke
 !sausage *@user(s)* || Asks *@user(s)* if they would like some sausage
-!spray *@user(s)* || Sprays *@user(s)* with water bottle (it' hot water.)
-!trumpet | hawk | Sends a video of Hawk's beautiful trumpet performance
-!yogabs | yo | Sends a random yo gabs meme
+!vapor || Sends a chart of the vaporization points of various cannabinoids
+
+### **Quotes**
+Command | Aliases | Description
+--- | --- | ---
+!kanye || Sends a random Kanye West quote
+!ralph || Sends a random Ralph Wiggum quote
+!zen || Sends a random zen quote
 
 ### **Voice**
 Command | Aliases | Description
@@ -74,3 +91,4 @@ Command | Aliases | Description
 !deez *@user(s)* | deeznuts, redeem | Kindly asks *@user(s)* to redeem deez nuts
 !delete *@user(s)* | del | Informs *@user(s)* that they will be deleted
 !eviluno || Sends an image informing channel of Evil Uno's incessant flatulence
+!hotrain *@user(s) | Asks *@user(s)* to come aboard the ho train

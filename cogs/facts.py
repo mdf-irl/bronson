@@ -28,9 +28,6 @@ class Facts(commands.Cog):
         embed = Embed(
             title='Cat Facts', description=fact, color=Color.random()
         )
-        # embed.set_author(
-        #     name="Bronson's Cat Facts", icon_url=await self.ass.get_url('bbb')
-        # )
         embed.set_thumbnail(url=await self.ass.get_url('billy_c'))
         await ctx.send(embed=embed)
 
@@ -49,11 +46,7 @@ class Facts(commands.Cog):
         embed = Embed(
             title='Dog Facts', description=fact, color=Color.random()
         )
-        # embed.set_author(
-        #     name="Bronson's Dog Facts", icon_url=await self.ass.get_url('bbb')
-        # )
         embed.set_thumbnail(url=await self.ass.get_url('duchess_c'))
-
         await ctx.send(embed=embed)
 
     @commands.command()
@@ -71,10 +64,6 @@ class Facts(commands.Cog):
             title='HeLLy Facts', description=choice(facts),
             color=Color.random()
         )
-        # embed.set_author(
-        #     name="Bronson's HeLLy Facts",
-        #     icon_url=await self.ass.get_url('bbb')
-        # )
         embed.set_thumbnail(url=await self.ass.get_url('sherlock'))
         await ctx.send(embed=embed)
 
@@ -107,9 +96,6 @@ class Facts(commands.Cog):
         embed = Embed(
             title='Mom Facts', description=joke, color=Color.random()
         )
-        # embed.set_author(
-        #     name="Bronson's Mom Facts", icon_url=await self.ass.get_url('bbb')
-        # )
         embed.set_thumbnail(url=await self.ass.get_url('your_mom'))
         await ctx.send(embed=embed)
 
@@ -130,10 +116,6 @@ class Facts(commands.Cog):
         embed = Embed(
             title='Useless Facts', description=fact, color=Color.random()
         )
-        # embed.set_author(
-        #     name="Bronson's Useless Facts",
-        #     icon_url=await self.ass.get_url('bbb')
-        # )
         embed.set_thumbnail(url=await self.ass.get_url('useless'))
         await ctx.send(embed=embed)
 

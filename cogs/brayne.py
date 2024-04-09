@@ -47,9 +47,6 @@ class Brayne(commands.Cog):
         embed.add_field(
             name='__Disk__:', value=self._get_disk_info(), inline=True
         )
-        # embed.set_author(
-        #     name="Bronson's BrAyNe", icon_url=await self.ass.get_url('bbb')
-        # )
         embed.set_thumbnail(url=await self.ass.get_url('brayne'))
         await ctx.send(embed=embed)
 
@@ -65,9 +62,6 @@ class Brayne(commands.Cog):
             ),
             color=Color.random()
         )
-        # embed.set_author(
-        #     name='Bronson', icon_url=await self.ass.get_url('bbb')
-        # )
         embed.set_thumbnail(url=await self.ass.get_url('cow_capri'))
         await ctx.send(embed=embed)
 
@@ -81,7 +75,7 @@ class Brayne(commands.Cog):
 
             embed = Embed(
                 description='oWwWw mY BrAyNe iS CuRReNtLy '
-                    f'{cpu_temp_f} LOL!!!!!', color=Color.random()
+                f'{cpu_temp_f} LOL!!!!!', color=Color.random()
             )
             await ctx.send(embed=embed)
         else:
@@ -94,7 +88,7 @@ class Brayne(commands.Cog):
         """ called when the bot is online & ready """
         self.connected_time = datetime.now()
         await self.bot.change_presence(
-            activity=CustomActivity(name='420.69-1.4.0')
+            activity=CustomActivity(name='420.69-1.5.0')
         )
 
     def _get_platform_info(self):
@@ -102,7 +96,7 @@ class Brayne(commands.Cog):
         booted_time = datetime.fromtimestamp(boot_time())
 
         platform_info = (
-            '**Bot version**: 420.69-1.4.0\n'
+            '**Bot version**: 420.69-1.5.0'
             '**GitHub**: '
             '[/mdf-gh/bronson](https://www.github.com/mdf-gh/bronson)\n\n'
 

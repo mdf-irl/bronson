@@ -12,7 +12,6 @@ class Fangulese(commands.Cog):
         self.bot = bot
         self.ass = self.bot.get_cog('Assets')
         self.gen = self.bot.get_cog('General')
-        # self.kamillion = False
 
     @commands.command(aliases=['btoborg', 'btoborg1'])
     async def bronson(self, ctx):
@@ -25,10 +24,29 @@ class Fangulese(commands.Cog):
         embed = Embed(color=Color.random())
         embed.set_image(url=await self.ass.get_url('bronson'))
         await ctx.send(embed=embed)
-        # await ctx.send(await self.ass.get_url('bronson'))
 
-    @commands.command(aliases=['ha'])
-    async def haheho(self, ctx):
+    @commands.command()
+    async def hack(self, ctx, users: commands.Greedy[Member]):
+        """ hack @user(s) """
+        has_have = 'HaZ' if len(users) == 1 else 'HaVe'
+        hacked_users = await self.gen.format_users(users)
+
+        embed = Embed(
+            title='SMMPHA', description=(
+                f'{hacked_users} {has_have} BeEn HaCKeD!!! LoL!!!!! '
+                'oKaY KoN eYe HaVe HaKkEd YeR CoMp LoL oKaY YeaH oKaY LoL '
+                'YeW HaVe BeEn r0oTeD LoL!!!\n\n'
+
+                'eYe HaVe SucKSeSsFuLLy HiT YeW WitH tHe SeQUeNTiaL '
+                'MuLTi-MaTRiX PiNCeR HaK aTTacK!!! hAh HEhe hOh oKaYyYYyY '
+                'BuYYy!!!'
+            ), color=Color.random()
+        )
+        embed.set_thumbnail(url=await self.ass.get_url('hack.gif'))
+        await ctx.send(embed=embed)
+
+    @commands.command()
+    async def ha(self, ctx):
         """ Sends a ha he ho message """
         msg = [
             'AH haH HEhEH ehh HO o ho Ho Ho OHO!!!!!'
@@ -46,20 +64,6 @@ class Fangulese(commands.Cog):
             description=f'{choice(msg)} {choice(msg)}', color=Color.random()
         )
         await ctx.send(embed=embed)
-        # await ctx.send(f'{choice(msg)} {choice(msg)}')
-
-    # @commands.command()
-    # @commands.is_owner()  # only bot owner can do this
-    # async def kamillion(self, ctx):
-    #     """ kamillion moad on/off """
-    #     if not self.kamillion:
-    #         await self.bot.change_presence(status=Status.invisible)
-    #         await ctx.send('KaMiLLiOn MoAd engaged.')
-    #         self.kamillion = True
-    #     else:
-    #         await self.bot.change_presence(status=Status.online)
-    #         await ctx.send('KaMiLLiOn MoAd disengaged.')
-    #         self.kamillion = False
 
     @commands.command(aliases=['hey', 'hi'])
     async def hello(self, ctx):
@@ -102,8 +106,8 @@ class Fangulese(commands.Cog):
             color=Color.random()
         )
         await ctx.send(embed=embed)
-        # await ctx.send(self._get_alt_caps(f'{oo}k{aa}{yy} {pp}owerslam{ex}'))
 
+    @commands.is_nsfw()
     @commands.command(aliases=['sludgedump'])
     async def sludge(self, ctx):
         """
@@ -123,7 +127,7 @@ class Fangulese(commands.Cog):
         sludge_bin = await self.ass.get_discord_file(
             sludge_url, 'sludge.jpg', spoiler=True
         )
-        await ctx.send(file=sludge_bin)
+        await ctx.send(':poop: **WARNING** :poop:', file=sludge_bin)
 
     @commands.command()
     async def tohd(self, ctx, users: commands.Greedy[Member]):
@@ -139,10 +143,6 @@ class Fangulese(commands.Cog):
             color=Color.random()
         )
         await ctx.send(embed=embed)
-        # await ctx.send(
-        #     f'TUCH OV HERTNISS DISSTINTS ON U {tohd_users} '
-        #     'IYAHHHHHHHHHH!!!!11'
-        # )
 
     @commands.command(aliases=['tehehe', 'teeheehee'])
     async def thh(self, ctx):
@@ -162,7 +162,6 @@ class Fangulese(commands.Cog):
             description=f'{tee}\n{heee}\n{heeee}', color=Color.random()
         )
         await ctx.send(embed=embed)
-        # await ctx.send(f'{tee}\n{heee}\n{heeee}')
 
     @commands.command(aliases=['yh'])
     async def yeehaw(self, ctx):
@@ -185,10 +184,6 @@ class Fangulese(commands.Cog):
             color=Color.random()
         )
         await ctx.send(embed=embed)
-        # await ctx.send(
-        #     f'Y{ee}H{aa}{ww}{ex}\n'
-        #     f"RIDIN' A MOTHERFUCKIN' COWBOY{ex * 2} :cowboy:"
-        # )
 
     def _get_alt_caps(self, message):
         """
@@ -206,8 +201,9 @@ class Fangulese(commands.Cog):
     async def cog_command_error(self, ctx, error):
         """ override, handles all cog errors for this class """
         if isinstance(error, commands.CheckFailure):
-            await ctx.send(
-                '**Error**: Only the bot owner can use this command.'
+            await ctx.reply(
+                '**Error**: This command can only be used in channels tagged '
+                'as **NSFW**.'
             )
         else:
             await ctx.reply(f'**Error**: {error}')

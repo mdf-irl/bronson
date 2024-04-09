@@ -16,8 +16,6 @@ class Weather(commands.Cog):
 
         load_dotenv()
         self.openweathermap_api_key = getenv('OPENWEATHERMAP_API_KEY')
-        # load_dotenv()
-        # self.weatherbit_api_key = getenv('WEATHERBIT_API_KEY')
 
     @commands.command(aliases=['w'])
     async def weather(self, ctx, zipcode):
@@ -81,10 +79,6 @@ class Weather(commands.Cog):
         )
 
         embed = Embed(title=city, description=body, color=Color.random())
-        # embed.set_author(
-        #     name="Bronson's Weather",
-        #     icon_url=await self.ass.get_url('bbb')
-        # )
         embed.set_thumbnail(
             url='http://openweathermap.org/img/wn/'
                 f'{json_data['weather'][0]['icon']}@2x.png'

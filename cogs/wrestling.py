@@ -28,9 +28,6 @@ class Wrestling(commands.Cog):
                 f'{cursed_users} {has_have} been **CURSED** by Danhausen.'),
             color=Color.random()
         )
-        # embed.set_author(
-        #     name="Danhausen's Curse", icon_url=await self.ass.get_url('bbb')
-        # )
         embed.set_image(url=f'{await self.ass.get_url('curse')}.gif')
         await ctx.send(embed=embed)
 
@@ -51,11 +48,6 @@ class Wrestling(commands.Cog):
         embed.set_image(url=await self.ass.get_url('deez.gif'))
         await ctx.send(embed=embed)
 
-        # deez_url = await self.ass.get_url('deez.gif')
-        # deez_bin = await self.ass.get_discord_file(deez_url, 'deez.gif')
-
-        # await ctx.send(f'{deez_users} **REDEEM DEEZ NUTS!!!**', file=deez_bin)
-
     @commands.command(aliases=['del'])
     async def delete(self, ctx, users: commands.Greedy[Member]):
         """
@@ -66,16 +58,12 @@ class Wrestling(commands.Cog):
         """
         del_users = await self.gen.format_users(users)
 
-        embed=Embed(
+        embed = Embed(
             description=f'{del_users} will be **DELETED**!!!',
             color=Color.random()
         )
         embed.set_image(url=await self.ass.get_url('mh_delete.gif'))
         await ctx.send(embed=embed)
-        # del_url = await self.ass.get_url('mh_delete.gif')
-        # del_bin = await self.ass.get_discord_file(del_url, 'mh_delete.gif')
-
-        # await ctx.send(f'{del_users} will be **DELETED**!!!', file=del_bin)
 
     @commands.command()
     async def eviluno(self, ctx):
@@ -87,7 +75,20 @@ class Wrestling(commands.Cog):
         embed = Embed(color=Color.random())
         embed.set_image(url=await self.ass.get_url('evil_uno'))
         await ctx.send(embed=embed)
-        # await ctx.reply(await self.ass.get_url('evil_uno'))
+
+    @commands.command()
+    async def hotrain(self, ctx, users: commands.Greedy[Member]):
+        """ Asks user(s) to come aboard the ho train """
+        ho_users = await self.gen.format_users(users)
+
+        embed = Embed(
+            description=(
+                f"IT'S TIME, ONCE AGAIN, FOR {ho_users} TO COME "
+                "ABOARD THE... **HOOOOOO TRAAAAIIIINNNNN**!!!"
+            ), color=Color.random()
+        )
+        embed.set_image(url=await self.ass.get_url('ho_train.gif'))
+        await ctx.send(embed=embed)
 
     async def cog_command_error(self, ctx, error):
         """ override, handles all cog errors for this class """

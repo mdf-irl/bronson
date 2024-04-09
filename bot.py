@@ -11,8 +11,6 @@ from dotenv import load_dotenv
 load_dotenv()
 DISCORD_TOKEN = getenv('DISCORD_TOKEN')
 BOT_PREFIX = getenv('BOT_PREFIX')
-CLOUD_NAME = getenv('CLOUD_NAME')
-OPENWEATHERMAP_API_KEY = getenv('OPENWEATHERMAP_API_KEY')
 
 if DISCORD_TOKEN is None:
     print("Couldn't get DISCORD_TOKEN from .env file")
@@ -20,12 +18,6 @@ if DISCORD_TOKEN is None:
 elif BOT_PREFIX is None:
     print("Couldn't get BOT_PREFIX from .env file. Defaulting to '!'")
     BOT_PREFIX = '!'
-elif CLOUD_NAME is None:
-    print("Couldn't get CLOUD_NAME from .env file.")
-    quit_bot()
-elif OPENWEATHERMAP_API_KEY is None:
-    print("Couldn't get OPENWEATHERMAP_API_KEY from .env file.")
-    quit_bot()
 
 
 class DiscordBot(commands.Bot):
