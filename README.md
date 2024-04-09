@@ -91,4 +91,4 @@ Command | Aliases | Description
 !deez *@user(s)* | deeznuts, redeem | Kindly asks *@user(s)* to redeem deez nuts
 !delete *@user(s)* | del | Informs *@user(s)* that they will be deleted
 !eviluno || Sends an image informing channel of Evil Uno's incessant flatulence
-!hotrain *@user(s)* | Asks *@user(s)* to come aboard the ho train
+!hotrain *@user(s)* || Asks *@user(s)* to come aboard the ho train
