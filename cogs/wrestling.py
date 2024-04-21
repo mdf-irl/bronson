@@ -28,7 +28,7 @@ class Wrestling(commands.Cog):
                 f'{cursed_users} {has_have} been **CURSED** by Danhausen.'),
             color=Color.random()
         )
-        embed.set_image(url=f'{await self.ass.get_url('curse')}.gif')
+        embed.set_image(url=await self.ass.get_url('curse.gif'))
         await ctx.send(embed=embed)
 
     @commands.command(aliases=['deeznuts', 'redeem'])

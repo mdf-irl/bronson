@@ -43,7 +43,7 @@ class Aspies(commands.Cog):
         Aliases: fucknewby
         """
         embed = Embed(color=Color.random())
-        embed.set_image(url=f'{await self.ass.get_url('fucknewby')}.gif')
+        embed.set_image(url=await self.ass.get_url('fucknewby.gif'))
         await ctx.send(embed=embed)
 
     @commands.command()
@@ -87,18 +87,16 @@ class Aspies(commands.Cog):
 
     @commands.command(aliases=['yo'])
     async def yogabs(self, ctx):
-        """
-        Sends a random 'yo gabs' meme
-
-        Sends a random 'yo gabs' meme image from the
-        ./images/yogabs/ local directory. So wholesome.
-
-        Usage: <prefix>yogabs
-        Aliases: yo
-        """
+        """ Sends a random yo gabs meme """
         embed = Embed(color=Color.random())
         embed.set_image(url=await self.ass.get_url('yogabs', tag=True))
-        await ctx.send(embed=embed)
+
+        # gabs user id: 235906772504805377
+        # check for gabs & tag her if she's in the server
+        gabs = ctx.guild.get_member(235906772504805377)
+        gabs_mention = '' if gabs is None else '<@235906772504805377>'
+
+        await ctx.send(gabs_mention, embed=embed)
 
     async def cog_command_error(self, ctx, error):
         """ override, handles all cog errors for this class """

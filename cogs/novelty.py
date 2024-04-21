@@ -17,8 +17,10 @@ class Novelty(commands.Cog):
         self.gen = self.bot.get_cog('General')
 
         load_dotenv()
-        # self.giphy_api_key = getenv('GIPHY_API_KEY')
         self.tenor_api_key = getenv('TENOR_API_KEY')
+        self.tenor_client_key = getenv('TENOR_CLIENT_KEY')
+        self.giphy_api_key = getenv('GIPHY_API_KEY')
+        self.drunkenslug_api_key = getenv('DRUNKENSLUG_API_KEY')
 
     @commands.command(name='8ball')
     async def eightball(self, ctx, *, question):
@@ -107,32 +109,35 @@ class Novelty(commands.Cog):
         embed.set_thumbnail(url=await self.ass.get_url('dad'))
         await ctx.send(embed=embed)
 
-    # @commands.command()
-    # async def fortune(self, ctx):
-    #     """ get fortune """
-    #     resp_url = await self.ass.get_url('fortunes.txt', res_type='raw')
-    #     resp_txt = await self.ass.get_url_data(resp_url)
-    #     responses = resp_txt.splitlines()
+    @commands.command()
+    async def fortune(self, ctx):
+        """ get fortune """
+        resp_url = await self.ass.get_url('fortunes.txt', res_type='raw')
+        resp_txt = await self.ass.get_url_data(resp_url)
+        responses = resp_txt.splitlines()
 
-    #     fortune = choice(responses)
-    #     await ctx.send(fortune)
+        embed = Embed(
+            title='Your fortune is...', description=choice(responses),
+            color=Color.random()
+        )
+        embed.set_thumbnail(url=await self.ass.get_url('fortune'))
+        await ctx.send(embed=embed)
 
-    # @commands.command(aliases=['gif'])
-    # async def giphy(self, ctx, *, query):
-    #     """ get gif from giphy """
-    #     json_data = await self.ass.get_url_data(
-    #         f'http://api.giphy.com/v1/gifs/search?q={query}&limit=10'
-    #         f'&api_key={self.giphy_api_key}', get_type='json'
-    #     )
-    #     if json_data['data']:
-    #         rand_gif = choice(json_data['data'])
-    #         rand_url = rand_gif['images']['original']['url']
-
-    #         embed = Embed(color=Color.random())
-    #         embed.set_image(url=rand_url)
-    #         await ctx.send(embed=embed)
-    #     else:
-    #         raise commands.CommandError('No results found.')
+    @commands.command(aliases=['gif2'])
+    async def giphy(self, ctx, *, query):
+        """ get gif from giphy """
+        json_data = await self.ass.get_url_data(
+            f'http://api.giphy.com/v1/gifs/search?q={query}&limit=1'
+            f'&api_key={self.giphy_api_key}', get_type='json'
+        )
+        if json_data['data']:
+            embed = Embed(color=Color.random())
+            embed.set_image(
+                url=json_data['data'][0]['images']['original']['url']
+            )
+            await ctx.send(embed=embed)
+        else:
+            raise commands.CommandError('No results found.')
 
     @commands.command()
     async def insult(self, ctx, users: commands.Greedy[Member]):
@@ -163,11 +168,49 @@ class Novelty(commands.Cog):
             '?blacklistFlags=racist,sexist&format=txt'
         )
         embed = Embed(
-            title='RLY FUN-E JOKES LOL!!! :hand_splayed: :skull:',
+            title='RLY FUN-E JOKES LOL!!! :hand_splayed::skull:',
             description=joke, color=Color.random()
         )
         embed.set_thumbnail(url=await self.ass.get_url('cow_lol'))
         await ctx.send(embed=embed)
+
+    @commands.command()
+    async def nzb(self, ctx, *, query):
+        """ check drunkenslug for nzbs """
+        # this is hacked together and DEFINITELY needs a re-write
+        # but... for now it works! LOL!!!!!!!!
+        json_data = await self.ass.get_url_data(
+            f'https://drunkenslug.com/api?t=search&q={query}&o=json'
+            f'&apikey={self.drunkenslug_api_key}', get_type='json'
+        )
+        try:
+            if json_data['item']:
+                entry_list = []
+                if not isinstance(json_data['item'], list):
+                    # we have only 1 result, so 'item' is not a list...
+                    # so we process the result here to avoid a KeyError
+                    entry_list.append(
+                        f"1. [{json_data['item']['title']}]"
+                        f"({json_data['item']['guid']['text']})"
+                    )
+                else:
+                    # we have more than 1 result:
+                    items = json_data['item'][:5]
+                    for i, item in enumerate(items, start=1):
+                        entry_list.append(
+                            f"{i}. [{item['title']}]({item['guid']['text']})"
+                        )
+                entries = '\n'.join(entry_list)
+
+                embed = Embed(
+                    title='DrunkenSlug Results', description=entries,
+                    color=Color.random()
+                )
+                embed.set_thumbnail(url=await self.ass.get_url('drunk_slug'))
+                await ctx.send(embed=embed)
+        except KeyError as e:
+            # we have 0 results
+            raise commands.CommandError('No results found.') from e
 
     @commands.command()
     async def sausage(self, ctx, users: commands.Greedy[Member]):
@@ -196,8 +239,8 @@ class Novelty(commands.Cog):
         """ get tenor gif """
         json_data = await self.ass.get_url_data(
             f'https://tenor.googleapis.com/v2/search?q={query}'
-            f'&key={self.tenor_api_key}&client_key=bronson&limit=1',
-            get_type='json'
+            f'&key={self.tenor_api_key}&client_key={self.tenor_client_key}'
+            '&limit=1', get_type='json'
         )
         if json_data['results']:
             gif = json_data['results'][0]['media_formats']['gif']['url']

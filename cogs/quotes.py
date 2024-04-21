@@ -17,7 +17,9 @@ class Quotes(commands.Cog):
         """ gets a kanye quote """
         quote = await self.ass.get_url_data('https://api.kanye.rest/text')
         embed = Embed(
-            title='Kanye West Quotes', description=quote, color=Color.random()
+            title='Kanye West Quotes',
+            description=f'{quote}\n\n-- Kanye West, inspired by HeLLy',
+            color=Color.random()
         )
         embed.set_thumbnail(url=await self.ass.get_url('kanye_f'))
         await ctx.send(embed=embed)
@@ -29,9 +31,14 @@ class Quotes(commands.Cog):
         ralph_txt = await self.ass.get_url_data(ralph_url)
         ralph_quotes = ralph_txt.split('%')
 
+        ralph_quote = choice(ralph_quotes)
+        ralph_quote = ralph_quote.replace(
+            '--Ralph Wiggum', '-- Ralph Wiggum, inspired by HeLLy'
+        )
+
         embed = Embed(
             title='Ralph Wiggum Quotes',
-            description=choice(ralph_quotes), color=Color.random()
+            description=ralph_quote, color=Color.random()
         )
         embed.set_thumbnail(url=await self.ass.get_url('ralph_25'))
         await ctx.send(embed=embed)

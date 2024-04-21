@@ -20,6 +20,7 @@ class Weather(commands.Cog):
     @commands.command(aliases=['w'])
     async def weather(self, ctx, zipcode):
         """ weather command """
+        # this badly needs a re-write
         try:
             json_data = await self.ass.get_url_data(
                 f'http://api.openweathermap.org/geo/1.0/zip?zip={zipcode}'

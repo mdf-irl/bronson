@@ -1,5 +1,6 @@
 """ comics module """
 from re import findall
+from random import randint
 
 from discord import Color, Embed
 from discord.ext import commands
@@ -30,6 +31,34 @@ class Comics(commands.Cog):
             title='Garfield Minus Garfield', color=Color.random()
         )
         embed.set_image(url=await self.ass.get_url('gmg', tag=True))
+        await ctx.send(embed=embed)
+
+    @commands.command()
+    async def xkcd(self, ctx):
+        """ gets a random comic from xkcd """
+        # official API doesn't support random, so we parse the main site
+        # first to get the ID # of the latest comic for our random choice
+        html = await self.ass.get_url_data('https://xkcd.com')
+        max_num = findall(r'(?<=xkcd\.com\/)\d+', html)
+
+        if not max_num:
+            raise commands.CommandError("Couldn't extract highest comic ID.")
+
+        random_id = randint(1, int(max_num[0]))
+        json_data = await self.ass.get_url_data(
+            f'https://xkcd.com/{random_id}/info.0.json', get_type='json'
+        )
+        embed = Embed(
+            title=(
+                f"XKCD: {json_data['safe_title']} "
+                f"({json_data['month']}/{json_data['day']}"
+                f"/{json_data['year']})"
+            ),
+            # description=f"*{json_data['alt']}*",
+            color=Color.random()
+        )
+        embed.set_image(url=json_data['img'])
+        embed.set_footer(text=json_data['alt'])
         await ctx.send(embed=embed)
 
     @commands.command(aliases=['bd'])
@@ -108,8 +137,8 @@ class Comics(commands.Cog):
 
         # I should probably be using bs4 for this for
         # performance reasons
-        date = findall('(?<=formatted-date=").+?(?=")', html)
-        image_url = findall('(?<=data-image=").+?(?=")', html)
+        date = findall(r'(?<=formatted-date=").+?(?=")', html)
+        image_url = findall(r'(?<=data-image=").+?(?=")', html)
 
         if not date:
             raise commands.CommandError("Couldn't extract date.")
