@@ -30,6 +30,7 @@ Command | Aliases | Description
 !peanuts | p | Sends a random Peanuts comic strip
 !peanutsb | pb | Sends a random Peanuts Begins comic strip
 !sarah | scribbles, ss | Sends a random Sarah's Scribbles comic strip
+!xkcd || Sends a random comic from XKCD
 
 ### **Facts**
 Command | Aliases | Description
@@ -61,9 +62,12 @@ Command | Aliases | Description
 !coin || Bronson flips a coin for you
 !cowsay *message* | cow | Sends an ASCII art cow saying your *message*
 !dadjoke || Sends a random dad joke
+!fortune || Bronson reveals your fortune to you
 !gif *query* | tenor | Sends the first gif result from tenor for *query*
+!gif2 *query* | giphy | Sends the first gif result from giphy for *query*
 !insult *@user(s)* || Insults *@user(s)*
 !joke || Sends a random joke
+!nzb *query* || Searches DrunkenSlug for *query*
 !sausage *@user(s)* || Asks *@user(s)* if they would like some sausage
 !vapor || Sends a chart of the vaporization points of various cannabinoids
 
