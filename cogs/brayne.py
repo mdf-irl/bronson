@@ -20,6 +20,17 @@ class Brayne(commands.Cog):
         self.gen = self.bot.get_cog('General')
         self.connected_time = 0
 
+    @commands.command()
+    async def ping(self, ctx):
+        """ ping cmd """
+        ping_ms = round(self.bot.latency * 1000)
+        embed = Embed(
+            title='Pong! :ping_pong: LOL!!!',
+            description=f'My current ping is {ping_ms}ms.',
+            color=Color.random()
+        )
+        await ctx.send(embed=embed)
+
     @commands.command(aliases=['about', 'info', 'ver', 'version'])
     async def brayne(self, ctx):
         """
@@ -48,6 +59,7 @@ class Brayne(commands.Cog):
             name='__Disk__:', value=self._get_disk_info(), inline=True
         )
         embed.set_thumbnail(url=await self.ass.get_url('brayne'))
+        embed.set_footer(text=f'Ping: {round(self.bot.latency * 1000)}ms')
         await ctx.send(embed=embed)
 
     @commands.command()
@@ -88,7 +100,7 @@ class Brayne(commands.Cog):
         """ called when the bot is online & ready """
         self.connected_time = datetime.now()
         await self.bot.change_presence(
-            activity=CustomActivity(name='420.69-1.6.0')
+            activity=CustomActivity(name='420.69-1.7.0 - !help')
         )
 
     def _get_platform_info(self):
@@ -96,7 +108,7 @@ class Brayne(commands.Cog):
         booted_time = datetime.fromtimestamp(boot_time())
 
         platform_info = (
-            '**Bot version**: 420.69-1.6.0\n'
+            '**Bot version**: 420.69-1.7.0\n'
             '**GitHub**: '
             '[/mdf-gh/bronson](https://www.github.com/mdf-gh/bronson)\n\n'
 

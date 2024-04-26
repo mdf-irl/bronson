@@ -1,9 +1,11 @@
 """ comics module """
+# from os import remove
 from re import findall
 from random import randint
 
-from discord import Color, Embed
+from discord import Color, Embed, File
 from discord.ext import commands
+from PIL import Image
 
 
 class Comics(commands.Cog):
@@ -18,6 +20,77 @@ class Comics(commands.Cog):
         self.bot = bot
         self.ass = self.bot.get_cog('Assets')
         self.gen = self.bot.get_cog('General')
+
+    def _combine_images(self, img_names: list[str], filename: str):
+        """combine rcg panels into 1 image"""
+        # adapted from Alex The JPEG's Mastodon bot
+        c_img_width = sum(
+            Image.open(name).size[0] for name in img_names) + 20
+        c_img_height = max(
+            Image.open(name).size[1] for name in img_names) + 20
+        c_img = Image.new(
+            "RGB", (c_img_width, c_img_height), color=(255, 255, 255)
+        )
+        x_offset = 10
+        y_offset = 10
+
+        for name in img_names:
+            image = Image.open(name)
+            c_img.paste(image, (x_offset, y_offset))
+            x_offset += image.size[0]
+
+        c_img.save(filename, format="PNG")
+
+    @commands.command()
+    async def rcg(self, ctx):
+        """Sends randomly generated comic from Explosm"""
+        #needs to be refactored LOL
+        json_data = await self.ass.get_url_data(
+            'https://explosm.net/api/get-random-panels', get_type='json'
+        )
+        prefix = 'https://rcg-cdn.explosm.net/panels/'
+        panels = [
+            f"{prefix}{json_data['panels'][0]['filename']}",
+            f"{prefix}{json_data['panels'][1]['filename']}",
+            f"{prefix}{json_data['panels'][2]['filename']}",
+        ]
+        comic_id = (
+            f"{json_data['panels'][0]['slug']}"
+            f"{json_data['panels'][1]['slug']}"
+            f"{json_data['panels'][2]['slug']}"
+        )
+        comic_url = f'https://explosm.net/rcg/{comic_id.lower()}'
+
+        for i, item in enumerate(panels, start=0):
+            panel_bin = await self.ass.get_url_data(item, get_type='binary')
+            with open(f'./tmp/{comic_id}_{i}.png', 'wb') as file:
+                file.write(panel_bin)
+
+        self._combine_images(
+            [
+                f'./tmp/{comic_id}_0.png',
+                f'./tmp/{comic_id}_1.png',
+                f'./tmp/{comic_id}_2.png'
+            ],
+            f'./tmp/{comic_id}.png'
+        )
+
+        embed = Embed(
+            title="Joking Hazard's Random Comic Generator",
+            description=(
+                f'[Explosm.net](https://explosm.net/) permalink: {comic_url}'
+            ), color=Color.random()
+        )
+        embed.set_image(url=f'attachment://{comic_id}.png')
+
+        with open(f'./tmp/{comic_id}.png', 'rb') as file:
+            comic_file = File(file, f'{comic_id}.png')
+            await ctx.send(embed=embed, file=comic_file)
+
+        # remove(f'./tmp/{comic_id}_0.png')
+        # remove(f'./tmp/{comic_id}_1.png')
+        # remove(f'./tmp/{comic_id}_2.png')
+        # remove(f'./tmp/{comic_id}.png')
 
     @commands.command()
     async def gmg(self, ctx):

@@ -35,9 +35,7 @@ class Novelty(commands.Cog):
 
         Usage: <prefix>8ball question
         """
-        resp_url = await self.ass.get_url(
-            '8ball_responses.txt', res_type='raw'
-        )
+        resp_url = await self.ass.get_url('8ball_2.txt', res_type='raw')
         resp_text = await self.ass.get_url_data(resp_url)
         responses = resp_text.splitlines()
 
@@ -50,7 +48,7 @@ class Novelty(commands.Cog):
                          f'**Answer**: {choice(responses)}'),
             color=Color.random()
         )
-        embed.set_thumbnail(url=await self.ass.get_url('8ball_ai_f'))
+        embed.set_thumbnail(url=await self.ass.get_url('8ball_new'))
         await ctx.send(embed=embed)
 
     @commands.command()
@@ -110,14 +108,15 @@ class Novelty(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command()
-    async def fortune(self, ctx):
+    async def fortune(self, ctx, user: Member = None):
         """ get fortune """
         resp_url = await self.ass.get_url('fortunes.txt', res_type='raw')
         resp_txt = await self.ass.get_url_data(resp_url)
         responses = resp_txt.splitlines()
 
+        who = f"{user.display_name}'s" if user else 'Your'
         embed = Embed(
-            title='Your fortune is...', description=choice(responses),
+            title=f'{who} fortune is...', description=choice(responses),
             color=Color.random()
         )
         embed.set_thumbnail(url=await self.ass.get_url('fortune'))

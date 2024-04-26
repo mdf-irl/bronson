@@ -68,7 +68,7 @@ class Facts(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command(aliases=['yomama'])
-    async def mom(self, ctx, users: commands.Greedy[Member]):
+    async def mom(self, ctx, user: Member):
         """
         Sends a fact about @user's mom
 
@@ -78,7 +78,7 @@ class Facts(commands.Cog):
         Usage: <prefix>mom @user
         Aliases: yomama
         """
-        target_users = await self.gen.format_users(users)
+        #target_users = await self.gen.format_users(users)
 
         json_data = await self.ass.get_url_data(
             'https://www.yomama-jokes.com/api/v1/jokes/random/',
@@ -89,7 +89,7 @@ class Facts(commands.Cog):
         # make sure the joke is in valid format, then swap out
         # "yo mama" for @user's MOM
         if joke.lower().startswith('yo mama'):
-            joke = f"{target_users}'s **MOM** {joke[7:]}"
+            joke = f"{user.mention}'s **MOM** {joke[7:]}"
         else:
             raise commands.CommandError('Malformed joke.')
 

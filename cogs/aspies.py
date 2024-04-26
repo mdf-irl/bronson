@@ -34,6 +34,13 @@ class Aspies(commands.Cog):
         embed = Embed(description=msg, color=Color.random())
         await ctx.send(embed=embed)
 
+    @commands.command()
+    async def deploy(self, ctx):
+        """ Sends deploy c0n image """
+        embed = Embed(color=Color.random())
+        embed.set_image(url=await self.ass.get_url('deploy_c0n'))
+        await ctx.send(embed=embed)
+
     @commands.command(aliases=['fucknewby'])
     async def fnewby(self, ctx):
         """
