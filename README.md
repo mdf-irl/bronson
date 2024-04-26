@@ -7,6 +7,7 @@ Command | Aliases | Description
 --- | --- | ---
 !49ers || Sends HeLLy 49ers gif
 !ckhello || Sends Cool-Knight's hello message
+!deploy || Sends deploy c0n image
 !fnewby | fucknewby | Sends the classic fucknewby gif
 !gabby || Sends the stabby gabby gif
 !spray *@user(s)* || Sprays *@user(s)* with water bottle (it' hot water.)
@@ -18,6 +19,7 @@ Command | Aliases | Description
 --- | --- | ---
 !brayne | about, info, ver, version | Sends info about the current status of Bronson
 !help || Directs users to this page for command info, etc.
+!ping || Sends Bronson's ping
 !temp || Sends info about Bronson's current temperature
 
 ### **Comics**
@@ -29,6 +31,7 @@ Command | Aliases | Description
 !gmg || Sends a random Garfield Minus Garfield comic strip
 !peanuts | p | Sends a random Peanuts comic strip
 !peanutsb | pb | Sends a random Peanuts Begins comic strip
+!rcg || Sends a randomly generated comic from Joking Hazard's Random Comic Generator (millions of possible combos)
 !sarah | scribbles, ss | Sends a random Sarah's Scribbles comic strip
 !xkcd || Sends a random comic from XKCD
 
@@ -38,7 +41,7 @@ Command | Aliases | Description
 !cat || Sends a random fact about cats
 !dog || Sends a random fact about dogs
 !helly || Sends a random fact about HeLLy
-!mom *@user(s)* | yomama | Sends a random fact about *@user(s)*' mom
+!mom *@user* | yomama | Sends a random fact about *@user*'s mom
 !useless || Sends a random useless fact
 
 ### **Fangulese**
@@ -62,7 +65,7 @@ Command | Aliases | Description
 !coin || Bronson flips a coin for you
 !cowsay *message* | cow | Sends an ASCII art cow saying your *message*
 !dadjoke || Sends a random dad joke
-!fortune || Bronson reveals your fortune to you
+!fortune [*@user*] || Bronson reveals your fortune to you, or *@user*'s fortune if optional argument added
 !gif *query* | tenor | Sends the first gif result from tenor for *query*
 !gif2 *query* | giphy | Sends the first gif result from giphy for *query*
 !insult *@user(s)* || Insults *@user(s)*
