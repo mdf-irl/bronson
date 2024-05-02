@@ -151,7 +151,7 @@ class Novelty(commands.Cog):
             )
             thumbnail = 'insult_mild'
             response = f'{insult.rstrip()}.'
-        elif arg == '-spicy':
+        elif (arg == '-spicy') or (arg == '-s'):
             words_txt = await self.ass.get_url_data(
                 await self.ass.get_url('insult_words.txt', res_type='raw')
             )

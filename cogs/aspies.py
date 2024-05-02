@@ -123,7 +123,7 @@ class Aspies(commands.Cog):
 
         public_id_list = await self._yo_get_id_list()
 
-        if arg == '-list':
+        if (arg == '-list') or (arg == '-l'):
             public_ids = ', '.join(sorted(public_id_list))
             embed = Embed(
                 title='Yo Gabs Picture IDs', description=public_ids,

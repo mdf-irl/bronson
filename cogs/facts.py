@@ -106,7 +106,7 @@ class Facts(commands.Cog):
         embed = Embed(
             title='Mom Facts', description=joke, color=Color.random()
         )
-        embed.set_thumbnail(url=await self.ass.get_url('your_mom'))
+        embed.set_thumbnail(url=await self.ass.get_url('your_mom_md'))
         await ctx.send(embed=embed)
 
     @commands.command()

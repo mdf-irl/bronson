@@ -58,10 +58,11 @@ Command | Aliases | Description
 !tehehe | thh | Sends Equ4L]ZeR0['s tee hee hee message
 !yeehaw | yh | Sends a yeehaw message
 
-### **Movies**
+### **Media**
 Command | Aliases | Description
 --- | --- | ---
 !movie *query* || Shows movie information for *query*
+!tv *query* || Shows TV show information for *query*
 
 ### **Novelty**
 Command | Aliases | Description
