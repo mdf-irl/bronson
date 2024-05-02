@@ -15,8 +15,6 @@ class Movies(commands.Cog):
         load_dotenv()
         self.omdb_api_key = getenv('OMDB_API_KEY')
 
-        self.movie_embeds = []
-
     @commands.command()
     async def movie(self, ctx: commands.Context, *, query: str):
         """get movie info"""
@@ -27,15 +25,18 @@ class Movies(commands.Cog):
             movie_ids = await self._get_movie_ids(query)
             movie_ids = movie_ids[:5]
 
-            await self._populate_movie_embeds(movie_ids)
-            await self._show_movies(ctx)
+            movie_embeds = []
+            movie_embeds = await self._populate_movie_embeds(movie_ids)
+            await self._show_movies(ctx, movie_embeds)
 
     async def _populate_movie_embeds(self, movie_ids: list):
         """populate the class's movie embed list"""
-        self.movie_embeds.clear()
+        movie_embeds = []
 
         for movie_id in movie_ids:
-            self.movie_embeds.append(await self._get_embed_by_tt(movie_id))
+            movie_embeds.append(await self._get_embed_by_tt(movie_id))
+
+        return movie_embeds
 
     async def _get_movie_ids(self, query: str):
         json_data = await self.ass.get_url_data(
@@ -76,9 +77,9 @@ class Movies(commands.Cog):
             f'https://www.omdbapi.com/?apikey={self.omdb_api_key}&i={tt}'
             f'&plot=short', get_type = 'json'
         )
-        try:
+        if json_data['Ratings']:
             ratings = await self._format_ratings(json_data['Ratings'])
-        except IndexError:
+        else:
             ratings = 'N/A'
 
         search_title = await self._format_search_title(json_data['Title'])
@@ -118,11 +119,14 @@ class Movies(commands.Cog):
             embed.set_thumbnail(url=json_data['Poster'])
         return embed
 
-    async def _show_movies(self, ctx: commands.Context):
+    async def _show_movies(self, ctx: commands.Context, movie_embeds: list):
         """show movies"""
-        menu = ViewMenu(ctx, menu_type=ViewMenu.TypeEmbed)
+        menu = ViewMenu(
+            ctx, menu_type=ViewMenu.TypeEmbed,
+            timeout=None, all_can_click=True
+        )
 
-        for movie_embed in self.movie_embeds:
+        for movie_embed in movie_embeds:
             menu.add_page(movie_embed)
 
         btn_back = ViewButton(
@@ -133,7 +137,7 @@ class Movies(commands.Cog):
 
         btn_next = ViewButton(
             style=ButtonStyle.primary, label='>',
-              custom_id=ViewButton.ID_NEXT_PAGE
+            custom_id=ViewButton.ID_NEXT_PAGE
         )
         menu.add_button(btn_next)
 

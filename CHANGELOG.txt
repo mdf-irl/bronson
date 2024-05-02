@@ -1,3 +1,13 @@
+1.8.3
+- !movie buttons can now be interacted with by all server members
+- !movie buttons no longer timeout after 60 seconds
+- !movie embeds are now method specific rather than global
+- !movie ratings now display N/A if no IMDb, RT, or Metacritic ratings are found
+- Added !foiegras (HeLLy's Foie Gras Fun Facts) to README (forgot to document from 1.8.0)
+
+1.8.1 & 1.8.2:
+- Small bug fixes for !brayne temperature
+
 1.8.0:
 - !rcg is now fully asynchronous
 - !rcg now automatically scrubs temporary files

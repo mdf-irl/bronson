@@ -40,6 +40,7 @@ Command | Aliases | Description
 --- | --- | ---
 !cat || Sends a random fact about cats
 !dog || Sends a random fact about dogs
+!foiegras || Sends a random fact about foie gras
 !helly || Sends a random fact about HeLLy
 !mom *@user* | yomama | Sends a random fact about *@user*'s mom
 !useless || Sends a random useless fact
