@@ -12,7 +12,7 @@ Command | Aliases | Description
 !gabby || Sends the stabby gabby gif
 !spray *@user(s)* || Sprays *@user(s)* with water bottle (it' hot water.)
 !trumpet | hawk | Sends a video of Hawk's beautiful trumpet performance
-!yogabs | yo | Sends a random yo gabs meme
+!yo [-list] or [ID] | yogabs | Sends a random yo gabs meme. Optional argument -list shows a list of picture IDs that can be used to show a specific meme (!yo gordon, etc.)
 
 ### **Brayne**
 Command | Aliases | Description
@@ -57,6 +57,11 @@ Command | Aliases | Description
 !tehehe | thh | Sends Equ4L]ZeR0['s tee hee hee message
 !yeehaw | yh | Sends a yeehaw message
 
+### **Movies**
+Command | Aliases | Description
+--- | --- | ---
+!movie *query* || Shows movie information for *query*
+
 ### **Novelty**
 Command | Aliases | Description
 --- | --- | ---
@@ -68,7 +73,7 @@ Command | Aliases | Description
 !fortune [*@user*] || Bronson reveals your fortune to you, or *@user*'s fortune if optional argument added
 !gif *query* | tenor | Sends the first gif result from tenor for *query*
 !gif2 *query* | giphy | Sends the first gif result from giphy for *query*
-!insult *@user(s)* || Insults *@user(s)*
+!insult *@user(s)* [-spicy] || Insults *@user(s)*. Optional -spicy argument uses more explicit insults.
 !joke || Sends a random joke
 !nzb *query* || Searches DrunkenSlug for *query*
 !sausage *@user(s)* || Asks *@user(s)* if they would like some sausage

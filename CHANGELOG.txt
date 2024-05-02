@@ -1,0 +1,8 @@
+1.8.0:
+- !rcg is now fully asynchronous
+- !rcg now automatically scrubs temporary files
+- !brayne now displays temperature in Celsius by default
+- !insult now accepts an optional -spicy argument to use more explicit insults
+- !yo now accepts an optional picture ID argument to show a specific yo gabs meme (!yo gordon, etc.)
+- !yo now accepts an optional -list argument to show a list of usable picture IDs
+- Added !movie to search for and display movie information (!movie Terrifier, etc.)

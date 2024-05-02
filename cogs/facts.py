@@ -50,12 +50,22 @@ class Facts(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command()
-    async def helly(self, ctx):
-        """
-        Sends a random fact about HeLLy
+    async def foiegras(self, ctx: commands.Context):
+        """sends a random fact about foie gras"""
+        fg_url = await self.ass.get_url('foie_facts.txt', res_type='raw')
+        fg_txt = await self.ass.get_url_data(fg_url)
+        fg_facts = fg_txt.splitlines()
 
-        Usage: <prefix>helly
-        """
+        embed = Embed(
+            title="HeLLy's Foie Gras Fun Facts", description=choice(fg_facts),
+            color=Color.random()
+        )
+        embed.set_thumbnail(url=await self.ass.get_url('foie_gras'))
+        await ctx.send(embed=embed)
+
+    @commands.command()
+    async def helly(self, ctx: commands.Context):
+        """sends a random fact about HeLLy"""
         facts_url = await self.ass.get_url('helly_facts.txt', res_type='raw')
         facts_text = await self.ass.get_url_data(facts_url)
         facts = facts_text.splitlines()

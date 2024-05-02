@@ -1,6 +1,6 @@
 """ novelty module """
 from os import getenv
-from random import choice
+from random import choice, sample
 
 from cowsay import get_output_string
 from discord import Color, Embed, Member
@@ -139,24 +139,34 @@ class Novelty(commands.Cog):
             raise commands.CommandError('No results found.')
 
     @commands.command()
-    async def insult(self, ctx, users: commands.Greedy[Member]):
-        """
-        Insult @user(s)
+    async def insult(
+        self, ctx: commands.Context,
+        users: commands.Greedy[Member], *, arg: str = None):
+        """insult @user(s)"""
+        insultees = await self.gen.format_users(users, False)
 
-        Usage: <prefix>insult @user(s)
-        """
-        insultees = await self.gen.format_users(users)
+        if arg is None:
+            insult = await self.ass.get_url_data(
+                'https://insult.mattbas.org/api/insult.txt'
+            )
+            thumbnail = 'insult_mild'
+            response = f'{insult.rstrip()}.'
+        elif arg == '-spicy':
+            words_txt = await self.ass.get_url_data(
+                await self.ass.get_url('insult_words.txt', res_type='raw')
+            )
+            words_list = words_txt.splitlines()
+            words_chosen_list = sample(words_list, 10)
+            words = ' '.join(words_chosen_list)
+            a_an = 'an' if words[0] in ['a', 'e', 'i', 'o', 'u'] else 'a'
 
-        insult = await self.ass.get_url_data(
-            'https://insult.mattbas.org/api/insult.txt'
-        )
-        insult = insult.replace("You ", "you ", 1)
-        response = f'{insultees}, {insult.rstrip()}.'
+            thumbnail = 'insult_spicy'
+            response = f'You are {a_an} {words}.'
 
         embed = Embed(
-            title='Insults', description=response, color=Color.random()
+            title=f'{insultees}...', description=response, color=Color.random()
         )
-        embed.set_thumbnail(url=await self.ass.get_url('insult'))
+        embed.set_thumbnail(url=await self.ass.get_url(thumbnail))
         await ctx.send(embed=embed)
 
     @commands.command()

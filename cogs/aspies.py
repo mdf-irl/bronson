@@ -92,18 +92,56 @@ class Aspies(commands.Cog):
         )
         await ctx.send(file=trumpet_vid)
 
-    @commands.command(aliases=['yo'])
-    async def yogabs(self, ctx):
-        """ Sends a random yo gabs meme """
-        embed = Embed(color=Color.random())
-        embed.set_image(url=await self.ass.get_url('yogabs', tag=True))
+    async def _yo_get_id_list(self):
+        """get list of yo gabs picture IDs"""
+        json_data = await self.ass.get_url_data(
+            'https://res.cloudinary.com/mdf-cdn/image/list/yogabs.json',
+            get_type='json'
+        )
+        public_id_list = (
+            [resource['public_id'][15:]
+                for resource in json_data['resources']]
+        )
+        return public_id_list
 
+    async def _yo_get_gabs_mention(self, ctx: commands.Context):
+        """check for gabs & get @mention"""
         # gabs user id: 235906772504805377
-        # check for gabs & tag her if she's in the server
+        # check for gabs & @mention her if she's in the server
         gabs = ctx.guild.get_member(235906772504805377)
         gabs_mention = '' if gabs is None else '<@235906772504805377>'
+        return gabs_mention
 
-        await ctx.send(gabs_mention, embed=embed)
+    @commands.command(aliases=['yogabs'])
+    async def yo(self, ctx: commands.Context, arg: str = None):
+        """yo gabs"""
+        if arg is None:
+            embed = Embed(color=Color.random())
+            embed.set_image(url=await self.ass.get_url('yogabs', tag=True))
+            await ctx.send(await self._yo_get_gabs_mention(ctx), embed=embed)
+            return
+
+        public_id_list = await self._yo_get_id_list()
+
+        if arg == '-list':
+            public_ids = ', '.join(sorted(public_id_list))
+            embed = Embed(
+                title='Yo Gabs Picture IDs', description=public_ids,
+                color=Color.random()
+            )
+            await ctx.send(embed=embed)
+            return
+
+        if arg in public_id_list:
+            embed = Embed(color=Color.random())
+            embed.set_image(url=await self.ass.get_url(f'yogabs/{arg}'))
+            await ctx.send(await self._yo_get_gabs_mention(ctx), embed=embed)
+        else:
+            raise commands.CommandError(
+                f'wow ya "{arg}" is not a valid pickshur ID u fkn retard. '
+                 'u must b RLY DUMB LOL!!!!!'
+            )
+
 
     async def cog_command_error(self, ctx, error):
         """ override, handles all cog errors for this class """

@@ -1,5 +1,5 @@
 """ comics module """
-# from os import remove
+from os import remove
 from re import findall
 from random import randint
 
@@ -21,7 +21,7 @@ class Comics(commands.Cog):
         self.ass = self.bot.get_cog('Assets')
         self.gen = self.bot.get_cog('General')
 
-    def _combine_images(self, img_names: list[str], filename: str):
+    async def _combine_images(self, img_names: list[str], filename: str):
         """combine rcg panels into 1 image"""
         # adapted from Alex The JPEG's Mastodon bot
         c_img_width = sum(
@@ -44,7 +44,7 @@ class Comics(commands.Cog):
     @commands.command()
     async def rcg(self, ctx):
         """Sends randomly generated comic from Explosm"""
-        #needs to be refactored LOL
+        #needs to be re-written LOL!!!
         json_data = await self.ass.get_url_data(
             'https://explosm.net/api/get-random-panels', get_type='json'
         )
@@ -66,7 +66,7 @@ class Comics(commands.Cog):
             with open(f'./tmp/{comic_id}_{i}.png', 'wb') as file:
                 file.write(panel_bin)
 
-        self._combine_images(
+        await self._combine_images(
             [
                 f'./tmp/{comic_id}_0.png',
                 f'./tmp/{comic_id}_1.png',
@@ -87,10 +87,10 @@ class Comics(commands.Cog):
             comic_file = File(file, f'{comic_id}.png')
             await ctx.send(embed=embed, file=comic_file)
 
-        # remove(f'./tmp/{comic_id}_0.png')
-        # remove(f'./tmp/{comic_id}_1.png')
-        # remove(f'./tmp/{comic_id}_2.png')
-        # remove(f'./tmp/{comic_id}.png')
+        remove(f'./tmp/{comic_id}_0.png')
+        remove(f'./tmp/{comic_id}_1.png')
+        remove(f'./tmp/{comic_id}_2.png')
+        remove(f'./tmp/{comic_id}.png')
 
     @commands.command()
     async def gmg(self, ctx):

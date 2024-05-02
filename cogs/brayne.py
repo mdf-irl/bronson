@@ -77,30 +77,30 @@ class Brayne(commands.Cog):
         embed.set_thumbnail(url=await self.ass.get_url('cow_capri'))
         await ctx.send(embed=embed)
 
-    @commands.command()
-    async def temp(self, ctx):
-        """ temp """
-        if system().lower() == "linux":
-            cpu_temp = CPUTemperature()
-            cpu_temp_f = cpu_temp.temperature * (9 / 5) + 32
-            cpu_temp_f = f'{cpu_temp_f:.2f} °F'
+    # @commands.command()
+    # async def temp(self, ctx):
+    #     """ temp """
+    #     if system().lower() == "linux":
+    #         cpu_temp = CPUTemperature()
+    #         cpu_temp_f = cpu_temp.temperature * (9 / 5) + 32
+    #         cpu_temp_f = f'{cpu_temp_f:.2f} °F'
 
-            embed = Embed(
-                description='oWwWw mY BrAyNe iS CuRReNtLy '
-                f'{cpu_temp_f} LOL!!!!!', color=Color.random()
-            )
-            await ctx.send(embed=embed)
-        else:
-            raise commands.CommandError(
-                'oKaY WtF KoN EyE aM NoT a RaZzBeRRy PiE LOL!!!!!'
-            )
+    #         embed = Embed(
+    #             description='oWwWw mY BrAyNe iS CuRReNtLy '
+    #             f'{cpu_temp_f} LOL!!!!!', color=Color.random()
+    #         )
+    #         await ctx.send(embed=embed)
+    #     else:
+    #         raise commands.CommandError(
+    #             'oKaY WtF KoN EyE aM NoT a RaZzBeRRy PiE LOL!!!!!'
+    #         )
 
     @commands.Cog.listener()
     async def on_ready(self):
         """ called when the bot is online & ready """
         self.connected_time = datetime.now()
         await self.bot.change_presence(
-            activity=CustomActivity(name='420.69-1.7.0 - !help')
+            activity=CustomActivity(name='420.69-1.8.2 - !help')
         )
 
     def _get_platform_info(self):
@@ -108,7 +108,7 @@ class Brayne(commands.Cog):
         booted_time = datetime.fromtimestamp(boot_time())
 
         platform_info = (
-            '**Bot version**: 420.69-1.7.0\n'
+            '**Bot version**: 420.69-1.8.2\n'
             '**GitHub**: '
             '[/mdf-gh/bronson](https://www.github.com/mdf-gh/bronson)\n\n'
 
@@ -127,17 +127,18 @@ class Brayne(commands.Cog):
         # get cpu temp if on linux (raspberry pi)
         if system().lower() == "linux":
             cpu_temp = CPUTemperature()
-            cpu_temp_f = cpu_temp.temperature * (9 / 5) + 32
-            cpu_temp_f = f'{cpu_temp_f:.2f} °F'
+            cpu_temp_c = f'{cpu_temp.temperature:.2f} °C'
+            # cpu_temp_f = cpu_temp.temperature * (9 / 5) + 32
+            # cpu_temp_f = f'{cpu_temp_f:.2f} °F'
         else:
-            cpu_temp_f = 'N/A'
+            cpu_temp_c = 'N/A'
 
         cpu_info = (
             f'**Usage**: {cpu_percent(interval=1):.2f}%\n'
             f'**Core/Freq**: {cpu_count(logical=False)}x @ '
             f'{cpu_freq().current / 1000:.2f} GHz '
             f'(***max*** *{cpu_freq().max / 1000:.2f} GHz*)\n'
-            f'**Temperature**: {cpu_temp_f}'
+            f'**Temperature**: {cpu_temp_c}'
         )
         return cpu_info
 

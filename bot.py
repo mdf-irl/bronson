@@ -41,7 +41,6 @@ class DiscordBot(commands.Bot):
         # always load utils first
         await self.load_extension('utils.assets')
         await self.load_extension('utils.general')
-        #await self.load_extension('utils.sync')
 
         cogs = listdir('./cogs')
         for cog in cogs:

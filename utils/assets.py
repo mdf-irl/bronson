@@ -20,19 +20,23 @@ class Assets(commands.Cog):
 
         if not tag:
             return utils.cloudinary_url(
-                f'bronson/{public_id}', resource_type=res_type)[0]
+                f'bronson/{public_id}', resource_type=res_type
+            )[0]
 
         json_data = await self.get_url_data(
             f'http://res.cloudinary.com/mdf-cdn/image/list/{public_id}.json',
-            get_type='json')
+            get_type='json'
+        )
         chosen_public_id = choice(
             [resource['public_id'] for resource in json_data['resources']]
         )
         return utils.cloudinary_url(
-            chosen_public_id, resource_type=res_type)[0]
+            chosen_public_id, resource_type=res_type
+        )[0]
 
     async def get_url_data(self, url, get_type='text', timeout=5):
         """ GET """
+        # print(url) #####
         try:
             async with ClientSession() as session:
                 async with session.get(url, timeout=timeout) as response:
@@ -50,11 +54,13 @@ class Assets(commands.Cog):
                     else:
                         raise commands.CommandError(
                             f'Fetch attempt on URL failed with error code '
-                            f'{response.status}.')
+                            f'{response.status}.'
+                        )
         except TimeoutError as e:
             raise commands.CommandError(
                 f'Timeout threshold of {timeout} seconds reached while '
-                f'attempting to fetch data from URL.') from e
+                f'attempting to fetch data from URL.'
+            ) from e
 
     async def get_discord_file(self, url, filename, spoiler=False):
         """ get discord File() """

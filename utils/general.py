@@ -9,12 +9,16 @@ class General(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    async def format_users(self, users: commands.Greedy[Member]):
+    async def format_users(
+            self, users: commands.Greedy[Member], mention: bool = True):
         """ format users """
         if not users:
             raise commands.CommandError("You didn't @mention any user(s).")
 
-        users_f = ', '.join(user.mention for user in users)
+        if mention:
+            users_f = ', '.join(user.mention for user in users)
+        else:
+            users_f = ', '.join(user.display_name for user in users)
         return users_f
 
 
