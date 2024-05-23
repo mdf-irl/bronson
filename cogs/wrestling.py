@@ -13,6 +13,18 @@ class Wrestling(commands.Cog):
         self.gen = self.bot.get_cog('General')
 
     @commands.command()
+    async def cry(self, ctx: commands.Context, users: commands.Greedy[Member]):
+        """cry me a river"""
+        cry_users = await self.gen.format_users(users)
+
+        embed = Embed(
+            description=f'{cry_users} **CRY ME A RIVER!**',
+            color=Color.random()
+        )
+        embed.set_image(url=await self.ass.get_url('cry.gif'))
+        await ctx.send(embed=embed)
+
+    @commands.command()
     async def curse(self, ctx, users: commands.Greedy[Member]):
         """
         Inflict a very nice, very evil curse upon @user(s)

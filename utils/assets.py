@@ -34,12 +34,15 @@ class Assets(commands.Cog):
             chosen_public_id, resource_type=res_type
         )[0]
 
-    async def get_url_data(self, url, get_type='text', timeout=5):
+    async def get_url_data(self, url, get_type='text',
+                           timeout=5, headers=None):
         """ GET """
         # print(url) #####
         try:
             async with ClientSession() as session:
-                async with session.get(url, timeout=timeout) as response:
+                async with session.get(
+                    url, timeout=timeout, headers=headers
+                ) as response:
                     if response.status == 200:
                         if get_type == 'text':
                             return await response.text()

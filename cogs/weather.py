@@ -12,15 +12,12 @@ class Weather(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.ass = self.bot.get_cog('Assets')
-        self.gen = self.bot.get_cog('General')
 
         load_dotenv()
         self.openweathermap_api_key = getenv('OPENWEATHERMAP_API_KEY')
 
-    @commands.command(aliases=['w'])
-    async def weather(self, ctx, zipcode):
-        """ weather command """
-        # this badly needs a re-write
+    async def _weather_geolocate(self, zipcode: int):
+        """geolocate zipcode"""
         try:
             json_data = await self.ass.get_url_data(
                 f'http://api.openweathermap.org/geo/1.0/zip?zip={zipcode}'
@@ -28,76 +25,98 @@ class Weather(commands.Cog):
             )
         except Exception as e:
             raise commands.CommandError(
-                "You didn't provide a valid postal code."
+                "You didn't provide a valid zipcode."
             ) from e
+        return json_data['name'], json_data['lat'], json_data['lon']
 
-        await ctx.send(
-            embed=await self._get_weather_embed(
-                city=json_data['name'],
-                lat=json_data['lat'], lon=json_data['lon']
-            )
-        )
+    @commands.command(aliases=['w'])
+    async def weather(self, ctx: commands.Context, zipcode: int = None):
+        """weather command"""
+        if not zipcode:
+            raise commands.CommandError("You didn't provide a zipcode.")
 
-    async def _get_weather_embed(self, city, lat, lon):
-        """ build weather embed """
-        json_data = await self.ass.get_url_data(
-            'https://api.openweathermap.org/data/2.5/weather?units=imperial'
-            f'&lat={lat}&lon={lon}&appid={self.openweathermap_api_key}',
-            get_type='json'
-        )
-        body = (
-            f'**Right now**: {json_data['weather'][0]['description']}\n'
-        )
+        city, lat, lon = await self._weather_geolocate(zipcode)
+        weather_data = await self._weather_get_data(lat, lon)
+        await ctx.send(embed=await self._weather_get_embed(city, weather_data))
 
-        try:
-            body += (
-                f'**Rainfall**: {await self._mm_to_in(
-                    json_data['rain']['1h']):.2f} in/hr\n\n'
-            )
-            rainfall = True
-        except KeyError:
-            rainfall = False
-
-        try:
-            body += (
-                f'**Snowfall**: {await self._mm_to_in(
-                    json_data['snow']['1h']):.2f} in/hr\n\n'
-            )
-            snowfall = True
-        except KeyError:
-            snowfall = False
-
-        if (not rainfall) and (not snowfall):
-            body += '\n'
-
-        body += (
-            f'**Temperature**: {json_data['main']['temp']} °F\n'
-            f'**Feels like**: {json_data['main']['feels_like']} °F\n\n'
-
-            f'**Wind speed**: {json_data['wind']['speed']} mph\n'
-            f'**Cloud coverage**: {json_data['clouds']['all']}%\n'
-            f'**Relative humidity**: {json_data['main']['humidity']}%'
-        )
-
-        embed = Embed(title=city, description=body, color=Color.random())
+    async def _weather_get_embed(self, city: str, weather_data: list):
+        """get weather embed"""
+        embed = Embed(title=city, color=Color.random())
         embed.set_thumbnail(
             url='http://openweathermap.org/img/wn/'
-                f'{json_data['weather'][0]['icon']}@2x.png'
+                f"{weather_data['weather'][0]['icon']}@2x.png"
+        )
+        embed.add_field(
+            name='**Status**:',
+            value=weather_data['weather'][0]['description'],
+            inline=True
+        )
+        try:
+            embed.add_field(
+                name='**Rainfall**:',
+                value=f"{await self._weather_mm_to_in(
+                    weather_data['rain']['1h']):.2f} in/hr",
+                inline=True
+            )
+        except KeyError:
+            pass
+        try:
+            embed.add_field(
+                name='**Snowfall**:',
+                value=f"{await self._weather_mm_to_in(
+                    weather_data['snow']['1h']):.2f} in/hr",
+                inline=True
+            )
+        except KeyError:
+            pass
+        embed.add_field(
+            name='**Temperature**:',
+            value=f"{weather_data['main']['temp']} °F",
+            inline=True
+        )
+        embed.add_field(
+            name='**Feels like**:',
+            value=f"{weather_data['main']['feels_like']} °F",
+            inline=True
+        )
+        embed.add_field(
+            name='**Wind speed**:',
+            value=f"{weather_data['wind']['speed']} mph",
+            inline=True
+        )
+        embed.add_field(
+            name='**Cloud coverage**:',
+            value=f"{weather_data['clouds']['all']}%",
+            inline=True
+        )
+        embed.add_field(
+            name='**Relative humidity**:',
+            value=f"{weather_data['main']['humidity']}%",
+            inline=True
         )
         return embed
 
-    async def _mm_to_in(self, mm):
-        """ mm to in """
+    async def _weather_get_data(self, lat: float, lon: float):
+        """get weather data"""
+        try:
+            json_data = await self.ass.get_url_data(
+                'https://api.openweathermap.org/data/2.5/weather?units=imperial'
+                f'&lat={lat}&lon={lon}&appid={self.openweathermap_api_key}',
+                get_type='json'
+            )
+        except Exception as e:
+            raise commands.CommandError(
+                "Couldn't retrieve weather data."
+            ) from e
+        return json_data
+
+    async def _weather_mm_to_in(self, mm: float):
+        """mm to in"""
         return mm * 0.0393701
 
     async def cog_command_error(self, ctx, error):
         """ override, handles all cog errors for this class """
-        if isinstance(error, commands.MissingRequiredArgument):
-            await ctx.reply(
-                "**Error**: You didn't provide the necessary argument(s)."
-            )
-        else:
-            await ctx.reply(f'**Error**: {error}')
+        await ctx.reply(f'**Error**: {error}')
 
 
 async def setup(bot):

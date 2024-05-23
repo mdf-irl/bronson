@@ -1,3 +1,37 @@
+1.9.3:
+- Re-wrote !weather (!w)
+- Fixed a bug where !gif -<#> error message was showing the wrong #
+- Temporarily disabled !nzb until it is re-written
+
+1.9.2:
+- Minor bug fixes
+
+1.9.1:
+- Minor bug fixes for !epic & !humpty
+- Sending an optional argument with !yo can now be done as !yo -<name> or !yo <name>
+- Added !choose (alias !choice) command to help choose between arguments supplied in: "a, b, c" format
+
+1.9.0:
+- Added !humpty to send detailed instructions on doing the humpty dance
+- Added !epic to get a list of Epic Game Store's free games of the week
+- Added -u optional argument to !epic to show upcoming free games (!epic -u)
+- Added !bufu to BuFu @user(s) (oKaY BuY)
+- Added !interesting as an alias to !useless for useless/interesting facts
+- Added !cry to tell @user(s) to cry me a river
+- Added !homework to ask @user(s) if they need help with their homework
+- Added !idk to send idk lol ASCII art
+- Added !sdm to send #sDm ASCII art
+- Added !randall (alias !snitch) to send Randall/snitch gif
+- Added !moocrew to send moo crew gif
+- Overhauled !gif:
+-- !gif <name> returns the 1st result from Tenor for <name>
+-- !gif <name> -m returns an embed view of up to the 1st 50x results from Tenor for <name>
+-- !gif <name> -<#> returns the result from Tenor for <name> at position <#>
+
+-- !gif <name> -g returns the 1st result from GIPHY for <name>
+-- !gif <name> -gm returns an embed view of up to the 1st 50x results from GIPHY for <name>
+-- !gif <name> -g<#> returns the result from GIPHY for <name> at position <#>
+
 1.8.4:
 - !insult now accepts -s argument as an alias of -spicy
 - !yo now accepts -l argument as an alias of -list

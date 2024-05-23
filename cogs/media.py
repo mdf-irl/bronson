@@ -144,7 +144,7 @@ class Media(commands.Cog):
         return embed
 
     async def _show_media(self, ctx: commands.Context, embeds: list):
-        """show movies"""
+        """show embeds"""
         menu = ViewMenu(
             ctx, menu_type=ViewMenu.TypeEmbed,
             timeout=None, all_can_click=True

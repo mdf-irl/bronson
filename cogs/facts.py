@@ -109,24 +109,18 @@ class Facts(commands.Cog):
         embed.set_thumbnail(url=await self.ass.get_url('your_mom_md'))
         await ctx.send(embed=embed)
 
-    @commands.command()
-    async def useless(self, ctx):
-        """
-        Sends a random useless fact
-
-        Usage: <prefix>useless
-        Aliases: uf
-        """
+    @commands.command(aliases=['interesting'])
+    async def useless(self, ctx: commands.Context):
+        """useless/interesting facts"""
         json_data = await self.ass.get_url_data(
             'https://uselessfacts.jsph.pl/api/v2/facts/random?language=en',
             get_type='json'
         )
-        fact = json_data['text']
-
         embed = Embed(
-            title='Useless Facts', description=fact, color=Color.random()
+            title='Useless & Interesting Facts', description=json_data['text'],
+            color=Color.random()
         )
-        embed.set_thumbnail(url=await self.ass.get_url('useless'))
+        embed.set_thumbnail(url=await self.ass.get_url('bulb'))
         await ctx.send(embed=embed)
 
     async def cog_command_error(self, ctx, error):

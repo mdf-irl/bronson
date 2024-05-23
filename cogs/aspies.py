@@ -1,6 +1,7 @@
 """ aspies module """
-from discord import Color, Embed, Member
+from discord import ButtonStyle, Color, Embed, Member
 from discord.ext import commands
+from reactionmenu import ViewMenu, ViewButton
 
 
 class Aspies(commands.Cog):
@@ -10,6 +11,19 @@ class Aspies(commands.Cog):
         self.bot = bot
         self.ass = self.bot.get_cog('Assets')
         self.gen = self.bot.get_cog('General')
+
+        # message.guild.id == 427500277076197376
+        # and message.author.id == 333306739187515394
+
+    # @commands.Cog.listener()
+    # async def on_message(self, message):
+    #     """triggered on msg"""
+    #     if (
+    #         message.guild.id == 427500277076197376
+    #         and message.author.id == 333306739187515394
+    #         and message.content == 'wow'
+    #     ):
+    #         await message.channel.send('ya\n:madcow:\nu bitch')
 
     @commands.command(name='49ers')
     async def helly_49ers(self, ctx):
@@ -58,6 +72,115 @@ class Aspies(commands.Cog):
         """ sends stabby gabby gif """
         embed = Embed(color=Color.random())
         embed.set_image(url=await self.ass.get_url('gabby.gif'))
+        await ctx.send(embed=embed)
+
+    @commands.command()
+    async def homework(self, ctx: commands.Context,
+                       users: commands.Greedy[Member]):
+        """homework"""
+        hw_users = await self.gen.format_users(users)
+
+        embed = Embed(
+            description=f'{hw_users} do u need help with ur homework jw',
+            color=Color.random()
+        )
+        embed.set_image(url=await self.ass.get_url('homework.gif'))
+        await ctx.send(embed=embed)
+
+    @commands.command()
+    async def humpty(self, ctx: commands.Context):
+        """humpty instructions"""
+        humpty_url = await self.ass.get_url('humpty.txt', res_type='raw')
+        humpty_txt = await self.ass.get_url_data(humpty_url)
+        humpty_parts = humpty_txt.split('%')
+
+        humpty_embeds = []
+        for humpty_part in humpty_parts:
+            embed = Embed(
+                title='Humpty 101', description=humpty_part,
+                color=Color.random()
+            )
+            embed.set_thumbnail(url=await self.ass.get_url('humpty25.gif'))
+            humpty_embeds.append(embed)
+        await self._show_humpty(ctx, humpty_embeds)
+
+    async def _show_humpty(self, ctx: commands.Context, embeds: list):
+        """show humpty"""
+        menu = ViewMenu(
+            ctx, menu_type=ViewMenu.TypeEmbed,
+            timeout=None, all_can_click=True
+        )
+
+        for humpty_embed in embeds:
+            menu.add_page(humpty_embed)
+
+        btn_back = ViewButton(
+            style=ButtonStyle.primary, label='<',
+            custom_id=ViewButton.ID_PREVIOUS_PAGE
+        )
+        menu.add_button(btn_back)
+
+        btn_next = ViewButton(
+            style=ButtonStyle.primary, label='>',
+            custom_id=ViewButton.ID_NEXT_PAGE
+        )
+        menu.add_button(btn_next)
+
+        await menu.start()
+
+    @commands.command()
+    async def idk(self, ctx: commands.Context):
+        """idk lol"""
+        idk_lol = (
+            '#### ########  ##    ##\n'
+            ' ##  ##     ## ##   ##\n'
+            ' ##  ##     ## ##  ##\n'
+            ' ##  ##     ## #####\n'
+            ' ##  ##     ## ##  ##\n'
+            ' ##  ##     ## ##   ##\n'
+            '#### ########  ##    ##\n'
+            '\n'
+            '##        #######  ##\n'
+            '##       ##     ## ##\n'
+            '##       ##     ## ##\n'
+            '##       ##     ## ##\n'
+            '##       ##     ## ##\n'
+            '##       ##     ## ##\n'
+            '########  #######  ########'
+        )
+        embed = Embed(description=f'```{idk_lol}```', color=Color.random())
+        await ctx.send(embed=embed)
+
+    @commands.command()
+    async def moocrew(self, ctx: commands.Context):
+        """moo crew"""
+        embed = Embed(color=Color.random())
+        embed.set_image(url=await self.ass.get_url('moocrew_optimized.gif'))
+        await ctx.send(embed=embed)
+
+    @commands.command(aliases=['snitch'])
+    async def randall(self, ctx: commands.Context):
+        """randall gif"""
+        embed = Embed(color=Color.random())
+        embed.set_image(url=await self.ass.get_url('randall.gif'))
+        await ctx.send(embed=embed)
+
+    @commands.command()
+    async def sdm(self, ctx: commands.Context):
+        """#sDm"""
+        poop = ':poop:' * 15
+        sdm = (
+            '  # #          ######\n'
+            '  # #    ####  #     # #    #\n'
+            '####### #      #     # ##  ##\n'
+            '  # #    ####  #     # # ## #\n'
+            '#######      # #     # #    #\n'
+            '  # #   #    # #     # #    #\n'
+            '  # #    ####  ######  #    #\n'
+        )
+        embed = Embed(
+            description=f'{poop}```{sdm}```{poop}', color=Color.random()
+        )
         await ctx.send(embed=embed)
 
     @commands.command()
@@ -123,14 +246,20 @@ class Aspies(commands.Cog):
 
         public_id_list = await self._yo_get_id_list()
 
-        if (arg == '-list') or (arg == '-l'):
+        if arg in ['-list', '-l']:
             public_ids = ', '.join(sorted(public_id_list))
             embed = Embed(
-                title='Yo Gabs Picture IDs', description=public_ids,
+                title='Yo Gabs Photo Aliases', description=public_ids,
                 color=Color.random()
             )
+            embed.set_footer(text='Example usage: !yo -gordon')
             await ctx.send(embed=embed)
             return
+
+        #added to maintain backwards compatability with !yo gordon
+        #but also support the new preferred !yo -gordon
+        if arg.startswith('-'):
+            arg = arg[1:]
 
         if arg in public_id_list:
             embed = Embed(color=Color.random())
@@ -138,7 +267,7 @@ class Aspies(commands.Cog):
             await ctx.send(await self._yo_get_gabs_mention(ctx), embed=embed)
         else:
             raise commands.CommandError(
-                f'wow ya "{arg}" is not a valid pickshur ID u fkn retard. '
+                f'wow ya "{arg}" is not a valid fo toe alias u fkn retard. '
                  'u must b RLY DUMB LOL!!!!!'
             )
 

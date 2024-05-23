@@ -25,6 +25,24 @@ class Fangulese(commands.Cog):
         embed.set_image(url=await self.ass.get_url('bronson'))
         await ctx.send(embed=embed)
 
+    @commands.command(aliases=['itb'])
+    async def bufu(self, ctx: commands.Context,
+                   users: commands.Greedy[Member]):
+        """bufu user(s)"""
+        bufu_users = await self.gen.format_users(users)
+        embed = Embed(
+            description=(
+                f"oKaY YeA {bufu_users} YeW aRe oH FiSHaLLy BeiNg BuFu'd "
+                "LoL oKaY YeA oKaY iN tHe MoTHeRFucKiN' BuTT oKaY TeA "
+                "LoL iTb iTb HAh HE hE OHo HO LoL!!! oKaY dO NoT tRy 2 "
+                "ReSiSt pL UeA iN tHe MoTHeRFuCkiN' aSSHoLe OkKaAyYYyYy "
+                f"BuYYYY!!!! EyE'm GuNnA GiTcHa {bufu_users} oKaY YeA EyE "
+                "YaM GuNnA BuFu YeW LoL!!!!!!!!! oKaY YeA KoN YeW r GiTTiN "
+                "BuFu'd LoL!!!!!!!!!! oKaAaaYYyYY BuYyYYy!!!!!"
+            ), color=Color.random()
+        )
+        await ctx.send(embed=embed)
+
     @commands.command()
     async def hack(self, ctx, users: commands.Greedy[Member]):
         """ hack @user(s) """

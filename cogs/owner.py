@@ -1,5 +1,4 @@
 """owner module"""
-from os import listdir, remove
 from sys import exit as quit_bot
 
 from discord.ext import commands
@@ -9,18 +8,6 @@ class Owner(commands.Cog):
     """owner class"""
     def __init__(self, bot):
         self.bot = bot
-
-    @commands.command()
-    @commands.is_owner()
-    async def deltmp(self, ctx):
-        """clear tmp files"""
-        files = listdir('./tmp')
-        files_count = len(files)
-
-        for file in files:
-            remove(f'./tmp/{file}')
-
-        await ctx.send(f'Deleted {files_count} files from ./tmp')
 
     @commands.command()
     @commands.is_owner()
@@ -40,7 +27,6 @@ class Owner(commands.Cog):
     # @commands.is_owner()
     # async def update(self, ctx):
     #     """update bot"""
-
 
     async def cog_command_error(self, ctx, error):
         """ override, handles all cog errors for this class """
