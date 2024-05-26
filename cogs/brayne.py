@@ -12,7 +12,7 @@ from psutil import (
 
 
 class Brayne(commands.Cog):
-    """ Brayne class """
+    """Brayne class"""
 
     def __init__(self, bot):
         self.bot = bot
@@ -21,7 +21,7 @@ class Brayne(commands.Cog):
         self.connected_time = 0
 
     @commands.command()
-    async def ping(self, ctx):
+    async def ping(self, ctx: commands.Context):
         """ ping cmd """
         ping_ms = round(self.bot.latency * 1000)
         embed = Embed(
@@ -32,7 +32,7 @@ class Brayne(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command(aliases=['about', 'info', 'ver', 'version'])
-    async def brayne(self, ctx):
+    async def brayne(self, ctx: commands.Context):
         """
         Sends information about Bronson's BrAyNe
 
@@ -50,20 +50,26 @@ class Brayne(commands.Cog):
             color=Color.random()
         )
         embed.add_field(
-            name='__CPU__:', value=self._get_cpu_info(), inline=True
+            name='__CPU__:',
+            value=self._get_cpu_info(),
+            inline=True
         )
         embed.add_field(
-            name='__Memory__:', value=self._get_memory_info(), inline=True
+            name='__Memory__:',
+            value=self._get_memory_info(),
+            inline=True
         )
         embed.add_field(
-            name='__Disk__:', value=self._get_disk_info(), inline=True
+            name='__Disk__:',
+            value=self._get_disk_info(),
+            inline=True
         )
         embed.set_thumbnail(url=await self.ass.get_url('brayne'))
         embed.set_footer(text=f'Ping: {round(self.bot.latency * 1000)}ms')
         await ctx.send(embed=embed)
 
     @commands.command()
-    async def help(self, ctx):
+    async def help(self, ctx: commands.Context):
         """ help """
         embed = Embed(
             title='You need help? LOL!!!',
@@ -77,30 +83,12 @@ class Brayne(commands.Cog):
         embed.set_thumbnail(url=await self.ass.get_url('cow_capri'))
         await ctx.send(embed=embed)
 
-    @commands.command()
-    async def temp(self, ctx):
-        """ temp """
-        if system().lower() == "linux":
-            cpu_temp = CPUTemperature()
-            cpu_temp_f = cpu_temp.temperature * (9 / 5) + 32
-            cpu_temp_f = f'{cpu_temp_f:.2f} °F'
-
-            embed = Embed(
-                description='oWwWw mY BrAyNe iS CuRReNtLy '
-                f'{cpu_temp_f} LOL!!!!!', color=Color.random()
-            )
-            await ctx.send(embed=embed)
-        else:
-            raise commands.CommandError(
-                'oKaY WtF KoN EyE aM NoT a RaZzBeRRy PiE LOL!!!!!'
-            )
-
     @commands.Cog.listener()
     async def on_ready(self):
         """ called when the bot is online & ready """
         self.connected_time = datetime.now()
         await self.bot.change_presence(
-            activity=CustomActivity(name='420.69-1.9.3 - !help')
+            activity=CustomActivity(name='420.69-1.9.4 - !help')
         )
 
     def _get_platform_info(self):
@@ -108,7 +96,7 @@ class Brayne(commands.Cog):
         booted_time = datetime.fromtimestamp(boot_time())
 
         platform_info = (
-            '**Bot version**: 420.69-1.9.3\n'
+            '**Bot version**: 420.69-1.9.4\n'
             '**GitHub**: '
             '[/mdf-gh/bronson](https://www.github.com/mdf-gh/bronson)\n\n'
 
@@ -128,8 +116,6 @@ class Brayne(commands.Cog):
         if system().lower() == "linux":
             cpu_temp = CPUTemperature()
             cpu_temp_c = f'{cpu_temp.temperature:.2f} °C'
-            # cpu_temp_f = cpu_temp.temperature * (9 / 5) + 32
-            # cpu_temp_f = f'{cpu_temp_f:.2f} °F'
         else:
             cpu_temp_c = 'N/A'
 

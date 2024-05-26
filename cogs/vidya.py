@@ -23,8 +23,13 @@ class Vidya(commands.Cog):
         formatted_date = dt_object.strftime("%m/%d/%Y")
         return formatted_date
 
-    async def _epic_get_date(self, game_data: list, get_type: str,
-                             promo_key: str, index: int):
+    async def _epic_get_date(
+            self,
+            game_data: list,
+            get_type: str,
+            promo_key: str,
+            index: int
+    ):
         """get start or end date of free epic games"""
         try:
             get_date = (
@@ -38,7 +43,6 @@ class Vidya(commands.Cog):
 
     async def _epic_get_game_url(self, game: list):
         """get game's url"""
-        # if game_key == 'upcoming':
         try:
             game_url = (
                 f"https://store.epicgames.com/en-US/p/"
@@ -46,11 +50,6 @@ class Vidya(commands.Cog):
             )
         except (KeyError, IndexError):
             game_url = 'https://store.epicgames.com/en-US/free-games'
-        # else:
-        #     game_url = (
-        #         f"https://store.epicgames.com/en-US/p/"
-        #         f"{game['offerMappings'][0]['pageSlug']}"
-        #     )
         return game_url
 
     async def _epic_get_game_type(self, game: list):
@@ -63,10 +62,6 @@ class Vidya(commands.Cog):
     @commands.command()
     async def epic(self, ctx: commands.Context, args: str = None):
         """get epic game store's free games for this week"""
-        # json_data = await self.ass.get_url_data(
-        #     'https://res.cloudinary.com/mdf-cdn/raw/upload/v1715306026/epic2.json',
-        #     get_type='json'
-        # )
         headers = {
             'X-RapidAPI-Key': self.rapid_api_key,
             'X-RapidAPI-Host': 'free-epic-games.p.rapidapi.com'
@@ -100,12 +95,14 @@ class Vidya(commands.Cog):
                 f"{game['description']}\n\n"
             )
         embed = Embed(
-            title=embed_title, description=body, color=Color.random()
+            title=embed_title,
+            description=body,
+            color=Color.random()
         )
         embed.set_thumbnail(url=await self.ass.get_url(thumbnail))
         await ctx.send(embed=embed)
 
-    async def cog_command_error(self, ctx, error):
+    async def cog_command_error(self, ctx: commands.Context, error):
         """handle cog command errors for this class"""
         await ctx.reply(f'**Error**: {error}')
 

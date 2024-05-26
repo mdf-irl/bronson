@@ -25,12 +25,12 @@ class Wrestling(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command()
-    async def curse(self, ctx, users: commands.Greedy[Member]):
-        """
-        Inflict a very nice, very evil curse upon @user(s)
-
-        Usage: <prefix>curse @user(s)
-        """
+    async def curse(
+        self,
+        ctx: commands.Context,
+        users: commands.Greedy[Member]
+    ):
+        """Inflict a very nice, very evil curse upon @user(s)"""
 
         has_have = 'has' if len(users) == 1 else 'have'
         cursed_users = await self.gen.format_users(users)
@@ -44,13 +44,8 @@ class Wrestling(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command(aliases=['deeznuts', 'redeem'])
-    async def deez(self, ctx, users: commands.Greedy[Member]):
-        """
-        Ask @user(s) to redeem deez nuts
-
-        Usage: <prefix>deez @user(s)
-        Aliases: deeznuts, redeem
-        """
+    async def deez(self, ctx: commands.Context, users: commands.Greedy[Member]):
+        """Ask @user(s) to redeem deez nuts"""
         deez_users = await self.gen.format_users(users)
 
         embed = Embed(
@@ -61,13 +56,12 @@ class Wrestling(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command(aliases=['del'])
-    async def delete(self, ctx, users: commands.Greedy[Member]):
-        """
-        Tells @user(s) they will be deleted
-
-        Usage: <prefix>delete @user(s)
-        Aliases: del
-        """
+    async def delete(
+        self,
+        ctx: commands.Context,
+        users: commands.Greedy[Member]
+    ):
+        """Tells @user(s) they will be deleted"""
         del_users = await self.gen.format_users(users)
 
         embed = Embed(
@@ -78,18 +72,18 @@ class Wrestling(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command()
-    async def eviluno(self, ctx):
-        """
-        Sends Evil Uno 'farts a lot' meme
-
-        Usage: <prefix>eviluno
-        """
+    async def eviluno(self, ctx: commands.Context):
+        """Sends Evil Uno 'farts a lot' meme"""
         embed = Embed(color=Color.random())
         embed.set_image(url=await self.ass.get_url('evil_uno'))
         await ctx.send(embed=embed)
 
     @commands.command()
-    async def hotrain(self, ctx, users: commands.Greedy[Member]):
+    async def hotrain(
+        self,
+        ctx: commands.Context,
+        users: commands.Greedy[Member]
+    ):
         """ Asks user(s) to come aboard the ho train """
         ho_users = await self.gen.format_users(users)
 
@@ -97,12 +91,13 @@ class Wrestling(commands.Cog):
             description=(
                 f"IT'S TIME, ONCE AGAIN, FOR {ho_users} TO COME "
                 "ABOARD THE... **HOOOOOO TRAAAAIIIINNNNN**!!!"
-            ), color=Color.random()
+            ),
+            color=Color.random()
         )
         embed.set_image(url=await self.ass.get_url('ho_train.gif'))
         await ctx.send(embed=embed)
 
-    async def cog_command_error(self, ctx, error):
+    async def cog_command_error(self, ctx: commands.Context, error):
         """ override, handles all cog errors for this class """
         await ctx.reply(f'**Error**: {error}')
 

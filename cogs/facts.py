@@ -14,37 +14,29 @@ class Facts(commands.Cog):
         self.gen = self.bot.get_cog('General')
 
     @commands.command()
-    async def cat(self, ctx):
-        """
-        Sends a random cat fact
-
-        Usage: <prefix>cat
-        """
+    async def cat(self, ctx: commands.Context):
+        """Sends a random cat fact"""
         json_data = await self.ass.get_url_data(
             'https://catfact.ninja/fact', get_type='json'
         )
-        fact = json_data['fact']
-
         embed = Embed(
-            title='Cat Facts', description=fact, color=Color.random()
+            title='Cat Facts',
+            description=json_data['fact'],
+            color=Color.random()
         )
         embed.set_thumbnail(url=await self.ass.get_url('billy_c'))
         await ctx.send(embed=embed)
 
     @commands.command()
-    async def dog(self, ctx):
-        """
-        Sends a random dog fact
-
-        Usage: <prefix>dog
-        """
+    async def dog(self, ctx: commands.Context):
+        """Sends a random dog fact"""
         json_data = await self.ass.get_url_data(
             'https://dogapi.dog/api/v2/facts', get_type='json'
         )
-        fact = json_data['data'][0]['attributes']['body']
-
         embed = Embed(
-            title='Dog Facts', description=fact, color=Color.random()
+            title='Dog Facts',
+            description=json_data['data'][0]['attributes']['body'],
+            color=Color.random()
         )
         embed.set_thumbnail(url=await self.ass.get_url('duchess_c'))
         await ctx.send(embed=embed)
@@ -57,7 +49,8 @@ class Facts(commands.Cog):
         fg_facts = fg_txt.splitlines()
 
         embed = Embed(
-            title="HeLLy's Foie Gras Fun Facts", description=choice(fg_facts),
+            title="HeLLy's Foie Gras Fun Facts",
+            description=choice(fg_facts),
             color=Color.random()
         )
         embed.set_thumbnail(url=await self.ass.get_url('foie_gras'))
@@ -71,25 +64,16 @@ class Facts(commands.Cog):
         facts = facts_text.splitlines()
 
         embed = Embed(
-            title='HeLLy Facts', description=choice(facts),
+            title='HeLLy Facts',
+            description=choice(facts),
             color=Color.random()
         )
         embed.set_thumbnail(url=await self.ass.get_url('sherlock'))
         await ctx.send(embed=embed)
 
     @commands.command(aliases=['yomama'])
-    async def mom(self, ctx, user: Member):
-        """
-        Sends a fact about @user's mom
-
-        Returns a random yo mama joke from the yomama-jokes.com API
-        targeted at a specific user.
-
-        Usage: <prefix>mom @user
-        Aliases: yomama
-        """
-        #target_users = await self.gen.format_users(users)
-
+    async def mom(self, ctx: commands.Context, user: Member):
+        """Sends a fact about @user's mom"""
         json_data = await self.ass.get_url_data(
             'https://www.yomama-jokes.com/api/v1/jokes/random/',
             get_type='json'
@@ -104,20 +88,23 @@ class Facts(commands.Cog):
             raise commands.CommandError('Malformed joke.')
 
         embed = Embed(
-            title='Mom Facts', description=joke, color=Color.random()
+            title='Mom Facts',
+            description=joke,
+            color=Color.random()
         )
         embed.set_thumbnail(url=await self.ass.get_url('your_mom_md'))
         await ctx.send(embed=embed)
 
     @commands.command(aliases=['interesting'])
     async def useless(self, ctx: commands.Context):
-        """useless/interesting facts"""
+        """Sends useless/interesting facts"""
         json_data = await self.ass.get_url_data(
             'https://uselessfacts.jsph.pl/api/v2/facts/random?language=en',
             get_type='json'
         )
         embed = Embed(
-            title='Useless & Interesting Facts', description=json_data['text'],
+            title='Useless & Interesting Facts',
+            description=json_data['text'],
             color=Color.random()
         )
         embed.set_thumbnail(url=await self.ass.get_url('bulb'))

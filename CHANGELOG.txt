@@ -1,3 +1,7 @@
+1.9.4:
+- Further code optimization
+- Improved code readability
+
 1.9.3:
 - Re-wrote !weather (!w)
 - Fixed a bug where !gif -<#> error message was showing the wrong #

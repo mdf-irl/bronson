@@ -114,7 +114,7 @@ class Weather(commands.Cog):
         """mm to in"""
         return mm * 0.0393701
 
-    async def cog_command_error(self, ctx, error):
+    async def cog_command_error(self, ctx: commands.Context, error):
         """ override, handles all cog errors for this class """
         await ctx.reply(f'**Error**: {error}')
 

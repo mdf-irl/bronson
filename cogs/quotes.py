@@ -13,8 +13,8 @@ class Quotes(commands.Cog):
         self.ass = self.bot.get_cog('Assets')
 
     @commands.command()
-    async def kanye(self, ctx):
-        """ gets a kanye quote """
+    async def kanye(self, ctx: commands.Context):
+        """gets a kanye quote"""
         quote = await self.ass.get_url_data('https://api.kanye.rest/text')
         embed = Embed(
             title='Kanye West Quotes',
@@ -25,8 +25,8 @@ class Quotes(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command()
-    async def ralph(self, ctx):
-        """ Sends a Ralph Wiggum quote """
+    async def ralph(self, ctx: commands.Context):
+        """Sends a Ralph Wiggum quote"""
         ralph_url = await self.ass.get_url('ralph_wiggum.txt', res_type='raw')
         ralph_txt = await self.ass.get_url_data(ralph_url)
         ralph_quotes = ralph_txt.split('%')
@@ -38,14 +38,15 @@ class Quotes(commands.Cog):
 
         embed = Embed(
             title='Ralph Wiggum Quotes',
-            description=ralph_quote, color=Color.random()
+            description=ralph_quote,
+            color=Color.random()
         )
         embed.set_thumbnail(url=await self.ass.get_url('ralph_25'))
         await ctx.send(embed=embed)
 
     @commands.command()
-    async def zen(self, ctx):
-        """ gets a random zen quote """
+    async def zen(self, ctx: commands.Context):
+        """gets a random zen quote"""
         json_data = await self.ass.get_url_data(
             'https://zenquotes.io/api/random', get_type='json'
         )
@@ -54,19 +55,16 @@ class Quotes(commands.Cog):
             f'-- {json_data[0]['a']}, inspired by HeLLy'
         )
         embed = Embed(
-            title='Zen Quotes', description=msg, color=Color.random()
+            title='Zen Quotes',
+            description=msg,
+            color=Color.random()
         )
         embed.set_thumbnail(url=await self.ass.get_url('zen'))
         await ctx.send(embed=embed)
 
-    async def cog_command_error(self, ctx, error):
+    async def cog_command_error(self, ctx: commands.Context, error):
         """ override, handles all cog errors for this class """
-        if isinstance(error, commands.MissingRequiredArgument):
-            await ctx.reply(
-                "**Error**: You didn't provide the necessary argument(s)."
-            )
-        else:
-            await ctx.reply(f'**Error**: {error}')
+        await ctx.reply(f'**Error**: {error}')
 
 
 async def setup(bot):

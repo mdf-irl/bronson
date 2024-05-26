@@ -11,7 +11,7 @@ class Owner(commands.Cog):
 
     @commands.command()
     @commands.is_owner()
-    async def quit(self, ctx):
+    async def quit(self, ctx: commands.Context):
         """quit bot"""
         await ctx.send('oKaAaAAyYy BuYyyY!!! :wave:')
         self.bot.close()
@@ -19,14 +19,9 @@ class Owner(commands.Cog):
 
     @commands.command()
     @commands.is_owner()
-    async def say(self, ctx, *, message: str):
+    async def say(self, ctx: commands.Context, *, message: str):
         """say command"""
         await ctx.send(message)
-
-    # @commands.command()
-    # @commands.is_owner()
-    # async def update(self, ctx):
-    #     """update bot"""
 
     async def cog_command_error(self, ctx, error):
         """ override, handles all cog errors for this class """

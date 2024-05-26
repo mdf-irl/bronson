@@ -10,8 +10,11 @@ class General(commands.Cog):
         self.bot = bot
 
     async def format_users(
-            self, users: commands.Greedy[Member], mention: bool = True):
-        """ format users """
+            self,
+            users: commands.Greedy[Member],
+            mention: bool=True
+    ):
+        """format users"""
         if not users:
             raise commands.CommandError("You didn't @mention any user(s).")
 

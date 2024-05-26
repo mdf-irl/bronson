@@ -6,11 +6,6 @@ from discord.ext import commands
 from dotenv import load_dotenv
 from reactionmenu import ViewMenu, ViewButton
 
-# aliases = {
-#     "cowlick": "https://media.tenor.com/fTy4MGK0QRsAAAAC/lick-tongue.gif",
-#     "cowdance": "https://media.tenor.com/micwEWa24ZcAAAAC/cow-pole.gif",
-# }
-
 
 class Gif(commands.Cog):
     """gif commands"""
@@ -22,17 +17,6 @@ class Gif(commands.Cog):
         self.tenor_api_key = getenv('TENOR_API_KEY')
         self.tenor_client_key = getenv('TENOR_CLIENT_KEY')
         self.giphy_api_key = getenv('GIPHY_API_KEY')
-
-    # async def _handle_list(self, ctx: commands.Context):
-    #     """list all aliases"""
-    #     #pass
-
-    # async def _handle_alias(self, ctx: commands.Context, query: str):
-    #     """send gif by alias"""
-    #     if query in aliases:
-    #         await ctx.send(aliases[query])
-    #     else:
-    #         raise commands.CommandError(f'"{query}" is not a valid alias.')
 
     async def _populate_embeds(self, json_data: list, giphy: bool):
         """populate gif embeds"""
@@ -51,8 +35,13 @@ class Gif(commands.Cog):
 
         return gif_embeds
 
-    async def _handle_results(self, ctx: commands.Context, json_data: list,
-                              gif_index: int, giphy: bool):
+    async def _handle_results(
+            self,
+            ctx: commands.Context,
+            json_data: list,
+            gif_index: int,
+            giphy: bool
+    ):
         """handle gif results"""
         if gif_index == 0:
             embed_footer = 'Source: GIPHY' if giphy else 'Source: Tenor'
@@ -104,16 +93,6 @@ class Gif(commands.Cog):
         args = query.split(' ')
         gif_index = 0
         giphy = False
-
-        # #!gif -list
-        # if args[-1] in ['-l', '-list']:
-        #     await self._handle_list(ctx)
-        #     return
-
-        # #!gif -<name>
-        # if args[-1].startswith('-') and len(args) == 1:
-        #     await self._handle_alias(ctx, args[-1][1:])
-        #     return
 
         #!gif <query> -g
         if args[-1] == '-g':

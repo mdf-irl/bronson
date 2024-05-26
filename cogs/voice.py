@@ -13,16 +13,8 @@ class Voice(commands.Cog):
         self.gen = self.bot.get_cog('General')
 
     @commands.command()
-    async def vc(self, ctx, users: commands.Greedy[Member]):
-        """
-        Sends a voice chat invitation to @user(s)
-
-        This command issues a voice chat invitation to @mentioned
-        server members. It can be used by a server member only when
-        they are in one of the server's voice channels.
-
-        Usage: <prefix>vc @user(s)
-        """
+    async def vc(self, ctx: commands.Context, users: commands.Greedy[Member]):
+        """Sends a voice chat invitation to @user(s)"""
 
         # check for command errors
         if ctx.author.voice is None:
@@ -54,7 +46,7 @@ class Voice(commands.Cog):
         await ctx.send(embed=embed)
 
     @vc.error
-    async def vc_error(self, ctx, error):
+    async def vc_error(self, ctx: commands.Context, error):
         """ vc err handler """
         await ctx.reply(f'**Error**: {error}')
 

@@ -34,10 +34,14 @@ class Assets(commands.Cog):
             chosen_public_id, resource_type=res_type
         )[0]
 
-    async def get_url_data(self, url, get_type='text',
-                           timeout=5, headers=None):
-        """ GET """
-        # print(url) #####
+    async def get_url_data(
+            self,
+            url: str,
+            get_type: str='text',
+            timeout: int=5,
+            headers: str=None
+    ):
+        """GET"""
         try:
             async with ClientSession() as session:
                 async with session.get(
@@ -65,8 +69,13 @@ class Assets(commands.Cog):
                 f'attempting to fetch data from URL.'
             ) from e
 
-    async def get_discord_file(self, url, filename, spoiler=False):
-        """ get discord File() """
+    async def get_discord_file(
+            self,
+            url: str,
+            filename: str,
+            spoiler: bool=False
+    ):
+        """get discord File()"""
         binary = await self.get_url_data(url, get_type='binary')
         return File(BytesIO(binary), filename=filename, spoiler=spoiler)
 

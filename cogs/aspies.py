@@ -1,7 +1,6 @@
 """ aspies module """
-from discord import ButtonStyle, Color, Embed, Member
+from discord import Color, Embed, Member
 from discord.ext import commands
-from reactionmenu import ViewMenu, ViewButton
 
 
 class Aspies(commands.Cog):
@@ -12,33 +11,16 @@ class Aspies(commands.Cog):
         self.ass = self.bot.get_cog('Assets')
         self.gen = self.bot.get_cog('General')
 
-        # message.guild.id == 427500277076197376
-        # and message.author.id == 333306739187515394
-
-    # @commands.Cog.listener()
-    # async def on_message(self, message):
-    #     """triggered on msg"""
-    #     if (
-    #         message.guild.id == 427500277076197376
-    #         and message.author.id == 333306739187515394
-    #         and message.content == 'wow'
-    #     ):
-    #         await message.channel.send('ya\n:madcow:\nu bitch')
-
     @commands.command(name='49ers')
-    async def helly_49ers(self, ctx):
-        """ sends HeLLy 49ers meme image """
+    async def helly_49ers(self, ctx: commands.Context):
+        """Sends HeLLy 49ers gif"""
         embed = Embed(color=Color.random())
         embed.set_image(url=await self.ass.get_url('helly_49ers'))
         await ctx.send(embed=embed)
 
     @commands.command()
-    async def ckhello(self, ctx):
-        """
-        Sends Cool-Knight's hello message
-
-        Usage: <prefix>ckhello
-        """
+    async def ckhello(self, ctx: commands.Context):
+        """Sends Cool-Knight's hello message"""
         msg = (
             'Hello i am Bronson from StarCraft Broodwar.\n'
             'A gamer, a websiter. And i am Arana Friend.\n'
@@ -49,35 +31,33 @@ class Aspies(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command()
-    async def deploy(self, ctx):
-        """ Sends deploy c0n image """
+    async def deploy(self, ctx: commands.Context):
+        """Sends deploy c0n image"""
         embed = Embed(color=Color.random())
         embed.set_image(url=await self.ass.get_url('deploy_c0n'))
         await ctx.send(embed=embed)
 
     @commands.command(aliases=['fucknewby'])
-    async def fnewby(self, ctx):
-        """
-        Sends fuck newby gif
-
-        Usage: <prefix>fnewby
-        Aliases: fucknewby
-        """
+    async def fnewby(self, ctx: commands.Context):
+        """Sends the classic fucknewby gif"""
         embed = Embed(color=Color.random())
         embed.set_image(url=await self.ass.get_url('fucknewby.gif'))
         await ctx.send(embed=embed)
 
-    @commands.command()
-    async def gabby(self, ctx):
-        """ sends stabby gabby gif """
+    @commands.command(aliases=['stabby', 'stabbygabby'])
+    async def gabby(self, ctx: commands.Context):
+        """Sends the stabby gabby gif"""
         embed = Embed(color=Color.random())
         embed.set_image(url=await self.ass.get_url('gabby.gif'))
         await ctx.send(embed=embed)
 
     @commands.command()
-    async def homework(self, ctx: commands.Context,
-                       users: commands.Greedy[Member]):
-        """homework"""
+    async def homework(
+        self,
+        ctx: commands.Context,
+        users: commands.Greedy[Member]
+    ):
+        """Asks @user(s) if they need help with their homework"""
         hw_users = await self.gen.format_users(users)
 
         embed = Embed(
@@ -88,49 +68,8 @@ class Aspies(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command()
-    async def humpty(self, ctx: commands.Context):
-        """humpty instructions"""
-        humpty_url = await self.ass.get_url('humpty.txt', res_type='raw')
-        humpty_txt = await self.ass.get_url_data(humpty_url)
-        humpty_parts = humpty_txt.split('%')
-
-        humpty_embeds = []
-        for humpty_part in humpty_parts:
-            embed = Embed(
-                title='Humpty 101', description=humpty_part,
-                color=Color.random()
-            )
-            embed.set_thumbnail(url=await self.ass.get_url('humpty25.gif'))
-            humpty_embeds.append(embed)
-        await self._show_humpty(ctx, humpty_embeds)
-
-    async def _show_humpty(self, ctx: commands.Context, embeds: list):
-        """show humpty"""
-        menu = ViewMenu(
-            ctx, menu_type=ViewMenu.TypeEmbed,
-            timeout=None, all_can_click=True
-        )
-
-        for humpty_embed in embeds:
-            menu.add_page(humpty_embed)
-
-        btn_back = ViewButton(
-            style=ButtonStyle.primary, label='<',
-            custom_id=ViewButton.ID_PREVIOUS_PAGE
-        )
-        menu.add_button(btn_back)
-
-        btn_next = ViewButton(
-            style=ButtonStyle.primary, label='>',
-            custom_id=ViewButton.ID_NEXT_PAGE
-        )
-        menu.add_button(btn_next)
-
-        await menu.start()
-
-    @commands.command()
     async def idk(self, ctx: commands.Context):
-        """idk lol"""
+        """Sends IDK LOL ASCII art"""
         idk_lol = (
             '#### ########  ##    ##\n'
             ' ##  ##     ## ##   ##\n'
@@ -153,21 +92,21 @@ class Aspies(commands.Cog):
 
     @commands.command()
     async def moocrew(self, ctx: commands.Context):
-        """moo crew"""
+        """Sends moo crew gif"""
         embed = Embed(color=Color.random())
         embed.set_image(url=await self.ass.get_url('moocrew_optimized.gif'))
         await ctx.send(embed=embed)
 
     @commands.command(aliases=['snitch'])
     async def randall(self, ctx: commands.Context):
-        """randall gif"""
+        """Sends Randall/snitch gif"""
         embed = Embed(color=Color.random())
         embed.set_image(url=await self.ass.get_url('randall.gif'))
         await ctx.send(embed=embed)
 
     @commands.command()
     async def sdm(self, ctx: commands.Context):
-        """#sDm"""
+        """Sends #sDm ASCII art"""
         poop = ':poop:' * 15
         sdm = (
             '  # #          ######\n'
@@ -179,17 +118,18 @@ class Aspies(commands.Cog):
             '  # #    ####  ######  #    #\n'
         )
         embed = Embed(
-            description=f'{poop}```{sdm}```{poop}', color=Color.random()
+            description=f'{poop}```{sdm}```{poop}',
+            color=Color.random()
         )
         await ctx.send(embed=embed)
 
     @commands.command()
-    async def spray(self, ctx, users: commands.Greedy[Member]):
-        """
-        Sprays @user(s) with water bottle
-
-        Usage: <prefix>spray @user(s)
-        """
+    async def spray(
+        self,
+        ctx: commands.Context,
+        users: commands.Greedy[Member]
+    ):
+        """Sprays @user(s) with water bottle (it' hot water.)"""
         sprayed_users = await self.gen.format_users(users)
 
         msg = (
@@ -202,13 +142,8 @@ class Aspies(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command(aliases=['hawk'])
-    async def trumpet(self, ctx):
-        """
-        Sends Hawk's beautiful trumpet performance
-
-        Usage: <prefix>trumpet
-        Aliases: hawk
-        """
+    async def trumpet(self, ctx: commands.Context):
+        """Sends a video of Hawk's beautiful trumpet performance"""
         trumpet_url = await self.ass.get_url('trumpet', res_type='video')
         trumpet_vid = await self.ass.get_discord_file(
             trumpet_url, 'trumpet.mov'
@@ -216,7 +151,7 @@ class Aspies(commands.Cog):
         await ctx.send(file=trumpet_vid)
 
     async def _yo_get_id_list(self):
-        """get list of yo gabs picture IDs"""
+        """get list of yo gabs photo IDs"""
         json_data = await self.ass.get_url_data(
             'https://res.cloudinary.com/mdf-cdn/image/list/yogabs.json',
             get_type='json'
@@ -229,18 +164,23 @@ class Aspies(commands.Cog):
 
     async def _yo_get_gabs_mention(self, ctx: commands.Context):
         """check for gabs & get @mention"""
-        # gabs user id: 235906772504805377
-        # check for gabs & @mention her if she's in the server
         gabs = ctx.guild.get_member(235906772504805377)
         gabs_mention = '' if gabs is None else '<@235906772504805377>'
         return gabs_mention
 
     @commands.command(aliases=['yogabs'])
     async def yo(self, ctx: commands.Context, arg: str = None):
-        """yo gabs"""
+        """
+        Sends a random yo gabs meme. Optional argument -list shows a list of
+        picture IDs that can be used to show a specific meme
+        (!yo gordon OR !yo -gordon, etc.)
+        """
         if arg is None:
+            gabs_img = await self.ass.get_url('yogabs', tag=True)
+            # gabs_id = gabs_img.split('/')[-1]
+
             embed = Embed(color=Color.random())
-            embed.set_image(url=await self.ass.get_url('yogabs', tag=True))
+            embed.set_image(url=gabs_img)
             await ctx.send(await self._yo_get_gabs_mention(ctx), embed=embed)
             return
 
@@ -249,17 +189,18 @@ class Aspies(commands.Cog):
         if arg in ['-list', '-l']:
             public_ids = ', '.join(sorted(public_id_list))
             embed = Embed(
-                title='Yo Gabs Photo Aliases', description=public_ids,
+                title='Yo Gabs Meme IDs',
+                description=public_ids,
                 color=Color.random()
             )
-            embed.set_footer(text='Example usage: !yo -gordon')
+            embed.set_footer(
+                text='Example usage: !yo -gordon',
+                icon_url=await self.ass.get_url('bbb')
+            )
             await ctx.send(embed=embed)
             return
 
-        #added to maintain backwards compatability with !yo gordon
-        #but also support the new preferred !yo -gordon
-        if arg.startswith('-'):
-            arg = arg[1:]
+        arg = arg.lstrip('-')
 
         if arg in public_id_list:
             embed = Embed(color=Color.random())
@@ -267,21 +208,17 @@ class Aspies(commands.Cog):
             await ctx.send(await self._yo_get_gabs_mention(ctx), embed=embed)
         else:
             raise commands.CommandError(
-                f'wow ya "{arg}" is not a valid fo toe alias u fkn retard. '
-                 'u must b RLY DUMB LOL!!!!!'
+                f'wow ya "{arg}" is not a valid me me eye D u fkn retard. '
+                 'u must b RLY DUMB LOL!!!!! idk maybe try using !yo -list '
+                 '2 show sum ackshual valid ones LOL!'
             )
 
 
-    async def cog_command_error(self, ctx, error):
-        """ override, handles all cog errors for this class """
-        if isinstance(error, commands.MissingRequiredArgument):
-            await ctx.reply(
-                "**Error**: You didn't provide the necessary argument(s)."
-            )
-        else:
-            await ctx.reply(f'**Error**: {error}')
+    async def cog_command_error(self, ctx: commands.Context, error):
+        """handle cog errors"""
+        await ctx.reply(f'**Error**: {error}')
 
 
 async def setup(bot):
-    """ add class to bot's cog system """
+    """add class to bot's cog system"""
     await bot.add_cog(Aspies(bot))
