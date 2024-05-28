@@ -1,4 +1,4 @@
-""" assets module """
+"""assets module"""
 from io import BytesIO
 from random import choice
 
@@ -9,13 +9,13 @@ from discord.ext import commands
 
 
 class Assets(commands.Cog):
-    """ Assets class """
+    """Assets class"""
 
     def __init__(self, bot):
         self.bot = bot  # just to shut pylint up
 
     async def get_url(self, public_id, res_type='image', tag=False):
-        """ get cloud url """
+        """get cloud url"""
         config(cloud_name='mdf-cdn')
 
         if not tag:
@@ -56,7 +56,7 @@ class Assets(commands.Cog):
                             return await response.read()
                     elif response.status == 429:
                         raise commands.CommandError(
-                            'Exceeded API usage limitations. LOL!!!'
+                            'Exceeded API usage limitations.'
                         )
                     else:
                         raise commands.CommandError(
@@ -81,5 +81,5 @@ class Assets(commands.Cog):
 
 
 async def setup(bot):
-    """ add class to bot's cog system """
+    """add class to bot's cog system"""
     await bot.add_cog(Assets(bot))

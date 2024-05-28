@@ -1,21 +1,40 @@
-""" wrestling module """
+"""wrestling module"""
 
 from discord import Color, Embed, Member
 from discord.ext import commands
 
 
-class Wrestling(commands.Cog):
-    """ wrestling-related commands """
+async def setup(bot: commands.Bot):
+    """add to bot's cog system"""
+    await bot.add_cog(Wrestling(bot))
 
-    def __init__(self, bot):
+
+class Wrestling(commands.Cog):
+    """
+    Wrestling related commands.
+    """
+
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.ass = self.bot.get_cog('Assets')
-        self.gen = self.bot.get_cog('General')
+
+    async def cog_command_error(self, ctx: commands.Context, error: str):
+        """handle cog errors"""
+        await ctx.reply(f'**Error**: {error}')
 
     @commands.command()
-    async def cry(self, ctx: commands.Context, users: commands.Greedy[Member]):
+    async def cry(
+        self,
+        ctx: commands.Context,
+        users: commands.Greedy[Member] = None
+    ):
         """cry me a river"""
-        cry_users = await self.gen.format_users(users)
+        if users is None:
+            raise commands.CommandError(
+                "You didn't provide any user(s) "
+                f"(example: **!cry {ctx.author.mention}**)."
+            )
+        cry_users = ', '.join(user.mention for user in users)
 
         embed = Embed(
             description=f'{cry_users} **CRY ME A RIVER!**',
@@ -28,12 +47,16 @@ class Wrestling(commands.Cog):
     async def curse(
         self,
         ctx: commands.Context,
-        users: commands.Greedy[Member]
+        users: commands.Greedy[Member] = None
     ):
         """Inflict a very nice, very evil curse upon @user(s)"""
-
+        if users is None:
+            raise commands.CommandError(
+                "You didn't provide any user(s) "
+                f"(example: **!curse {ctx.author.mention}**)."
+            )
         has_have = 'has' if len(users) == 1 else 'have'
-        cursed_users = await self.gen.format_users(users)
+        cursed_users = ', '.join(user.mention for user in users)
 
         embed = Embed(
             description=(
@@ -44,9 +67,18 @@ class Wrestling(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command(aliases=['deeznuts', 'redeem'])
-    async def deez(self, ctx: commands.Context, users: commands.Greedy[Member]):
+    async def deez(
+        self,
+        ctx: commands.Context,
+        users: commands.Greedy[Member] = None
+    ):
         """Ask @user(s) to redeem deez nuts"""
-        deez_users = await self.gen.format_users(users)
+        if users is None:
+            raise commands.CommandError(
+                "You didn't provide any user(s) "
+                f"(example: **!deez {ctx.author.mention}**)."
+            )
+        deez_users = ', '.join(user.mention for user in users)
 
         embed = Embed(
             description=f'{deez_users} **REDEEM DEEZ NUTS!!!**',
@@ -59,10 +91,15 @@ class Wrestling(commands.Cog):
     async def delete(
         self,
         ctx: commands.Context,
-        users: commands.Greedy[Member]
+        users: commands.Greedy[Member] = None
     ):
         """Tells @user(s) they will be deleted"""
-        del_users = await self.gen.format_users(users)
+        if users is None:
+            raise commands.CommandError(
+                "You didn't provide any user(s) "
+                f"(example: **!delete {ctx.author.mention}**)."
+            )
+        del_users = ', '.join(user.mention for user in users)
 
         embed = Embed(
             description=f'{del_users} will be **DELETED**!!!',
@@ -82,10 +119,15 @@ class Wrestling(commands.Cog):
     async def hotrain(
         self,
         ctx: commands.Context,
-        users: commands.Greedy[Member]
+        users: commands.Greedy[Member] = None
     ):
-        """ Asks user(s) to come aboard the ho train """
-        ho_users = await self.gen.format_users(users)
+        """Asks user(s) to come aboard the ho train"""
+        if users is None:
+            raise commands.CommandError(
+                "You didn't provide any user(s) "
+                f"(example: **!hotrain {ctx.author.mention}**)."
+            )
+        ho_users = ', '.join(user.mention for user in users)
 
         embed = Embed(
             description=(
@@ -96,12 +138,3 @@ class Wrestling(commands.Cog):
         )
         embed.set_image(url=await self.ass.get_url('ho_train.gif'))
         await ctx.send(embed=embed)
-
-    async def cog_command_error(self, ctx: commands.Context, error):
-        """ override, handles all cog errors for this class """
-        await ctx.reply(f'**Error**: {error}')
-
-
-async def setup(bot):
-    """ add class to bot's cog system """
-    await bot.add_cog(Wrestling(bot))

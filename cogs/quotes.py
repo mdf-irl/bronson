@@ -1,20 +1,31 @@
-""" quotes module """
+"""quotes module"""
 from random import choice
 
 from discord import Color, Embed
 from discord.ext import commands
 
 
-class Quotes(commands.Cog):
-    """ quotes class """
+async def setup(bot: commands.Bot):
+    """add to bot's cog system"""
+    await bot.add_cog(Quotes(bot))
 
-    def __init__(self, bot):
+
+class Quotes(commands.Cog):
+    """
+    Quote commands.
+    """
+
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.ass = self.bot.get_cog('Assets')
 
+    async def cog_command_error(self, ctx: commands.Context, error: str):
+        """handle cog errors"""
+        await ctx.reply(f'**Error**: {error}')
+
     @commands.command()
     async def kanye(self, ctx: commands.Context):
-        """gets a kanye quote"""
+        """Sends a Kanye quote"""
         quote = await self.ass.get_url_data('https://api.kanye.rest/text')
         embed = Embed(
             title='Kanye West Quotes',
@@ -35,7 +46,6 @@ class Quotes(commands.Cog):
         ralph_quote = ralph_quote.replace(
             '--Ralph Wiggum', '-- Ralph Wiggum, inspired by HeLLy'
         )
-
         embed = Embed(
             title='Ralph Wiggum Quotes',
             description=ralph_quote,
@@ -46,7 +56,7 @@ class Quotes(commands.Cog):
 
     @commands.command()
     async def zen(self, ctx: commands.Context):
-        """gets a random zen quote"""
+        """Sends a random zen quote"""
         json_data = await self.ass.get_url_data(
             'https://zenquotes.io/api/random', get_type='json'
         )
@@ -61,12 +71,3 @@ class Quotes(commands.Cog):
         )
         embed.set_thumbnail(url=await self.ass.get_url('zen'))
         await ctx.send(embed=embed)
-
-    async def cog_command_error(self, ctx: commands.Context, error):
-        """ override, handles all cog errors for this class """
-        await ctx.reply(f'**Error**: {error}')
-
-
-async def setup(bot):
-    """ add class to bot's cog system """
-    await bot.add_cog(Quotes(bot))

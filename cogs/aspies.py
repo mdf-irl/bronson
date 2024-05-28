@@ -1,15 +1,25 @@
-""" aspies module """
+"""aspies module"""
 from discord import Color, Embed, Member
 from discord.ext import commands
 
 
-class Aspies(commands.Cog):
-    """ aspies & aspies-adjacent commands """
+async def setup(bot: commands.Bot):
+    """add to bot's cog system"""
+    await bot.add_cog(Aspies(bot))
 
-    def __init__(self, bot):
+
+class Aspies(commands.Cog):
+    """
+    Commands that are only really relevant to Aspies & Aspies-adjacent servers.
+    """
+
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.ass = self.bot.get_cog('Assets')
-        self.gen = self.bot.get_cog('General')
+
+    async def cog_command_error(self, ctx: commands.Context, error: str):
+        """handle cog errors"""
+        await ctx.reply(f'**Error**: {error}')
 
     @commands.command(name='49ers')
     async def helly_49ers(self, ctx: commands.Context):
@@ -39,14 +49,14 @@ class Aspies(commands.Cog):
 
     @commands.command(aliases=['fucknewby'])
     async def fnewby(self, ctx: commands.Context):
-        """Sends the classic fucknewby gif"""
+        """Sends fucknewby gif"""
         embed = Embed(color=Color.random())
         embed.set_image(url=await self.ass.get_url('fucknewby.gif'))
         await ctx.send(embed=embed)
 
     @commands.command(aliases=['stabby', 'stabbygabby'])
     async def gabby(self, ctx: commands.Context):
-        """Sends the stabby gabby gif"""
+        """Sends stabby gabby gif"""
         embed = Embed(color=Color.random())
         embed.set_image(url=await self.ass.get_url('gabby.gif'))
         await ctx.send(embed=embed)
@@ -55,10 +65,15 @@ class Aspies(commands.Cog):
     async def homework(
         self,
         ctx: commands.Context,
-        users: commands.Greedy[Member]
+        users: commands.Greedy[Member] = None
     ):
         """Asks @user(s) if they need help with their homework"""
-        hw_users = await self.gen.format_users(users)
+        if users is None:
+            raise commands.CommandError(
+                "You didn't provide any user(s) "
+                f"(example: **!homework {ctx.author.mention}**)."
+            )
+        hw_users = ', '.join(user.mention for user in users)
 
         embed = Embed(
             description=f'{hw_users} do u need help with ur homework jw',
@@ -115,7 +130,7 @@ class Aspies(commands.Cog):
             '  # #    ####  #     # # ## #\n'
             '#######      # #     # #    #\n'
             '  # #   #    # #     # #    #\n'
-            '  # #    ####  ######  #    #\n'
+            '  # #    ####  ######  #    #'
         )
         embed = Embed(
             description=f'{poop}```{sdm}```{poop}',
@@ -127,10 +142,15 @@ class Aspies(commands.Cog):
     async def spray(
         self,
         ctx: commands.Context,
-        users: commands.Greedy[Member]
+        users: commands.Greedy[Member] = None
     ):
         """Sprays @user(s) with water bottle (it' hot water.)"""
-        sprayed_users = await self.gen.format_users(users)
+        if users is None:
+            raise commands.CommandError(
+                "You didn't provide any user(s) "
+                f"(example: **!spray {ctx.author.mention}**)."
+            )
+        sprayed_users = ', '.join(user.mention for user in users)
 
         msg = (
             f'Sprays {sprayed_users} with water bottle\n'
@@ -143,41 +163,23 @@ class Aspies(commands.Cog):
 
     @commands.command(aliases=['hawk'])
     async def trumpet(self, ctx: commands.Context):
-        """Sends a video of Hawk's beautiful trumpet performance"""
+        """Sends video of Hawk's beautiful trumpet performance"""
         trumpet_url = await self.ass.get_url('trumpet', res_type='video')
         trumpet_vid = await self.ass.get_discord_file(
             trumpet_url, 'trumpet.mov'
         )
         await ctx.send(file=trumpet_vid)
 
-    async def _yo_get_id_list(self):
-        """get list of yo gabs photo IDs"""
-        json_data = await self.ass.get_url_data(
-            'https://res.cloudinary.com/mdf-cdn/image/list/yogabs.json',
-            get_type='json'
-        )
-        public_id_list = (
-            [resource['public_id'][15:]
-                for resource in json_data['resources']]
-        )
-        return public_id_list
-
-    async def _yo_get_gabs_mention(self, ctx: commands.Context):
-        """check for gabs & get @mention"""
-        gabs = ctx.guild.get_member(235906772504805377)
-        gabs_mention = '' if gabs is None else '<@235906772504805377>'
-        return gabs_mention
-
     @commands.command(aliases=['yogabs'])
-    async def yo(self, ctx: commands.Context, arg: str = None):
+    async def yo(self, ctx: commands.Context, *, arg: str = None):
         """
-        Sends a random yo gabs meme. Optional argument -list shows a list of
-        picture IDs that can be used to show a specific meme
-        (!yo gordon OR !yo -gordon, etc.)
+        Sends yo gabs meme:
+        !yo -> sends random yo gabs meme
+        !yo -list -> sends list of yo gabs meme public IDs
+        !yo -name -> sends yo gabs meme with the public ID "name"
         """
         if arg is None:
             gabs_img = await self.ass.get_url('yogabs', tag=True)
-            # gabs_id = gabs_img.split('/')[-1]
 
             embed = Embed(color=Color.random())
             embed.set_image(url=gabs_img)
@@ -208,17 +210,24 @@ class Aspies(commands.Cog):
             await ctx.send(await self._yo_get_gabs_mention(ctx), embed=embed)
         else:
             raise commands.CommandError(
-                f'wow ya "{arg}" is not a valid me me eye D u fkn retard. '
-                 'u must b RLY DUMB LOL!!!!! idk maybe try using !yo -list '
-                 '2 show sum ackshual valid ones LOL!'
+                f'Yo {ctx.author.mention}, "{arg}" is not a valid argument. '
+                'Try using **!yo** by itself for a random meme, or **!yo '
+                '-list** to see a list of valid arguments you can use.'
             )
 
+    async def _yo_get_gabs_mention(self, ctx: commands.Context) -> str:
+        """check for gabs & get @mention"""
+        gabs = ctx.guild.get_member(235906772504805377)
+        gabs_mention = '' if gabs is None else '<@235906772504805377>'
+        return gabs_mention
 
-    async def cog_command_error(self, ctx: commands.Context, error):
-        """handle cog errors"""
-        await ctx.reply(f'**Error**: {error}')
-
-
-async def setup(bot):
-    """add class to bot's cog system"""
-    await bot.add_cog(Aspies(bot))
+    async def _yo_get_id_list(self) -> list:
+        """get list of yo gabs photo public IDs"""
+        json_data = await self.ass.get_url_data(
+            'https://res.cloudinary.com/mdf-cdn/image/list/yogabs.json',
+            get_type='json'
+        )
+        public_id_list = (
+            [resource['public_id'][15:] for resource in json_data['resources']]
+        )
+        return public_id_list

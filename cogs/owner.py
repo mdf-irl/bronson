@@ -4,30 +4,33 @@ from sys import exit as quit_bot
 from discord.ext import commands
 
 
+async def setup(bot):
+    """add class to bot's cog system"""
+    await bot.add_cog(Owner(bot))
+
+
 class Owner(commands.Cog):
-    """owner class"""
-    def __init__(self, bot):
+    """
+    Owner only commands.
+    """
+
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-    @commands.command()
-    @commands.is_owner()
-    async def quit(self, ctx: commands.Context):
-        """quit bot"""
-        await ctx.send('oKaAaAAyYy BuYyyY!!! :wave:')
-        self.bot.close()
-        quit_bot()
+    async def cog_command_error(self, ctx: commands.Context, error: str):
+        """handle cog errors"""
+        await ctx.reply(f'**Error**: {error}')
 
     @commands.command()
     @commands.is_owner()
     async def say(self, ctx: commands.Context, *, message: str):
-        """say command"""
+        """Bronson says specified text"""
         await ctx.send(message)
 
-    async def cog_command_error(self, ctx, error):
-        """ override, handles all cog errors for this class """
-        await ctx.reply(f'**Error**: {error}')
-
-
-async def setup(bot):
-    """ add class to bot's cog system """
-    await bot.add_cog(Owner(bot))
+    @commands.command()
+    @commands.is_owner()
+    async def quit(self, ctx: commands.Context):
+        """Quit bot"""
+        await ctx.send('oKaAaAAyYy BuYyyY!!! :wave:')
+        self.bot.close()
+        quit_bot()

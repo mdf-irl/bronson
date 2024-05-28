@@ -7,68 +7,40 @@ from discord.ext import commands
 from dotenv import load_dotenv
 
 
-class Vidya(commands.Cog):
-    """vidya related commands"""
+async def setup(bot: commands.Bot):
+    """add to bot's cog system"""
+    await bot.add_cog(Vidya(bot))
 
-    def __init__(self, bot):
+
+class Vidya(commands.Cog):
+    """
+    Vidya game related commands.
+    """
+
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.ass = self.bot.get_cog('Assets')
 
         load_dotenv()
         self.rapid_api_key = getenv('RAPID_API_KEY')
 
-    async def _epic_convert_timestamp(self, timestamp: str):
-        """convert timestamp from json into mm/dd/yyyy format"""
-        dt_object = datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%S.%fZ")
-        formatted_date = dt_object.strftime("%m/%d/%Y")
-        return formatted_date
-
-    async def _epic_get_date(
-            self,
-            game_data: list,
-            get_type: str,
-            promo_key: str,
-            index: int
-    ):
-        """get start or end date of free epic games"""
-        try:
-            get_date = (
-                game_data[index]['promotions'][promo_key]
-                [0]['promotionalOffers'][0][get_type]
-            )
-            get_date = await self._epic_convert_timestamp(get_date)
-        except (KeyError, IndexError):
-            get_date = '(unknown)'
-        return get_date
-
-    async def _epic_get_game_url(self, game: list):
-        """get game's url"""
-        try:
-            game_url = (
-                f"https://store.epicgames.com/en-US/p/"
-                f"{game['catalogNs']['mappings'][0]['pageSlug']}"
-            )
-        except (KeyError, IndexError):
-            game_url = 'https://store.epicgames.com/en-US/free-games'
-        return game_url
-
-    async def _epic_get_game_type(self, game: list):
-        """get game type"""
-        game_type = game['offerType'].replace('BASE_GAME', 'base game') \
-                                     .replace('ADD_ON', 'add-on') \
-                                     .replace('OTHERS', 'other')
-        return game_type
+    async def cog_command_error(self, ctx: commands.Context, error: str):
+        """handle cog errors"""
+        await ctx.reply(f'**Error**: {error}')
 
     @commands.command()
     async def epic(self, ctx: commands.Context, args: str = None):
-        """get epic game store's free games for this week"""
+        """
+        !epic -> sends epic game store's free games of the week
+        !epic -upcoming -> sends epic game store's upcoming free games
+        """
         headers = {
             'X-RapidAPI-Key': self.rapid_api_key,
             'X-RapidAPI-Host': 'free-epic-games.p.rapidapi.com'
         }
         json_data = await self.ass.get_url_data(
             'https://free-epic-games.p.rapidapi.com/free',
-            get_type = 'json', headers=headers
+            get_type='json', headers=headers
         )
         if args in ['-u', '-upcoming']:
             game_key = 'upcoming'
@@ -102,11 +74,44 @@ class Vidya(commands.Cog):
         embed.set_thumbnail(url=await self.ass.get_url(thumbnail))
         await ctx.send(embed=embed)
 
-    async def cog_command_error(self, ctx: commands.Context, error):
-        """handle cog command errors for this class"""
-        await ctx.reply(f'**Error**: {error}')
+    async def _epic_convert_timestamp(self, timestamp: str) -> str:
+        """convert timestamp from json into mm/dd/yyyy format"""
+        dt_object = datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%S.%fZ")
+        formatted_date = dt_object.strftime("%m/%d/%Y")
+        return formatted_date
 
+    async def _epic_get_date(
+            self,
+            game_data: list,
+            get_type: str,
+            promo_key: str,
+            index: int
+    ) -> str:
+        """get start or end date of free epic games"""
+        try:
+            get_date = (
+                game_data[index]['promotions'][promo_key]
+                [0]['promotionalOffers'][0][get_type]
+            )
+            get_date = await self._epic_convert_timestamp(get_date)
+        except (KeyError, IndexError):
+            get_date = '(unknown)'
+        return get_date
 
-async def setup(bot):
-    """add class to bot's cog system"""
-    await bot.add_cog(Vidya(bot))
+    async def _epic_get_game_type(self, game: list) -> str:
+        """get game type"""
+        game_type = game['offerType'].replace('BASE_GAME', 'base game') \
+                                     .replace('ADD_ON', 'add-on') \
+                                     .replace('OTHERS', 'other')
+        return game_type
+
+    async def _epic_get_game_url(self, game: list) -> str:
+        """get game's url"""
+        try:
+            game_url = (
+                f"https://store.epicgames.com/en-US/p/"
+                f"{game['catalogNs']['mappings'][0]['pageSlug']}"
+            )
+        except (KeyError, IndexError):
+            game_url = 'https://store.epicgames.com/en-US/free-games'
+        return game_url

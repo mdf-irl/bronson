@@ -1,10 +1,10 @@
-""" Bronson """
+"""Bronson"""
 #!/usr/bin/env python3
 
 from os import getenv, listdir
 from sys import exit as quit_bot
 
-import discord
+from discord import Intents
 from discord.ext import commands
 from dotenv import load_dotenv
 
@@ -21,12 +21,12 @@ elif BOT_PREFIX is None:
 
 
 class DiscordBot(commands.Bot):
-    """ main bot class """
+    """main bot class"""
 
     def __init__(self):
-        intents = discord.Intents.default()
-        # these following 2 are special privs u need 2 turn on in the
-        # discord developer portal
+        intents = Intents.default()
+        #these following 2 are special privs u need 2 turn on in the
+        #discord developer portal
         intents.message_content = True
         intents.members = True
 
@@ -37,10 +37,9 @@ class DiscordBot(commands.Bot):
         )
 
     async def load_cogs(self):
-        """ load cogs """
-        # always load utils first
+        """load cogs"""
+        #always load utils first
         await self.load_extension('utils.assets')
-        await self.load_extension('utils.general')
 
         cogs = listdir('./cogs')
         for cog in cogs:
@@ -48,6 +47,7 @@ class DiscordBot(commands.Bot):
                 await self.load_extension(f'cogs.{cog[:-3]}')
 
     async def setup_hook(self):
+        """called for bot set up"""
         await self.load_cogs()
 
 

@@ -1,4 +1,4 @@
-""" novelty module """
+"""novelty module"""
 from random import choice, sample
 
 from cowsay import get_output_string
@@ -6,18 +6,32 @@ from discord import ButtonStyle, Color, Embed, Member
 from discord.ext import commands
 from reactionmenu import ViewMenu, ViewButton
 
+async def setup(bot: commands.Bot):
+    """add to bot's cog system"""
+    await bot.add_cog(Novelty(bot))
+
 
 class Novelty(commands.Cog):
-    """ Novelty commands """
+    """
+    Novelty commands.
+    """
 
-    def __init__(self, bot):
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.ass = self.bot.get_cog('Assets')
-        self.gen = self.bot.get_cog('General')
+
+    async def cog_command_error(self, ctx: commands.Context, error: str):
+        """handle cog errors"""
+        await ctx.reply(f'**Error**: {error}')
 
     @commands.command(name='8ball')
-    async def eightball(self, ctx: commands.Context, *, question: str):
+    async def eightball(self, ctx: commands.Context, *, question: str = None):
         """Magic 8ball"""
+        if question is None:
+            raise commands.CommandError(
+                "You didn't provide a question "
+                "(example: **!8ball is HeLLy tha kewlest?**)."
+            )
         resp_url = await self.ass.get_url('8ball_2.txt', res_type='raw')
         resp_text = await self.ass.get_url_data(resp_url)
         responses = resp_text.splitlines()
@@ -37,8 +51,13 @@ class Novelty(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command()
-    async def achtung(self, ctx: commands.Context, *, message: str):
+    async def achtung(self, ctx: commands.Context, *, message: str = None):
         """Sends an achtung with your message"""
+        if message is None:
+            raise commands.CommandError(
+                "You didn't provide a message "
+                "(example: **!achtung newby farted**)."
+            )
         embed = Embed(
             title='ACHTUNG!',
             description=message,
@@ -52,7 +71,8 @@ class Novelty(commands.Cog):
         """choose between things"""
         if args is None:
             raise commands.CommandError(
-                "You didn't list anything to choose from."
+                "You didn't list anything to choose from "
+                "(example: **!choose ketchup, mustard, mayo**)."
             )
         split_args = args.split(', ')
         my_choice = choice(split_args)
@@ -67,9 +87,8 @@ class Novelty(commands.Cog):
 
     @commands.command()
     async def coin(self, ctx: commands.Context):
-        """ Bronson flips a coin for you """
+        """Bronson flips a coin for you"""
         coin_state = choice(['heads', 'tails'])
-
         embed = Embed(
             title='And...',
             description=f'{coin_state.title()} it is!',
@@ -85,7 +104,8 @@ class Novelty(commands.Cog):
         # will expand on this at a later time
         if message is None:
             raise commands.CommandError(
-                "ya, u didn't provide n e thing 4 the cow 2 say dipshit LOL!!!"
+                "You didn't provide a message "
+                "(example: **!cowsay fuck newby**)."
             )
         await ctx.reply(f'```{get_output_string('cow', message)}```')
 
@@ -105,7 +125,7 @@ class Novelty(commands.Cog):
 
     @commands.command()
     async def fortune(self, ctx: commands.Context, user: Member = None):
-        """get fortune"""
+        """Sends fortune"""
         resp_url = await self.ass.get_url('fortunes.txt', res_type='raw')
         resp_txt = await self.ass.get_url_data(resp_url)
         responses = resp_txt.splitlines()
@@ -121,7 +141,7 @@ class Novelty(commands.Cog):
 
     @commands.command()
     async def humpty(self, ctx: commands.Context):
-        """humpty instructions"""
+        """Sends humpty 101 instructions"""
         humpty_url = await self.ass.get_url('humpty.txt', res_type='raw')
         humpty_txt = await self.ass.get_url_data(humpty_url)
         humpty_parts = humpty_txt.split('%')
@@ -158,7 +178,6 @@ class Novelty(commands.Cog):
             custom_id=ViewButton.ID_NEXT_PAGE
         )
         menu.add_button(btn_next)
-
         await menu.start()
 
     @commands.command()
@@ -168,13 +187,16 @@ class Novelty(commands.Cog):
         users: commands.Greedy[Member] = None,
         *, arg: str = None
     ):
-        """insult @user(s)"""
+        """
+        !insult @user(s) -> mild insult
+        !insult @user(s) -spicy -> spicy insult
+        """
         if users is None:
             raise commands.CommandError(
-                "LOL u didn't @mention n e @user(s) u fkn mongoloid LOL!!! "
-                'do u wear a helmet irl or sumthin??? LOL!!!!!'
+                "You didn't provide any user(s) "
+                f"(example: **!insult {ctx.author.mention}**)."
             )
-        insultees = await self.gen.format_users(users, False)
+        insultees = ', '.join(user.display_name for user in users)
 
         if arg is None:
             insult = await self.ass.get_url_data(
@@ -195,7 +217,8 @@ class Novelty(commands.Cog):
             response = f'You are {a_an} {words}.'
         else:
             raise commands.CommandError(
-                f'"{arg}" is an invalid argument u fkn dumbass LOL!!!'
+                "You didn't provide a valid argument "
+                f"(example: **!insult {ctx.author.mention} -spicy**)."
             )
         embed = Embed(
             title=f'{insultees}...',
@@ -224,10 +247,15 @@ class Novelty(commands.Cog):
     async def sausage(
         self,
         ctx: commands.Context,
-        users: commands.Greedy[Member]
+        users: commands.Greedy[Member] = None
     ):
         """Ask @user(s) if they would like some sausage"""
-        hungry_users = await self.gen.format_users(users)
+        if users is None:
+            raise commands.CommandError(
+                "You didn't provide any user(s) "
+                f"(example: **!sausage {ctx.author.mention}**)."
+            )
+        hungry_users = ', '.join(user.mention for user in users)
 
         response = (
             f'{hungry_users} would you like some sausage?\n'
@@ -242,19 +270,10 @@ class Novelty(commands.Cog):
     @commands.command()
     async def vapor(self, ctx: commands.Context):
         """Sends a chart image of the vaporization points
-        of various cannabinoids """
+        of various cannabinoids"""
         embed = Embed(
             title='Cannabinoid Vaporization Temperatures',
             color=Color.random()
         )
         embed.set_image(url=await self.ass.get_url('vapor'))
         await ctx.send(embed=embed)
-
-    async def cog_command_error(self, ctx: commands.Context, error):
-        """ override, handles all cog errors for this class """
-        await ctx.reply(f'**Error**: {error}')
-
-
-async def setup(bot):
-    """ add class to bot's cog system """
-    await bot.add_cog(Novelty(bot))

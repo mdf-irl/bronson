@@ -1,17 +1,25 @@
-""" facts module """
+"""facts module"""
 from random import choice
 
 from discord import Color, Embed, Member
 from discord.ext import commands
 
 
-class Facts(commands.Cog):
-    """ Fact-related commands """
+async def setup(bot: commands.Bot):
+    """add to bot's cog system"""
+    await bot.add_cog(Facts(bot))
 
-    def __init__(self, bot):
+
+class Facts(commands.Cog):
+    """Commands to send various facts."""
+
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.ass = self.bot.get_cog('Assets')
-        self.gen = self.bot.get_cog('General')
+
+    async def cog_command_error(self, ctx: commands.Context, error: str):
+        """handle cog errors"""
+        await ctx.reply(f'**Error**: {error}')
 
     @commands.command()
     async def cat(self, ctx: commands.Context):
@@ -43,7 +51,7 @@ class Facts(commands.Cog):
 
     @commands.command()
     async def foiegras(self, ctx: commands.Context):
-        """sends a random fact about foie gras"""
+        """Sends a random fact about foie gras"""
         fg_url = await self.ass.get_url('foie_facts.txt', res_type='raw')
         fg_txt = await self.ass.get_url_data(fg_url)
         fg_facts = fg_txt.splitlines()
@@ -58,7 +66,7 @@ class Facts(commands.Cog):
 
     @commands.command()
     async def helly(self, ctx: commands.Context):
-        """sends a random fact about HeLLy"""
+        """Sends a random fact about HeLLy"""
         facts_url = await self.ass.get_url('helly_facts.txt', res_type='raw')
         facts_text = await self.ass.get_url_data(facts_url)
         facts = facts_text.splitlines()
@@ -72,8 +80,13 @@ class Facts(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command(aliases=['yomama'])
-    async def mom(self, ctx: commands.Context, user: Member):
+    async def mom(self, ctx: commands.Context, user: Member = None):
         """Sends a fact about @user's mom"""
+        if user is None:
+            raise commands.CommandError(
+                "You didn't provide a user "
+                f"(example: **!mom {ctx.author.mention}**)."
+            )
         json_data = await self.ass.get_url_data(
             'https://www.yomama-jokes.com/api/v1/jokes/random/',
             get_type='json'
@@ -109,12 +122,3 @@ class Facts(commands.Cog):
         )
         embed.set_thumbnail(url=await self.ass.get_url('bulb'))
         await ctx.send(embed=embed)
-
-    async def cog_command_error(self, ctx, error):
-        """ override, handles all cog errors for this class """
-        await ctx.reply(f'**Error**: {error}')
-
-
-async def setup(bot):
-    """ add class to bot's cog system """
-    await bot.add_cog(Facts(bot))

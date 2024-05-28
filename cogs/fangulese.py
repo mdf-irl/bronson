@@ -1,17 +1,31 @@
-""" fangulese module """
+"""fangulese module"""
 from random import choice, randint
 
-from discord import Color, Embed, Member  # , Status
+from discord import Color, Embed, Member
 from discord.ext import commands
 
 
-class Fangulese(commands.Cog):
-    """ Fangulese & c0n-adjacent commands """
+async def setup(bot: commands.Bot):
+    """add to bot's cog system"""
+    await bot.add_cog(Fangulese(bot))
 
-    def __init__(self, bot):
+
+class Fangulese(commands.Cog):
+    """Fangulese & c0n-adjacent commands."""
+
+    def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.ass = self.bot.get_cog('Assets')
-        self.gen = self.bot.get_cog('General')
+
+    async def cog_command_error(self, ctx: commands.Context, error: str):
+        """handle cog errors"""
+        if isinstance(error, commands.CheckFailure):
+            await ctx.reply(
+                '**Error**: This command can only be used in **NSFW** '
+                'channels.'
+            )
+        else:
+            await ctx.reply(f'**Error**: {error}')
 
     @commands.command(aliases=['btoborg', 'btoborg1'])
     async def bronson(self, ctx: commands.Context):
@@ -24,10 +38,16 @@ class Fangulese(commands.Cog):
     async def bufu(
         self,
         ctx: commands.Context,
-        users: commands.Greedy[Member]
+        users: commands.Greedy[Member] = None
     ):
         """bufu user(s)"""
-        bufu_users = await self.gen.format_users(users)
+        if users is None:
+            raise commands.CommandError(
+                "You didn't provide any user(s) "
+                f"(example: **!bufu {ctx.author.mention}**)."
+            )
+        bufu_users = ', '.join(user.mention for user in users)
+
         embed = Embed(
             description=(
                 f"oKaY YeA {bufu_users} YeW aRe oH FiSHaLLy BeiNg BuFu'd "
@@ -42,11 +62,20 @@ class Fangulese(commands.Cog):
         )
         await ctx.send(embed=embed)
 
-    @commands.command()
-    async def hack(self, ctx: commands.Context, users: commands.Greedy[Member]):
-        """hack @user(s) """
+    @commands.command(aliases=['smmpha'])
+    async def hack(
+        self,
+        ctx: commands.Context,
+        users: commands.Greedy[Member] = None
+    ):
+        """hack @user(s)"""
+        if users is None:
+            raise commands.CommandError(
+                "You didn't provide any user(s) "
+                f"(example: **!hack {ctx.author.mention}**)."
+            )
         has_have = 'HaZ' if len(users) == 1 else 'HaVe'
-        hacked_users = await self.gen.format_users(users)
+        hacked_users = ', '.join(user.mention for user in users)
 
         embed = Embed(
             title='SMMPHA',
@@ -66,7 +95,7 @@ class Fangulese(commands.Cog):
 
     @commands.command()
     async def ha(self, ctx: commands.Context):
-        """ Sends a ha he ho message """
+        """Sends a ha he ho message"""
         msg = [
             'AH haH HEhEH ehh HO o ho Ho Ho OHO!!!!!'
             'HAhA HEH hEHeh he HEHE ho Ho HO HAhAH HEheh eh OH ohOHO!!!!!!',
@@ -109,10 +138,23 @@ class Fangulese(commands.Cog):
         ex = f"{'!' * randint(11, 15)}"
 
         embed = Embed(
-            description=self._get_alt_caps(f'{oo}k{aa}{yy} {pp}owerslam{ex}'),
+            description=(
+                self._powerslam_get_alt_caps(f'{oo}k{aa}{yy} {pp}owerslam{ex}')
+            ),
             color=Color.random()
         )
         await ctx.send(embed=embed)
+
+    def _powerslam_get_alt_caps(self, message: str) -> str:
+        """takes a message and returns it with alternating caps"""
+        output_message = ''
+
+        for i, char in enumerate(message):
+            if i % 2 == 0:
+                output_message += char.upper()
+            else:
+                output_message += char.lower()
+        return output_message
 
     @commands.is_nsfw()
     @commands.command(aliases=['sludgedump'])
@@ -127,9 +169,19 @@ class Fangulese(commands.Cog):
         await ctx.send(':poop: **WARNING** :poop:', file=sludge_bin)
 
     @commands.command()
-    async def tohd(self, ctx: commands.Context, users: commands.Greedy[Member]):
+    async def tohd(
+        self,
+        ctx: commands.Context,
+        users: commands.Greedy[Member] = None
+    ):
         """Hits @user(s) with the touch of hurtness distance"""
-        tohd_users = await self.gen.format_users(users)
+        if users is None:
+            raise commands.CommandError(
+                "You didn't provide any user(s) "
+                f"(example: **!tohd {ctx.author.mention}**)."
+            )
+        tohd_users = ', '.join(user.mention for user in users)
+
         embed = Embed(
             description=(
                 f'TUCH OV HERTNISS DISSTINTS ON U {tohd_users} '
@@ -168,29 +220,3 @@ class Fangulese(commands.Cog):
             color=Color.random()
         )
         await ctx.send(embed=embed)
-
-    def _get_alt_caps(self, message: str):
-        """Takes a message and returns it with alternating caps."""
-        output_message = ''
-
-        for i, char in enumerate(message):
-            if i % 2 == 0:
-                output_message += char.upper()
-            else:
-                output_message += char.lower()
-        return output_message
-
-    async def cog_command_error(self, ctx: commands.Context, error):
-        """ override, handles all cog errors for this class """
-        if isinstance(error, commands.CheckFailure):
-            await ctx.reply(
-                '**Error**: **wow.** this cmd can only b yoozed in **NSFW** '
-                'channels u sick fkn freak LOL!!! :rage::poop:'
-            )
-        else:
-            await ctx.reply(f'**Error**: {error}')
-
-
-async def setup(bot):
-    """ add command to bot's cog system """
-    await bot.add_cog(Fangulese(bot))
