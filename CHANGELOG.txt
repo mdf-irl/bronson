@@ -1,3 +1,6 @@
+1.10.1:
+- Fixed bot showing wrong version
+
 1.10.0:
 - Added !hoot to send Jowl's hoot
 - Added !poke <@user> to poke <@user>
