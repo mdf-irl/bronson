@@ -141,6 +141,7 @@ Command | Aliases | Description
 ### **Wrestling**
 Command | Aliases | Description
 --- | --- | ---
+!choppy *@user(s)* || Choppy choppy *@user(s)*' pee pee(s)
 !cry *@user(s)* || Tells *@user(s)* to cry me a river
 !curse *@user(s)* || Danhausen curses *@user(s)*
 !deez *@user(s)* | deeznuts, redeem | Kindly asks *@user(s)* to redeem deez nuts
