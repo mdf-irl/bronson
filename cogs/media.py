@@ -29,7 +29,7 @@ class Media(commands.Cog):
         await ctx.reply(f'**Error**: {error}')
 
     @commands.command()
-    async def movie(self, ctx: commands.Context, *, query: str = None):
+    async def movie(self, ctx: commands.Context, *, query: str=None):
         """Sends info about specified movie"""
         if query is None:
             raise commands.CommandError(
@@ -47,7 +47,7 @@ class Media(commands.Cog):
             await self._show_media(ctx, movie_embeds)
 
     @commands.command()
-    async def tv(self, ctx: commands.Context, *, query: str = None):
+    async def tv(self, ctx: commands.Context, *, query: str=None):
         """Sends info about specified TV series"""
         if query is None:
             raise commands.CommandError(

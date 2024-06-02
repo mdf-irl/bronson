@@ -29,7 +29,7 @@ class Vidya(commands.Cog):
         await ctx.reply(f'**Error**: {error}')
 
     @commands.command()
-    async def epic(self, ctx: commands.Context, args: str = None):
+    async def epic(self, ctx: commands.Context, args: str=None):
         """
         !epic -> sends epic game store's free games of the week
         !epic -upcoming -> sends epic game store's upcoming free games

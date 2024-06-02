@@ -1,3 +1,24 @@
+1.10.0:
+- Added !hoot to send Jowl's hoot
+- Added !poke <@user> to poke <@user>
+- Added !ud <query> to search Urban Dictionary for <query>
+- Added !tts <query> to send text-to-speech mp3 of <query>
+- Added !he to send hehe image
+- Added !ai <query> to speak with Google Gemini about <query>
+- Added !ty <user> to thank a <user> for the update
+- Added !avatar <user> to show a <user>'s avatar
+- Added !server to show server info
+- Added !user <user> to show a <user>'s info
+- Added !cow to send a random cow fact
+- Added !homer to send a random Homer Simpson quote
+- Added !citation (!cn) to send citation needed image
+
+- Overhauled GoComics comics (!boondocks, !cah, !garfield, !peanuts, !peanutsb):
+-- For this example, we will use the !garfield command, but it will work with all listed:
+--- !garfield sends today's Garfield comic
+--- !garfield -r OR -random will send a random Garfield comic
+--- !garfield mm/dd/yyyy will send a Garfield comic from specified date (ex: !garfield 9/8/89)
+
 1.9.5:
 - Further code optimization
 - Further improved code readability

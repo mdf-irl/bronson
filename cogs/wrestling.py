@@ -23,10 +23,33 @@ class Wrestling(commands.Cog):
         await ctx.reply(f'**Error**: {error}')
 
     @commands.command()
+    async def choppy(
+        self,
+        ctx: commands.Context,
+        users: commands.Greedy[Member]=None
+    ):
+        """choppy choppy"""
+        if users is None:
+            raise commands.CommandError(
+                "You didn't provide any user(s) "
+                f"(example: **!choppy {ctx.author.mention}**)."
+            )
+        choppy_users = ', '.join(user.mention for user in users)
+
+        embed = Embed(
+            description=(
+                f'{choppy_users} **I... CHOPPY CHOPPY.. YOUR.. PEE PEE!!!**'
+            ),
+            color=Color.random()
+        )
+        embed.set_image(url=await self.ass.get_url('choppy2.gif'))
+        await ctx.send(embed=embed)
+
+    @commands.command()
     async def cry(
         self,
         ctx: commands.Context,
-        users: commands.Greedy[Member] = None
+        users: commands.Greedy[Member]=None
     ):
         """cry me a river"""
         if users is None:
@@ -70,7 +93,7 @@ class Wrestling(commands.Cog):
     async def deez(
         self,
         ctx: commands.Context,
-        users: commands.Greedy[Member] = None
+        users: commands.Greedy[Member]=None
     ):
         """Ask @user(s) to redeem deez nuts"""
         if users is None:
@@ -119,7 +142,7 @@ class Wrestling(commands.Cog):
     async def hotrain(
         self,
         ctx: commands.Context,
-        users: commands.Greedy[Member] = None
+        users: commands.Greedy[Member]=None
     ):
         """Asks user(s) to come aboard the ho train"""
         if users is None:

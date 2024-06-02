@@ -114,6 +114,13 @@ class Fangulese(commands.Cog):
         )
         await ctx.send(embed=embed)
 
+    @commands.command()
+    async def he(self, ctx: commands.Context):
+        """"Sends he he he image"""
+        embed = Embed(color=Color.random())
+        embed.set_image(url=await self.ass.get_url('hehe'))
+        await ctx.send(embed=embed)
+
     @commands.command(aliases=['hey', 'hi'])
     async def hello(self, ctx: commands.Context):
         """Sends Bronson's hello message"""
@@ -125,6 +132,18 @@ class Fangulese(commands.Cog):
             'amazed that I practicly never have home work.'
         )
         embed = Embed(description=response, color=Color.random())
+        await ctx.send(embed=embed)
+
+    @commands.command()
+    async def hoot(self, ctx: commands.Context):
+        """!hoot"""
+        o = 'o' * randint(20, 30)
+        oo = 'o' * randint(31, 40)
+        embed = Embed(
+            description=f'okay wh{o} is h{oo}ting?',
+            color=Color.random()
+        )
+        embed.set_image(url=await self.ass.get_url('hoot.gif'))
         await ctx.send(embed=embed)
 
     @commands.command(aliases=['ps', 'pslam'])

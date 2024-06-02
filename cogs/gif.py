@@ -29,7 +29,7 @@ class Gif(commands.Cog):
         await ctx.reply(f'**Error**: {error}')
 
     @commands.command(aliases=['img'])
-    async def gif(self, ctx: commands.Context, *, query: str = None):
+    async def gif(self, ctx: commands.Context, *, query: str=None):
         """
         !gif name -> sends 1st Tenor result for "name"
         !gif name -menu -> sends menu of Tenor results for "name"
@@ -107,24 +107,19 @@ class Gif(commands.Cog):
     ):
         """handle gif results"""
         if gif_index == 0:
-            # embed_footer = 'Source: GIPHY' if giphy else 'Source: Tenor'
-
             gif_url = json_data['data'][0]['images']['original']['url'] if \
                 giphy else \
                 json_data['results'][0]['media_formats']['gif']['url']
 
             embed = Embed(color=Color.random())
             embed.set_image(url=gif_url)
-            # embed.set_footer(text=embed_footer)
             await ctx.send(embed=embed)
 
         elif gif_index == -1:
-            gif_embeds = []
             gif_embeds = await self._gif_populate_embeds(json_data, giphy)
             await self._gif_show_gifs(ctx, gif_embeds)
 
         else:
-            gif_embeds = []
             gif_embeds = await self._gif_populate_embeds(json_data, giphy)
             try:
                 await ctx.send(embed=gif_embeds[gif_index])
@@ -137,7 +132,6 @@ class Gif(commands.Cog):
         """populate gif embeds"""
         gif_embeds = []
         json_key = 'data' if giphy else 'results'
-        # embed_footer = 'Source: GIPHY' if giphy else 'Source: Tenor'
 
         for gif in json_data[json_key]:
             embed = Embed(color=Color.random())
@@ -145,9 +139,7 @@ class Gif(commands.Cog):
                 embed.set_image(url=gif['images']['original']['url'])
             else:
                 embed.set_image(url=gif['media_formats']['gif']['url'])
-            # embed.set_footer(text=embed_footer)
             gif_embeds.append(embed)
-
         return gif_embeds
 
     async def _gif_show_gifs(self, ctx: commands.Context, embeds: list):

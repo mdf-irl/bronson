@@ -21,6 +21,22 @@ class Aspies(commands.Cog):
         """handle cog errors"""
         await ctx.reply(f'**Error**: {error}')
 
+    @commands.Cog.listener()
+    async def on_message(self, message):
+        """triggered on msg"""
+        #Sends an image expressing disdain for a certain cow
+        if await self._simple_checksum(message.content) == 47616:
+            embed = Embed(color=Color.random())
+            embed.set_image(url=await self.ass.get_url('autistic_man.gif'))
+            await message.channel.send(embed=embed)
+
+    async def _simple_checksum(self, message: str) -> int:
+        """simple checksum"""
+        checksum_value = 420
+        for char in message:
+            checksum_value += ord(char) * 69
+        return checksum_value
+
     @commands.command(name='49ers')
     async def helly_49ers(self, ctx: commands.Context):
         """Sends HeLLy 49ers gif"""
@@ -45,13 +61,6 @@ class Aspies(commands.Cog):
         """Sends deploy c0n image"""
         embed = Embed(color=Color.random())
         embed.set_image(url=await self.ass.get_url('deploy_c0n'))
-        await ctx.send(embed=embed)
-
-    @commands.command(aliases=['fucknewby'])
-    async def fnewby(self, ctx: commands.Context):
-        """Sends fucknewby gif"""
-        embed = Embed(color=Color.random())
-        embed.set_image(url=await self.ass.get_url('fucknewby.gif'))
         await ctx.send(embed=embed)
 
     @commands.command(aliases=['stabby', 'stabbygabby'])
@@ -112,6 +121,31 @@ class Aspies(commands.Cog):
         embed.set_image(url=await self.ass.get_url('moocrew_optimized.gif'))
         await ctx.send(embed=embed)
 
+    @commands.command()
+    async def poke(
+        self,
+        ctx: commands.Context,
+        users: commands.Greedy[Member] = None
+    ):
+        """poke @user(s)"""
+        if users is None:
+            raise commands.CommandError(
+                "You didn't provide any user(s) "
+                f"(example: **!poke {ctx.author.mention}**)."
+            )
+        has_have = 'has' if len(users) == 1 else 'have'
+        poked_users = ', '.join(user.mention for user in users)
+
+        embed = Embed(
+            description=(
+                f':point_right: {poked_users} :point_left: {has_have} been '
+                '**POKED**. LOL!!!'
+            ),
+            color=Color.random()
+        )
+        embed.set_image(url=await self.ass.get_url('poke.gif'))
+        await ctx.send(embed=embed)
+
     @commands.command(aliases=['snitch'])
     async def randall(self, ctx: commands.Context):
         """Sends Randall/snitch gif"""
@@ -161,6 +195,21 @@ class Aspies(commands.Cog):
         embed = Embed(description=msg, color=Color.random())
         await ctx.send(embed=embed)
 
+    @commands.command()
+    async def ty(self, ctx: commands.Context, user: Member=None):
+        """ty"""
+        if user is None:
+            raise commands.CommandError(
+                "You didn't provide a user "
+                f"(example: **!ty {ctx.author.mention}**)."
+            )
+        embed = Embed(
+            description=f'ty 4 the upd8 {user.mention}',
+            color=Color.random()
+        )
+        embed.set_image(url=await self.ass.get_url('ty_o.gif'))
+        await ctx.send(embed=embed)
+
     @commands.command(aliases=['hawk'])
     async def trumpet(self, ctx: commands.Context):
         """Sends video of Hawk's beautiful trumpet performance"""
@@ -171,7 +220,7 @@ class Aspies(commands.Cog):
         await ctx.send(file=trumpet_vid)
 
     @commands.command(aliases=['yogabs'])
-    async def yo(self, ctx: commands.Context, *, arg: str = None):
+    async def yo(self, ctx: commands.Context, *, arg: str=None):
         """
         Sends yo gabs meme:
         !yo -> sends random yo gabs meme

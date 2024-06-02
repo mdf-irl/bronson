@@ -1,4 +1,5 @@
 """comics module"""
+from datetime import datetime
 from pathlib import Path
 from re import findall
 from random import randint
@@ -26,51 +27,83 @@ class Comics(commands.Cog):
         """handle cog errors"""
         await ctx.reply(f'**Error**: {error}')
 
+    async def _get_today(self):
+        """get today's date"""
+        today = datetime.today()
+        return today.strftime('%Y/%m/%d')
+
+    async def _get_proper_date(self, cmd_name: str, date: str):
+        """get date in proper format"""
+        try:
+            dt_obj = datetime.strptime(date, '%m/%d/%Y')
+            comic_date = dt_obj.strftime('%Y/%m/%d')
+            return comic_date
+        except ValueError:
+            try:
+                dt_obj = datetime.strptime(date, '%m/%d/%y')
+                comic_date = dt_obj.strftime('%Y/%m/%d')
+                return comic_date
+            except ValueError as exc:
+                raise commands.CommandError(
+                    "You didn't provide a valid date "
+                    f"(example: **!{cmd_name} 7/4/23**)."
+                ) from exc
+
     @commands.command(aliases=['bd'])
-    async def boondocks(self, ctx: commands.Context):
+    async def boondocks(self, ctx: commands.Context, arg: str=None):
         """Sends a random Boondocks comic"""
-        await self._handle_gocomics_comic(ctx, 'boondocks', 'The Boondocks')
+        await self._handle_gocomics_comic(
+            ctx, 'boondocks', 'The Boondocks', arg
+        )
 
     @commands.command(aliases=['c&h'])
-    async def cah(self, ctx: commands.Context):
+    async def cah(self, ctx: commands.Context, arg: str=None):
         """Sends a random Calvin & Hobbes comic"""
         await self._handle_gocomics_comic(
-            ctx, 'calvinandhobbes', 'Calvin & Hobbes'
+            ctx, 'calvinandhobbes', 'Calvin & Hobbes', arg
         )
 
-    @commands.command(aliases=['gf'])
-    async def garfield(self, ctx: commands.Context):
+    @commands.command()
+    async def garfield(self, ctx: commands.Context, arg: str=None):
         """Sends a random Garfield comic"""
-        await self._handle_gocomics_comic(ctx, 'garfield', 'Garfield')
+        await self._handle_gocomics_comic(ctx, 'garfield', 'Garfield', arg)
 
     @commands.command(aliases=['p'])
-    async def peanuts(self, ctx: commands.Context):
+    async def peanuts(self, ctx: commands.Context, arg: str=None):
         """Sends a random Peanuts comic"""
-        await self._handle_gocomics_comic(ctx, 'peanuts', 'Peanuts')
+        await self._handle_gocomics_comic(ctx, 'peanuts', 'Peanuts', arg)
 
     @commands.command(aliases=['pb'])
-    async def peanutsb(self, ctx: commands.Context):
+    async def peanutsb(self, ctx: commands.Context, arg: str=None):
         """Sends a random Peanuts Begins comic"""
         await self._handle_gocomics_comic(
-            ctx, 'peanuts-begins', 'Peanuts Begins')
-
-    @commands.command(aliases=['scribbles', 'ss'])
-    async def sarah(self, ctx: commands.Context):
-        """Sends a random Sarah's Scribbles comic"""
-        await self._handle_gocomics_comic(
-            ctx, 'sarahs-scribbles', "Sarah's Scribbles"
-        )
+            ctx, 'peanuts-begins', 'Peanuts Begins', arg)
 
     async def _handle_gocomics_comic(
             self,
             ctx: commands.Context,
             url_id: str,
-            name: str
+            name: str,
+            arg: str=None
     ):
         """Gets & sends GoComics.com comics"""
-        html = await self.ass.get_url_data(
-            f'https://www.gocomics.com/random/{url_id}')
+        if arg is not None:
+            if arg in ['-r', '-random']:
+                comic_url = f'https://www.gocomics.com/random/{url_id}'
+            else:
+                comic_date = await self._get_proper_date(url_id, arg)
+                comic_url = f'https://www.gocomics.com/{url_id}/{comic_date}'
+        else:
+            comic_url = (
+                f'https://www.gocomics.com/{url_id}/{await self._get_today()}'
+            )
 
+        html = await self.ass.get_url_data(comic_url)
+
+        if 'Sorry but there was no' in html:
+            raise commands.CommandError(
+                f"There is no {name} comic for that date."
+            )
         # I should probably be using bs4 for this for
         # performance reasons
         date = findall(r'(?<=formatted-date=").+?(?=")', html)

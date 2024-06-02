@@ -1,9 +1,11 @@
 """novelty module"""
-from random import choice, sample
+from random import choice, choices, sample
+from string import ascii_lowercase, digits
 
 from cowsay import get_output_string
-from discord import ButtonStyle, Color, Embed, Member
+from discord import ButtonStyle, Color, Embed, File, Member
 from discord.ext import commands
+from gtts import gTTS
 from reactionmenu import ViewMenu, ViewButton
 
 async def setup(bot: commands.Bot):
@@ -25,7 +27,7 @@ class Novelty(commands.Cog):
         await ctx.reply(f'**Error**: {error}')
 
     @commands.command(name='8ball')
-    async def eightball(self, ctx: commands.Context, *, question: str = None):
+    async def eightball(self, ctx: commands.Context, *, question: str=None):
         """Magic 8ball"""
         if question is None:
             raise commands.CommandError(
@@ -51,12 +53,12 @@ class Novelty(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command()
-    async def achtung(self, ctx: commands.Context, *, message: str = None):
+    async def achtung(self, ctx: commands.Context, *, message: str=None):
         """Sends an achtung with your message"""
         if message is None:
             raise commands.CommandError(
                 "You didn't provide a message "
-                "(example: **!achtung newby farted**)."
+                "(example: **!achtung HeLLy farted**)."
             )
         embed = Embed(
             title='ACHTUNG!',
@@ -67,7 +69,7 @@ class Novelty(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command(aliases=['choice'])
-    async def choose(self, ctx: commands.Context, *, args: str = None):
+    async def choose(self, ctx: commands.Context, *, args: str=None):
         """choose between things"""
         if args is None:
             raise commands.CommandError(
@@ -85,6 +87,13 @@ class Novelty(commands.Cog):
         embed.set_thumbnail(url=await self.ass.get_url('thinking'))
         await ctx.send(embed=embed)
 
+    @commands.command(aliases=['cn'])
+    async def citation(self, ctx: commands.Context):
+        """citation needed"""
+        embed = Embed(color=Color.random())
+        embed.set_image(url=await self.ass.get_url('citation'))
+        await ctx.send(embed=embed)
+
     @commands.command()
     async def coin(self, ctx: commands.Context):
         """Bronson flips a coin for you"""
@@ -97,15 +106,15 @@ class Novelty(commands.Cog):
         embed.set_thumbnail(url=await self.ass.get_url(coin_state))
         await ctx.send(embed=embed)
 
-    @commands.command(aliases=['cow'])
-    async def cowsay(self, ctx: commands.Context, *, message: str = None):
+    @commands.command()
+    async def cowsay(self, ctx: commands.Context, *, message: str=None):
         """Sends an ASCII art cow saying your message"""
         # there's a bunch of options we can use other than 'cow'
         # will expand on this at a later time
         if message is None:
             raise commands.CommandError(
                 "You didn't provide a message "
-                "(example: **!cowsay fuck newby**)."
+                "(example: **!cowsay MOO LOL**)."
             )
         await ctx.reply(f'```{get_output_string('cow', message)}```')
 
@@ -185,7 +194,7 @@ class Novelty(commands.Cog):
         self,
         ctx: commands.Context,
         users: commands.Greedy[Member] = None,
-        *, arg: str = None
+        *, arg: str=None
     ):
         """
         !insult @user(s) -> mild insult
@@ -266,6 +275,24 @@ class Novelty(commands.Cog):
         embed = Embed(description=response, color=Color.random())
         embed.set_image(url=await self.ass.get_url('sausage.gif'))
         await ctx.send(embed=embed)
+
+    @commands.command()
+    async def tts(self, ctx: commands.Context, *, message: str=None):
+        """Sends wav file of text to speech message"""
+        if message is None:
+            raise commands.CommandError(
+                "You didn't provide a message "
+                "(example: **!tts r u kon?**)."
+            )
+        filename = await self._tts_get_filename()
+        tts = gTTS(text=message, lang='en')
+        tts.save(f'./tmp/Bronson_{filename}.mp3')
+        await ctx.send(file=File(f'./tmp/Bronson_{filename}.mp3'))
+
+    async def _tts_get_filename(self) -> str:
+        """get random filename"""
+        filename = ''.join(choices(ascii_lowercase + digits, k=20))
+        return filename
 
     @commands.command()
     async def vapor(self, ctx: commands.Context):

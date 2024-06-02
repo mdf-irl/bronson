@@ -3,7 +3,7 @@ from datetime import datetime
 from os import name as os_name
 from platform import platform, python_version, system
 
-from discord import Color, CustomActivity, Embed, __version__
+from discord import Color, CustomActivity, Embed, Member, __version__
 from discord.ext import commands
 from gpiozero import CPUTemperature
 from psutil import (
@@ -35,24 +35,24 @@ class Brayne(commands.Cog):
         """called when the bot is online & ready"""
         self.connected_time = datetime.now()
         await self.bot.change_presence(
-            activity=CustomActivity(name='420.69-1.9.5 - !help')
+            activity=CustomActivity(name='420.69-10.0.0 - !help')
         )
 
-    # @commands.command()
-    # async def avatar(self, ctx: commands.Context, user: Member = None):
-    #     """Sends @user's avatar"""
-    #     if user is None:
-    #         raise commands.CommandError(
-    #             "You didn't provide a user "
-    #             f"(example: **!avatar {ctx.author.mention}**)."
-    #         )
-    #     embed = Embed(
-    #         title=f"{user.display_name}'s Avatar",
-    #         description=f'```{user.display_avatar.url}```',
-    #         color=Color.random()
-    #     )
-    #     embed.set_image(url=user.display_avatar.url)
-    #     await ctx.send(embed=embed)
+    @commands.command()
+    async def avatar(self, ctx: commands.Context, user: Member = None):
+        """Sends @user's avatar"""
+        if user is None:
+            raise commands.CommandError(
+                "You didn't provide a user "
+                f"(example: **!avatar {ctx.author.mention}**)."
+            )
+        embed = Embed(
+            title=f"{user.display_name}'s Avatar",
+            description=f'```{user.display_avatar.url}```',
+            color=Color.random()
+        )
+        embed.set_image(url=user.display_avatar.url)
+        await ctx.send(embed=embed)
 
     @commands.command(aliases=['about', 'info', 'ver', 'version'])
     async def brayne(self, ctx: commands.Context):
@@ -122,7 +122,7 @@ class Brayne(commands.Cog):
         booted_time = datetime.fromtimestamp(boot_time())
 
         platform_info = (
-            '**Bot version**: 420.69-1.9.5\n'
+            '**Bot version**: 420.69-10.0.0\n'
             '**GitHub**: '
             '[/mdf-gh/bronson](https://www.github.com/mdf-gh/bronson)\n\n'
 
@@ -172,46 +172,48 @@ class Brayne(commands.Cog):
         )
         await ctx.send(embed=embed)
 
-    # @commands.command(aliases=['guild'])
-    # async def server(self, ctx: commands.Context):
-    #     """Sends current server info"""
-    #     embed = Embed(
-    #         title=ctx.guild.name,
-    #         color=Color.random()
-    #     )
-    #     embed.add_field(
-    #         name='**Owner**:',
-    #         value=ctx.guild.owner,
-    #         inline=True
-    #     )
-    #     embed.add_field(
-    #         name='**Created**:',
-    #         value=ctx.guild.created_at.strftime('%m/%d/%Y'),
-    #         inline=True
-    #     )
-    #     embed.add_field(
-    #         name='**Members**:',
-    #         value=ctx.guild.member_count,
-    #         inline=True
-    #     )
-    #     embed.set_thumbnail(url=ctx.guild.icon.url)
-    #     await ctx.send(embed=embed)
+    @commands.command(aliases=['guild'])
+    async def server(self, ctx: commands.Context):
+        """Sends current server info"""
+        embed = Embed(
+            title=ctx.guild.name,
+            color=Color.random()
+        )
+        embed.add_field(
+            name='**Owner**:',
+            value=ctx.guild.owner,
+            inline=True
+        )
+        embed.add_field(
+            name='**Created**:',
+            value=ctx.guild.created_at.strftime('%m/%d/%Y'),
+            inline=True
+        )
+        embed.add_field(
+            name='**Members**:',
+            value=ctx.guild.member_count,
+            inline=True
+        )
+        embed.set_thumbnail(url=ctx.guild.icon.url)
+        embed.set_footer(text='This will be expanded upon in a future update.')
+        await ctx.send(embed=embed)
 
-    # @commands.command()
-    # async def user(self, ctx: commands.Context, user: Member = None):
-    #     """Sends @user info"""
-    #     if user is None:
-    #         raise commands.CommandError(
-    #             "You didn't provide a user "
-    #             f"(example: **!user {ctx.author.mention}**)."
-    #         )
-    #     embed = Embed(
-    #         title=f'{user.display_name} ({user.name})',
-    #         color=Color.random()
-    #     )
-    #     embed.add_field(
-    #         name='**Server join date**:',
-    #         value=user.joined_at.strftime('%m/%d/%Y')
-    #     )
-    #     embed.set_thumbnail(url=user.display_avatar.url)
-    #     await ctx.send(embed=embed)
+    @commands.command()
+    async def user(self, ctx: commands.Context, user: Member = None):
+        """Sends @user info"""
+        if user is None:
+            raise commands.CommandError(
+                "You didn't provide a user "
+                f"(example: **!user {ctx.author.mention}**)."
+            )
+        embed = Embed(
+            title=f'{user.display_name} ({user.name})',
+            color=Color.random()
+        )
+        embed.add_field(
+            name='**Server join date**:',
+            value=user.joined_at.strftime('%m/%d/%Y')
+        )
+        embed.set_thumbnail(url=user.display_avatar.url)
+        embed.set_footer(text='This will be expanded upon in a future update.')
+        await ctx.send(embed=embed)

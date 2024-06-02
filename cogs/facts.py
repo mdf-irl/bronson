@@ -36,6 +36,23 @@ class Facts(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command()
+    async def cow(self, ctx: commands.Context):
+        """Sends a random cow fact"""
+        cow_url = await self.ass.get_url('cow_facts.txt', res_type='raw')
+        cow_txt = await self.ass.get_url_data(cow_url)
+        cow_facts = cow_txt.splitlines()
+
+        embed = Embed(
+            title='Cow Facts',
+            description=choice(cow_facts),
+            color=Color.random()
+        )
+        embed.set_thumbnail(
+            url=await self.ass.get_url('stock_photo_autistic_man')
+        )
+        await ctx.send(embed=embed)
+
+    @commands.command()
     async def dog(self, ctx: commands.Context):
         """Sends a random dog fact"""
         json_data = await self.ass.get_url_data(

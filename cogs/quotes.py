@@ -24,12 +24,30 @@ class Quotes(commands.Cog):
         await ctx.reply(f'**Error**: {error}')
 
     @commands.command()
+    async def homer(self, ctx: commands.Context):
+        """Sends a Homer Simpson quote"""
+        homer_url = await self.ass.get_url('homer_quotes.txt', res_type='raw')
+        homer_txt = await self.ass.get_url_data(homer_url)
+        homer_quotes = homer_txt.splitlines()
+
+        embed = Embed(
+            title='Homer Simpson Quotes',
+            description=(
+                f'"{choice(homer_quotes)}"\n\n -- Homer Simpson, '
+                'inspired by HeLLy'
+            ),
+            color=Color.random()
+        )
+        embed.set_thumbnail(url=await self.ass.get_url('homer'))
+        await ctx.send(embed=embed)
+
+    @commands.command()
     async def kanye(self, ctx: commands.Context):
         """Sends a Kanye quote"""
         quote = await self.ass.get_url_data('https://api.kanye.rest/text')
         embed = Embed(
             title='Kanye West Quotes',
-            description=f'{quote}\n\n-- Kanye West, inspired by HeLLy',
+            description=f'"{quote}"\n\n-- Kanye West, inspired by HeLLy',
             color=Color.random()
         )
         embed.set_thumbnail(url=await self.ass.get_url('kanye_f'))
@@ -61,7 +79,7 @@ class Quotes(commands.Cog):
             'https://zenquotes.io/api/random', get_type='json'
         )
         msg = (
-            f'{json_data[0]['q']}\n\n'
+            f'"{json_data[0]['q']}"\n\n'
             f'-- {json_data[0]['a']}, inspired by HeLLy'
         )
         embed = Embed(
