@@ -167,4 +167,3 @@ class Wrestling(commands.Cog):
         embed = Embed(color=Color.random())
         embed.set_image(url=await self.ass.get_url('indeed.gif'))
         await ctx.send(embed=embed)
-
