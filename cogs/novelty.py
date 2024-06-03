@@ -133,6 +133,28 @@ class Novelty(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command()
+    async def fart(
+        self,
+        ctx: commands.Context,
+        users: commands.Greedy[Member]=None
+    ):
+        """fart on @user(s)"""
+        if not users:
+            raise commands.CommandError(
+                "You didn't provide any user(s) "
+                f"(example: **!fart {ctx.author.mention}**)."
+            )
+        has_have = 'has' if len(users) == 1 else 'have'
+        fart_users = ', '.join(user.mention for user in users)
+
+        embed = Embed(
+            description=f'{fart_users} {has_have} been **FARTED** on. LOL!!!',
+            color=Color.random()
+        )
+        embed.set_image(url=await self.ass.get_url('fart.gif'))
+        await ctx.send(embed=embed)
+
+    @commands.command()
     async def fortune(self, ctx: commands.Context, user: Member = None):
         """Sends fortune"""
         resp_url = await self.ass.get_url('fortunes.txt', res_type='raw')

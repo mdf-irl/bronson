@@ -11,18 +11,25 @@ Command | Aliases | Description
 Command | Aliases | Description
 --- | --- | ---
 !49ers || Sends HeLLy 49ers gif
+!autism || Sends the autism meter gif
 !ckhello || Sends Cool-Knight's hello message
 !deploy || Sends deploy c0n image
+!excellent || Sends Mr. Burns excellent gif
 !gabby || Sends the stabby gabby gif
+!ghost *@user(s)* || Asks *@user(s)* if they've ever seen a spooky ghost
 !homework *@user(s)* || Asks *@user(s)* if they need help with their homework
 !idk || Sends IDK LOL ASCII art
+!moo || Sends moo bitch gif
 !moocrew || Sends moo crew gif
+!neato || Sends Butters neato gif
 !poke *@user(s)* || Pokes *@user(s)*
 !randall | snitch | Sends Randall/snitch gif
 !sdm || Sends #sDm ASCII art
+!shalom [*@user(s)*] || Sends Shabbat Shalom gif, optional *@user(s)* will be tagged
 !spray *@user(s)* || Sprays *@user(s)* with water bottle (it' hot water.)
 !trumpet | hawk | Sends a video of Hawk's beautiful trumpet performance
 !ty *@user* || Thanks *@user* for the update
+!vasports || Sends info about the great country of Virginia's sports teams
 !yo [-list] or [ID] | yogabs | Sends a random yo gabs meme. Optional argument -list shows a list of picture IDs that can be used to show a specific meme (!yo gordon OR !yo -gordon, etc.)
 
 ### **Brayne**
@@ -57,6 +64,7 @@ Command | Aliases | Description
 !foiegras || Sends a random fact about foie gras
 !helly || Sends a random fact about HeLLy
 !mom *@user* | yomama | Sends a random fact about *@user*'s mom
+!today || Sends a fact about this day in history
 !useless | interesting | Sends a random interesting/useless fact
 
 ### **Fangulese**
@@ -102,6 +110,7 @@ Command | Aliases | Description
 !cowsay *message* | cow | Sends an ASCII art cow saying your *message*
 !choose <a, b, c> | choice | Helps you make a choice between arguments supplied in a, b, c format
 !dadjoke || Sends a random dad joke
+!fart *@user(s)* || Farts on *@user(s)*
 !fortune [*@user*] || Bronson reveals your fortune to you, or *@user*'s fortune if optional argument added
 !humpty || Sends detailed instructions on doing the humpty dance
 !insult *@user(s)* [-spicy] || Insults *@user(s)*. Optional -spicy argument uses more explicit insults.
@@ -148,3 +157,4 @@ Command | Aliases | Description
 !delete *@user(s)* | del | Informs *@user(s)* that they will be deleted
 !eviluno || Sends an image informing channel of Evil Uno's incessant flatulence
 !hotrain *@user(s)* || Asks *@user(s)* to come aboard the ho train
+!indeed || Sends indeed gif

@@ -10,20 +10,17 @@ from dotenv import load_dotenv
 
 load_dotenv()
 DISCORD_TOKEN = getenv('DISCORD_TOKEN')
-BOT_PREFIX = getenv('BOT_PREFIX')
 
 if DISCORD_TOKEN is None:
     print("Couldn't get DISCORD_TOKEN from .env file")
     quit_bot()
-elif BOT_PREFIX is None:
-    print("Couldn't get BOT_PREFIX from .env file. Defaulting to '!'")
-    BOT_PREFIX = '!'
 
 
 class DiscordBot(commands.Bot):
     """main bot class"""
 
     def __init__(self):
+        self.bot_prefix = getenv('BOT_PREFIX')
         intents = Intents.default()
         #these following 2 are special privs u need 2 turn on in the
         #discord developer portal
@@ -31,7 +28,7 @@ class DiscordBot(commands.Bot):
         intents.members = True
 
         super().__init__(
-            command_prefix=commands.when_mentioned_or(BOT_PREFIX),
+            command_prefix=commands.when_mentioned_or(self.bot_prefix),
             intents=intents,
             help_command=None,
         )

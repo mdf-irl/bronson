@@ -1,3 +1,16 @@
+1.11.0:
+- Minor bug fixes
+- Added !moo to send moo bitch gif
+- Added !fart <users> to fart on <users>
+- Added !indeed to send wrasslin' indeed gif
+- Added !autism to send autism meter gif
+- Added !neato to send Butters neato gif
+- Added !ghost <users> to ask <users> if they've ever seen a spooky ghost
+- Added !shalom [users] to send Shabbat Shalom gif, optional [users] will be tagged
+- Added !excellent to send Mr. Burns excellent gif
+- Added !today to send a fact about this day in history
+- Added !vasports to send info about the great country of Virginia's sports teams
+
 1.10.1:
 - Fixed bot showing wrong version
 

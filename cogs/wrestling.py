@@ -1,5 +1,4 @@
 """wrestling module"""
-
 from discord import Color, Embed, Member
 from discord.ext import commands
 
@@ -161,3 +160,11 @@ class Wrestling(commands.Cog):
         )
         embed.set_image(url=await self.ass.get_url('ho_train.gif'))
         await ctx.send(embed=embed)
+
+    @commands.command()
+    async def indeed(self, ctx: commands.Context):
+        """sends indeed gif"""
+        embed = Embed(color=Color.random())
+        embed.set_image(url=await self.ass.get_url('indeed.gif'))
+        await ctx.send(embed=embed)
+

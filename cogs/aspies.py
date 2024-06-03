@@ -1,4 +1,6 @@
 """aspies module"""
+from datetime import datetime
+
 from discord import Color, Embed, Member
 from discord.ext import commands
 
@@ -23,25 +25,56 @@ class Aspies(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        """triggered on msg"""
-        #Sends an image expressing disdain for a certain cow
-        if await self._simple_checksum(message.content) == 47616:
-            embed = Embed(color=Color.random())
-            embed.set_image(url=await self.ass.get_url('autistic_man.gif'))
-            await message.channel.send(embed=embed)
+        """[REDACTED]-related commands"""
+        if message.content.startswith(self.bot.bot_prefix):
+            rot13_command = await self._rot13(message.content[1:])
+            #Sends gif expressing disdain for [REDACTED]
+            if rot13_command == 'sarjol':
+                embed = Embed(color=Color.random())
+                embed.set_image(url=await self.ass.get_url('autistic_man.gif'))
+                await message.channel.send(embed=embed)
+                # return
 
-    async def _simple_checksum(self, message: str) -> int:
-        """simple checksum"""
-        checksum_value = 420
+            #Sends the amount of days it has been since gabby ruined
+            #[REDACTED]Con
+            elif rot13_command == 'arjolpba':
+                days = (datetime.now() - datetime(2018, 4, 24)).days
+                embed = Embed(
+                    title='URGENT REMINDER:',
+                    description=(
+                        f'It has been {days} days since gabby ruined '
+                        f'{await self._rot13('arjol')}Con.'
+                    ),
+                    color=Color.random()
+                )
+                embed.set_thumbnail(
+                    url=await self.ass.get_url('gabs_ps')
+                )
+                await message.channel.send(embed=embed)
+
+    async def _rot13(self, message: str) -> str:
+        """rot13 encode/decode"""
+        result = ''
         for char in message:
-            checksum_value += ord(char) * 69
-        return checksum_value
+            if char.isalpha():
+                base = ord('a')
+                result += chr((ord(char) - base + 13) % 26 + base)
+            else:
+                result += char
+        return result
 
     @commands.command(name='49ers')
     async def helly_49ers(self, ctx: commands.Context):
         """Sends HeLLy 49ers gif"""
         embed = Embed(color=Color.random())
         embed.set_image(url=await self.ass.get_url('helly_49ers'))
+        await ctx.send(embed=embed)
+
+    @commands.command()
+    async def autism(self, ctx: commands.Context):
+        """Sends autism meter gif"""
+        embed = Embed(color=Color.random())
+        embed.set_image(url=await self.ass.get_url('autism.gif'))
         await ctx.send(embed=embed)
 
     @commands.command()
@@ -63,11 +96,42 @@ class Aspies(commands.Cog):
         embed.set_image(url=await self.ass.get_url('deploy_c0n'))
         await ctx.send(embed=embed)
 
+    @commands.command()
+    async def excellent(self, ctx: commands.Context):
+        """Sends Mr. Burns excellent gif"""
+        embed = Embed(color=Color.random())
+        embed.set_image(url=await self.ass.get_url('excellent.gif'))
+        await ctx.send(embed=embed)
+
     @commands.command(aliases=['stabby', 'stabbygabby'])
     async def gabby(self, ctx: commands.Context):
         """Sends stabby gabby gif"""
         embed = Embed(color=Color.random())
         embed.set_image(url=await self.ass.get_url('gabby.gif'))
+        await ctx.send(embed=embed)
+
+    @commands.command()
+    async def ghost(
+        self,
+        ctx: commands.Context,
+        users: commands.Greedy[Member]=None
+    ):
+        """ask user(s) if they've ever seen a spooky ghost"""
+        if users is None:
+            raise commands.CommandError(
+                "You didn't prove any user(s) "
+                f"(example: **!ghost {ctx.author.mention}**)."
+            )
+        ghost_users = ', '.join(user.mention for user in users)
+
+        embed = Embed(
+            description=(
+                f'{ghost_users} have u ever seen a spooky ghost?? jw '
+                ':ghost:'
+            ),
+            color=Color.random()
+        )
+        embed.set_image(url=await self.ass.get_url('ghost2.gif'))
         await ctx.send(embed=embed)
 
     @commands.command()
@@ -115,10 +179,24 @@ class Aspies(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command()
+    async def moo(self, ctx: commands.Context):
+        """Sends moo bitch gif"""
+        embed = Embed(color=Color.random())
+        embed.set_image(url=await self.ass.get_url('moo.gif'))
+        await ctx.send(embed=embed)
+
+    @commands.command()
     async def moocrew(self, ctx: commands.Context):
         """Sends moo crew gif"""
         embed = Embed(color=Color.random())
         embed.set_image(url=await self.ass.get_url('moocrew_optimized.gif'))
+        await ctx.send(embed=embed)
+
+    @commands.command()
+    async def neato(self, ctx: commands.Context):
+        """Sends Butters neato gif"""
+        embed = Embed(color=Color.random())
+        embed.set_image(url=await self.ass.get_url('neato2.gif'))
         await ctx.send(embed=embed)
 
     @commands.command()
@@ -173,6 +251,26 @@ class Aspies(commands.Cog):
         await ctx.send(embed=embed)
 
     @commands.command()
+    async def shalom(
+        self,
+        ctx: commands.Context,
+        users: commands.Greedy[Member]=None
+    ):
+        """Sends shalom gif to user(s)"""
+        if users is None:
+            body = ''
+        else:
+            shalom_users = ', '.join(user.mention for user in users)
+            body = f'Shabbat Shalom, {shalom_users}!'
+
+        embed = Embed(
+            description=body,
+            color=Color.random()
+        )
+        embed.set_image(url=await self.ass.get_url('shalom2.gif'))
+        await ctx.send(embed=embed)
+
+    @commands.command()
     async def spray(
         self,
         ctx: commands.Context,
@@ -218,6 +316,29 @@ class Aspies(commands.Cog):
             trumpet_url, 'trumpet.mov'
         )
         await ctx.send(file=trumpet_vid)
+
+    @commands.command()
+    async def vasports(self, ctx: commands.Context):
+        """Sends info about HeLLy's favorite sports teams"""
+        _49ers = (datetime.now() - datetime(1995, 2, 2)).days
+        dodgers = (datetime.now() - datetime(2020, 10, 27)).days
+        lakers = (datetime.now() - datetime(2020, 10, 11)).days
+
+        embed = Embed(
+            title="Virginia Sports Recap:",
+            description=(
+                f'- It has been **{_49ers}** days since the Virginia 49ers '
+                'last won a Super Bowl. LOL!!! :rofl:\n'
+                f'- It has been **{dodgers}** days since the Virginia Dodgers '
+                'last won a World Series. ROFL!!! :skull::hand_splayed:\n'
+                f'- It has been **{lakers}** days since the Virginia Lakers '
+                'last won an NBA championship. LMAO!!! :joy:'
+            ),
+            color=Color.random()
+        )
+        embed.set_thumbnail(url=await self.ass.get_url('virginia'))
+        await ctx.send(embed=embed)
+
 
     @commands.command(aliases=['yogabs'])
     async def yo(self, ctx: commands.Context, *, arg: str=None):

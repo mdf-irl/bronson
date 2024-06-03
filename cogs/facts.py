@@ -1,9 +1,11 @@
 """facts module"""
+from datetime import datetime
+from os import getenv
 from random import choice
 
 from discord import Color, Embed, Member
 from discord.ext import commands
-
+from dotenv import load_dotenv
 
 async def setup(bot: commands.Bot):
     """add to bot's cog system"""
@@ -16,6 +18,9 @@ class Facts(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
         self.ass = self.bot.get_cog('Assets')
+
+        load_dotenv()
+        self.rapid_api_key = getenv('RAPID_API_KEY')
 
     async def cog_command_error(self, ctx: commands.Context, error: str):
         """handle cog errors"""
@@ -123,6 +128,26 @@ class Facts(commands.Cog):
             color=Color.random()
         )
         embed.set_thumbnail(url=await self.ass.get_url('your_mom_md'))
+        await ctx.send(embed=embed)
+
+    @commands.command()
+    async def today(self, ctx: commands.Context):
+        """Sends a fact about this day in history"""
+        date = datetime.today().strftime('%m/%d')
+        headers = {
+            'x-rapidapi-key': self.rapid_api_key,
+            'x-rapidapi-host': 'numbersapi.p.rapidapi.com'
+        }
+        today_fact = await self.ass.get_url_data(
+            f'https://numbersapi.p.rapidapi.com/{date}/date',
+            headers=headers
+        )
+        embed = Embed(
+            title=f'{date} in history:',
+            description=today_fact,
+            color=Color.random()
+        )
+        embed.set_thumbnail(url=await self.ass.get_url('calendar'))
         await ctx.send(embed=embed)
 
     @commands.command(aliases=['interesting'])
