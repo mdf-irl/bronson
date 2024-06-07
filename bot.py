@@ -20,7 +20,7 @@ class DiscordBot(commands.Bot):
     """main bot class"""
 
     def __init__(self):
-        self.bot_prefix = getenv('BOT_PREFIX')
+        self.prefix = getenv('BOT_PREFIX')
         intents = Intents.default()
         #these following 2 are special privs u need 2 turn on in the
         #discord developer portal
@@ -28,7 +28,7 @@ class DiscordBot(commands.Bot):
         intents.members = True
 
         super().__init__(
-            command_prefix=commands.when_mentioned_or(self.bot_prefix),
+            command_prefix=commands.when_mentioned_or(self.prefix),
             intents=intents,
             help_command=None,
         )

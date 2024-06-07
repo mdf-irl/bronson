@@ -20,6 +20,7 @@ google-auth-httplib2==0.2.0
 google-generativeai==0.5.4
 googleapis-common-protos==1.63.0
 gpiozero==2.0.1
+greenlet==3.0.3
 grpcio==1.64.0
 grpcio-status==1.62.2
 gTTS==2.5.1
@@ -41,6 +42,7 @@ requests==2.31.0
 rsa==4.9
 setuptools==69.1.1
 six==1.16.0
+SQLAlchemy==2.0.30
 tqdm==4.66.4
 typing_extensions==4.12.0
 uritemplate==4.1.1

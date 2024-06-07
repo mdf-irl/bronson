@@ -1,7 +1,7 @@
 """aspies module"""
 from datetime import datetime
 
-from discord import Color, Embed, Member
+from discord import Color, Embed, Member, Message
 from discord.ext import commands
 
 
@@ -24,16 +24,15 @@ class Aspies(commands.Cog):
         await ctx.reply(f'**Error**: {error}')
 
     @commands.Cog.listener()
-    async def on_message(self, message):
+    async def on_message(self, message: Message):
         """[REDACTED]-related commands"""
-        if message.content.startswith(self.bot.bot_prefix):
+        if message.content.startswith(self.bot.prefix):
             rot13_command = await self._rot13(message.content[1:])
             #Sends gif expressing disdain for [REDACTED]
             if rot13_command == 'sarjol':
                 embed = Embed(color=Color.random())
                 embed.set_image(url=await self.ass.get_url('autistic_man.gif'))
                 await message.channel.send(embed=embed)
-                # return
 
             #Sends the amount of days it has been since gabby ruined
             #[REDACTED]Con
@@ -42,7 +41,7 @@ class Aspies(commands.Cog):
                 embed = Embed(
                     title='URGENT REMINDER:',
                     description=(
-                        f'It has been {days} days since gabby ruined '
+                        f'It has been **{days}** days since gabby ruined '
                         f'{await self._rot13('arjol')}Con.'
                     ),
                     color=Color.random()
@@ -64,7 +63,7 @@ class Aspies(commands.Cog):
         return result
 
     @commands.command(name='49ers')
-    async def helly_49ers(self, ctx: commands.Context):
+    async def _49ers(self, ctx: commands.Context):
         """Sends HeLLy 49ers gif"""
         embed = Embed(color=Color.random())
         embed.set_image(url=await self.ass.get_url('helly_49ers'))

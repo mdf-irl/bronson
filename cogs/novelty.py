@@ -27,7 +27,7 @@ class Novelty(commands.Cog):
         await ctx.reply(f'**Error**: {error}')
 
     @commands.command(name='8ball')
-    async def eightball(self, ctx: commands.Context, *, question: str=None):
+    async def _8ball(self, ctx: commands.Context, *, question: str=None):
         """Magic 8ball"""
         if question is None:
             raise commands.CommandError(

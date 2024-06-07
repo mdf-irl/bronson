@@ -1,3 +1,28 @@
+1.12.0:
+- Added image command scripting system:
+-- !<name>
+-- Shows scripted image command <name>.
+--
+-- !image -list
+-- Shows list of all scripted image commands.
+--
+-- !image -add <name> <URL>
+-- Adds command <name> from image at <URL>.
+--
+-- !image -del <name>
+-- Deletes command <name>.
+-- Must be command's author or bot owner.
+--
+-- !image -rename <old_name> <new_name>
+-- Renames command <old_name> to <new_name>.
+-- Must be command's author or bot owner.
+--
+-- !image -info <name>
+-- Shows info and stats about command <name>.
+--
+-- !image -help
+-- Shows a helpful embed.
+
 1.11.0:
 - Minor bug fixes
 - Added !moo to send moo bitch gif
